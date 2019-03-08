@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./Scripts/dist/",
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    "jsx": "react"
+  },
+  "include": ["**/*", "../Koenig.Maestro.Host/Scripts/src/components/MainMenu.tsx", "../Koenig.Maestro.Host/Scripts/src/agents/NaviAgent.ts"],
+  "exclude": [
+    "node_modules"
+  ]
+}

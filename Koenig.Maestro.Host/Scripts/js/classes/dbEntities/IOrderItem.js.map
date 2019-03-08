@@ -1,0 +1,1 @@
+{"version":3,"file":"IOrderItem.js","sourceRoot":"","sources":["../../../src/classes/dbEntities/IOrderItem.ts"],"names":[],"mappings":"AAWA,MAAM,OAAO,SAAS;IAGlB,YAAY,OAAe,EAAE,EAAS;QAClC,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;QACvB,IAAI,CAAC,EAAE,GAAG,EAAE,CAAC;QACb,IAAI,CAAC,KAAK,GAAG,EAAE,IAAI,CAAC,CAAC;IACzB,CAAC;CAiBJ"}

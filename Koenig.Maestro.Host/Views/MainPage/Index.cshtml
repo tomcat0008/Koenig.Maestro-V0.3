@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Maestro - Main Menu";
+    Layout = "~/Views/Layouts/_MainLayout.cshtml";
+}
+
+<div id="maestroPage" class="container" style="text-align:center">
+    <div id="errorDiv" class="alert-danger" style="display:none;font-size:small ">
+        <p class="alert-danger" style="font-weight:bold">Exception occured</p>
+        <p id="errorInfo" class="alert-danger"></p>
+    </div>
+    <div id="wait" class="active" style="display:none;vertical-align:middle;height:100vh ">
+        <img src="/img/please-wait.gif" />
+    </div>
+    <div id="mainMenu" class="container"></div>
+    <div id="content" class="container"></div>
+</div>
+
+
+@System.Web.Optimization.Scripts.Render("~/Scripts/js/maestro.js")
+
