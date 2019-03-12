@@ -2,8 +2,8 @@
 
 export default class TranRequest implements ITranRequest
 {
-    tranCode: string;
-    action: string;
-    listTitle: string;
-    msgExtension: { [key: string]: string };
+    TranCode: string;
+    Action: string;
+    ListTitle: string;
+    MsgExtension: { [key: string]: string };
 }

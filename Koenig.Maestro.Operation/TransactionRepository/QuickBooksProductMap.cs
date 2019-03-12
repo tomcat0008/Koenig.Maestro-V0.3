@@ -61,8 +61,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             call.SetDateTime("@CREATE_DATE", DateTime.Now);
             call.SetVarchar("@CREATE_USER", Context.UserName);
 
-            map.Id = db.ExecuteNonQuery(call);
-            Context.TransactionObject = map;
+            map.Id = db.ExecuteScalar<long>(call);
+            response.TransactionResult = map;
 
         }
 

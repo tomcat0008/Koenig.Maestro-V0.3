@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import * as React from 'react';
 import { Form, Col } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
 import MaestroCustomer from '../../classes/dbEntities/IMaestroCustomer';
 import EntityAgent from '../../classes/EntityAgent';
 import MaestroRegion from '../../classes/dbEntities/IMaestroRegion';
@@ -16,7 +15,8 @@ export default class MaestroCustomerComponent extends React.Component {
     //item:IMaestroCustomer;
     constructor(props) {
         super(props);
-        this.state = { Customer: props, Regions: [], init: true };
+        this.state = { Customer: null, Regions: [], init: true };
+        this.setState({ Customer: props, Regions: [], init: true });
     }
     componentDidMount() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,7 +25,7 @@ export default class MaestroCustomerComponent extends React.Component {
             this.Save = this.Save.bind(this);
             this.setState(cd);
             if (this.props.IsNew)
-                document.getElementById("customerRegionId").value = '';
+                document.getElementById("customerId").value = '';
         });
     }
     Save() {
@@ -42,9 +42,30 @@ export default class MaestroCustomerComponent extends React.Component {
             cust.QuickBoosCompany = document.getElementById("qbCompanyId").value;
             cust.DefaultPaymentType = this.state.Customer.DefaultPaymentType == null ? "" : this.state.Customer.DefaultPaymentType;
             cust.MaestroRegion = new MaestroRegion(parseInt(document.getElementById("customerRegionId").value));
+            cust.DefaultPaymentType = document.getElementById("defaultPaymentId").checked ? "COD" : "";
             let result = yield ea.SaveCustomer(cust);
+            if (result.ErrorInfo != null)
+                throw result.ErrorInfo;
+            if (cust.Id <= 0) {
+                cust.Id = (result.TransactionResult.Id);
+                document.getElementById("customerIdId").value = cust.Id.toString();
+            }
+            cust.IsNew = false;
+            this.Disable();
             return result;
         });
+    }
+    Disable() {
+        document.getElementById("customerIdId").disabled = true;
+        document.getElementById("qbCompanyId").disabled = true;
+        document.getElementById("customerNameId").disabled = true;
+        document.getElementById("qbListId").disabled = true;
+        document.getElementById("customerTitleId").disabled = true;
+        document.getElementById("customerRegionId").disabled = true;
+        document.getElementById("customerAddressId").disabled = true;
+        document.getElementById("customerEmailId").disabled = true;
+        document.getElementById("customerPhoneId").disabled = true;
+        document.getElementById("defaultPaymentId").disabled = true;
     }
     render() {
         let cus = this.state.Customer;
@@ -59,50 +80,46 @@ export default class MaestroCustomerComponent extends React.Component {
                 qbId = React.createElement(Form.Control, { id: "qbListId", type: "input" });
             }
             else {
-                qbCompany = React.createElement(Form.Control, { id: "qbCompanyId", plaintext: true, readOnly: true, defaultValue: cus.QuickBoosCompany });
-                qbId = React.createElement(Form.Control, { id: "qbListId", plaintext: true, readOnly: true, defaultValue: cus.QuickBooksId });
+                qbCompany = React.createElement(Form.Control, { id: "qbCompanyId", plaintext: true, readOnly: true, className: "modal-disabled", defaultValue: cus.QuickBoosCompany });
+                qbId = React.createElement(Form.Control, { id: "qbListId", plaintext: true, readOnly: true, className: "modal-disabled", defaultValue: cus.QuickBooksId });
             }
             return (React.createElement(Form, null,
-                React.createElement(Form.Group, { as: Row, controlId: "customerId" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Customer Id"),
-                    React.createElement(Col, { sm: "6" },
-                        React.createElement(Form.Control, { plaintext: true, readOnly: true, defaultValue: cus.IsNew ? "New customer" : cus.Id.toString() }))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerName" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Customer Name"),
-                    React.createElement(Col, { sm: "6" },
-                        React.createElement(Form.Control, { id: "customerNameId", type: "input", defaultValue: cus.Name }))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerTitle" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Title"),
-                    React.createElement(Col, { sm: "6" },
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "customerId" },
+                        React.createElement(Form.Label, null, "Customer Id"),
+                        React.createElement(Form.Control, { className: "modal-disabled", id: "customerIdId", plaintext: true, readOnly: true, defaultValue: cus.IsNew ? "New customer" : cus.Id.toString() }))),
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "customerName" },
+                        React.createElement(Form.Label, null, "Customer Name"),
+                        React.createElement(Form.Control, { id: "customerNameId", type: "input", defaultValue: cus.Name })),
+                    React.createElement(Form.Group, { as: Col, controlId: "customerTitle" },
+                        React.createElement(Form.Label, null, "Title"),
                         React.createElement(Form.Control, { id: "customerTitleId", type: "input", defaultValue: cus.Title }))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerRegion2" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Region"),
-                    React.createElement(Col, { sm: "6" },
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "customerEmail" },
+                        React.createElement(Form.Label, null, "Email"),
+                        React.createElement(Form.Control, { type: "input", id: "customerEmailId", defaultValue: cus.Email })),
+                    React.createElement(Form.Group, { as: Col, controlId: "customerPhone" },
+                        React.createElement(Form.Label, null, "Phone"),
+                        React.createElement(Form.Control, { type: "input", id: "customerPhoneId", defaultValue: cus.Phone })),
+                    React.createElement(Form.Group, { as: Col, controlId: "customerRegion2" },
+                        React.createElement(Form.Label, null, "Region"),
                         React.createElement(Form.Control, { as: "select", id: "customerRegionId" }, regions.map(rg => React.createElement("option", { selected: rg.Id == cus.RegionId, value: rg.Id },
                             rg.Name + " (" + rg.PostalCode + ")",
                             " "))))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerAddress" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Address"),
-                    React.createElement(Col, { sm: "6" },
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "customerAddress" },
+                        React.createElement(Form.Label, null, "Address"),
                         React.createElement(Form.Control, { as: "textarea", id: "customerAddressId", rows: "3" }, cus.Address))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerEmail" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Email"),
-                    React.createElement(Col, { sm: "6" },
-                        React.createElement(Form.Control, { type: "input", id: "customerEmailId", defaultValue: cus.Email }))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerPhone" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Phone"),
-                    React.createElement(Col, { sm: "6" },
-                        React.createElement(Form.Control, { type: "input", id: "customerPhoneId", defaultValue: cus.Phone }))),
-                React.createElement(Form.Group, { as: Row, controlId: "customerQbCompany" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Qb Company"),
-                    React.createElement(Col, { sm: "6" }, qbCompany)),
-                React.createElement(Form.Group, { as: Row, controlId: "customerQbId" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "Qb Object Id"),
-                    React.createElement(Col, { sm: "6" }, qbId)),
-                React.createElement(Form.Group, { as: Row, controlId: "defaultPayment" },
-                    React.createElement(Col, { className: "col-form-label", sm: 3, as: Form.Label }, "C.O.D."),
-                    React.createElement(Col, { sm: "6" },
-                        React.createElement("input", { id: "defaultPaymentId", type: "checkbox", checked: cus.DefaultPaymentType == "COD" })))));
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "customerQbCompany" },
+                        React.createElement(Form.Label, null, "QB Company"),
+                        qbCompany),
+                    React.createElement(Form.Group, { as: Col, controlId: "customerQbId" },
+                        React.createElement(Form.Label, null, "QB Object Id"),
+                        qbId)),
+                React.createElement(Form.Group, { id: "defaultPayment" },
+                    React.createElement(Form.Check, { type: "checkbox", id: "defaultPaymentId", label: "C.O.D.", defaultChecked: cus.DefaultPaymentType == "COD" }))));
         }
     }
 }

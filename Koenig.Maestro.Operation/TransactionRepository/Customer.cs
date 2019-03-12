@@ -96,8 +96,9 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             call.SetVarchar("@DEFAULT_PAYMENT_TYPE", customer.DefaultPaymentType);
             call.SetDateTime("@CREATE_DATE", DateTime.Now);
             call.SetVarchar("@CREATE_USER", Context.UserName);
-            customer.Id = db.ExecuteNonQuery(call);
-            Context.TransactionObject = customer;
+            customer.Id = db.ExecuteScalar<long>(call);
+            response.TransactionResult = customer;
+            //Context.TransactionObject = customer;
             
         }
 

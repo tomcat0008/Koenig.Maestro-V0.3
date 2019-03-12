@@ -24,7 +24,7 @@ export default class TransactionDisplay extends React.Component<ITranRequest, IT
 
 
         try {
-            let response: IResponseMessage = await new AxiosAgent().getImport(this.props.tranCode, this.props.msgExtension);
+            let response: IResponseMessage = await new AxiosAgent().getImport(this.props.TranCode, this.props.MsgExtension);
             this.setState({ responseMessage: response, init: false } );
             console.log(response);
 

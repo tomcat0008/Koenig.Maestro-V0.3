@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { Form, Col, Dropdown, FormCheck } from 'react-bootstrap';
+import { Form, Col, Dropdown, FormCheck, InputGroup } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import MaestroCustomer, { IMaestroCustomer } from '../../classes/dbEntities/IMaestroCustomer';
 import EntityAgent, { ICustomerDisplay } from '../../classes/EntityAgent';
@@ -9,10 +9,12 @@ import { ICrudComponent } from '../ICrudComponent';
 
 export default class MaestroCustomerComponent extends React.Component<IMaestroCustomer, ICustomerDisplay> implements ICrudComponent {
 
+    state = { Customer: null, Regions: [], init: true}
+
     //item:IMaestroCustomer;
     constructor(props:IMaestroCustomer) {
         super(props);
-        this.state = { Customer: props, Regions:[], init:true };
+        this.setState({ Customer: props, Regions:[], init:true });
     }
 
     async componentDidMount() {
@@ -22,7 +24,7 @@ export default class MaestroCustomerComponent extends React.Component<IMaestroCu
         this.Save = this.Save.bind(this);
         this.setState(cd);
         if(this.props.IsNew)
-            (document.getElementById("customerRegionId") as HTMLInputElement).value = '';
+            (document.getElementById("customerId") as HTMLInputElement).value = '';
     }
 
     async Save(): Promise<IResponseMessage> {
@@ -39,8 +41,33 @@ export default class MaestroCustomerComponent extends React.Component<IMaestroCu
         cust.QuickBoosCompany = (document.getElementById("qbCompanyId") as HTMLInputElement).value;
         cust.DefaultPaymentType = this.state.Customer.DefaultPaymentType == null ? "" : this.state.Customer.DefaultPaymentType;
         cust.MaestroRegion = new MaestroRegion(parseInt((document.getElementById("customerRegionId") as HTMLInputElement).value));
+        cust.DefaultPaymentType = (document.getElementById("defaultPaymentId") as HTMLInputElement).checked ? "COD" : "";
         let result: IResponseMessage = await ea.SaveCustomer(cust);
+        if (result.ErrorInfo != null)
+            throw result.ErrorInfo;
+        if (cust.Id <= 0) {
+            cust.Id = ((result.TransactionResult as MaestroCustomer).Id);
+            (document.getElementById("customerIdId") as HTMLInputElement).value = cust.Id.toString();
+        }
+        cust.IsNew = false;
+        
+        this.Disable();
         return result;
+    }
+
+
+    Disable() {
+        (document.getElementById("customerIdId") as HTMLInputElement).disabled = true;
+        (document.getElementById("qbCompanyId") as HTMLInputElement).disabled = true;
+        (document.getElementById("customerNameId") as HTMLInputElement).disabled = true;
+        (document.getElementById("qbListId") as HTMLInputElement).disabled = true;
+        (document.getElementById("customerTitleId") as HTMLInputElement).disabled = true;
+        (document.getElementById("customerRegionId") as HTMLInputElement).disabled = true;
+        (document.getElementById("customerAddressId") as HTMLInputElement).disabled = true;
+        (document.getElementById("customerEmailId") as HTMLInputElement).disabled = true;
+        (document.getElementById("customerPhoneId") as HTMLInputElement).disabled = true;
+        (document.getElementById("defaultPaymentId") as HTMLInputElement).disabled = true;
+
     }
 
     render() {
@@ -57,88 +84,70 @@ export default class MaestroCustomerComponent extends React.Component<IMaestroCu
                 qbId = <Form.Control id="qbListId" type="input" />
             }
             else {
-                qbCompany = <Form.Control id="qbCompanyId" plaintext readOnly defaultValue={cus.QuickBoosCompany} />;
-                qbId = <Form.Control id="qbListId" plaintext readOnly defaultValue={cus.QuickBooksId} />
+                qbCompany = <Form.Control id="qbCompanyId" plaintext readOnly className="modal-disabled" defaultValue={cus.QuickBoosCompany} />;
+                qbId = <Form.Control id="qbListId" plaintext readOnly className="modal-disabled" defaultValue={cus.QuickBooksId} />
             }
             return (
                 <Form>
-                    <Form.Group as={Row} controlId="customerId">
-                        <Col className="col-form-label" sm={3} as={Form.Label} >Customer Id</Col>
-                        <Col sm="6">
-                            <Form.Control plaintext readOnly defaultValue={cus.IsNew ? "New customer" : cus.Id.toString()} />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="customerName">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Customer Name</Col>
-                        <Col sm="6">
+
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="customerId">
+                            <Form.Label >Customer Id</Form.Label>
+                            <Form.Control className="modal-disabled" id="customerIdId" plaintext readOnly defaultValue={cus.IsNew ? "New customer" : cus.Id.toString()} />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+
+
+                        <Form.Group as={Col} controlId="customerName">
+                            <Form.Label>Customer Name</Form.Label>
                             <Form.Control id="customerNameId" type="input" defaultValue={cus.Name} />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="customerTitle">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Title</Col>
-                        <Col sm="6">
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="customerTitle">
+                            <Form.Label>Title</Form.Label>
                             <Form.Control id="customerTitleId" type="input" defaultValue={cus.Title} />
-                        </Col>
-                    </Form.Group>
+                        </Form.Group>
+                    </Form.Row>
 
-                    <Form.Group as={Row} controlId="customerRegion2">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Region</Col>
-                        <Col sm="6">
-                            <Form.Control as="select" id="customerRegionId">
-                            {
-                                regions.map(rg => <option selected={rg.Id == cus.RegionId} value={rg.Id}>{rg.Name +" ("+ rg.PostalCode + ")" } </option>)
-                            }
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-
-
-                    <Form.Group as={Row} controlId="customerAddress">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Address</Col>
-                        <Col sm="6">
-                            <Form.Control as="textarea" id="customerAddressId" rows="3">{cus.Address}</Form.Control>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="customerEmail">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Email</Col>
-                        <Col sm="6">
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="customerEmail">
+                            <Form.Label>Email</Form.Label>
                             <Form.Control type="input" id="customerEmailId" defaultValue={cus.Email} />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="customerPhone">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Phone</Col>
-                        <Col sm="6">
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="customerPhone">
+                            <Form.Label>Phone</Form.Label>
                             <Form.Control type="input" id="customerPhoneId" defaultValue={cus.Phone} />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="customerQbCompany">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Qb Company</Col>
-                        <Col sm="6">
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="customerRegion2">
+                            <Form.Label>Region</Form.Label>
+                            <Form.Control as="select" id="customerRegionId">
+                                {
+                                    regions.map(rg => <option selected={rg.Id == cus.RegionId} value={rg.Id}>{rg.Name + " (" + rg.PostalCode + ")"} </option>)
+                                }
+                            </Form.Control>
+                        </Form.Group>
+
+                    </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="customerAddress">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control as="textarea" id="customerAddressId" rows="3">{cus.Address}</Form.Control>
+                        </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="customerQbCompany">
+                            <Form.Label>QB Company</Form.Label>
                             {qbCompany}
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row} controlId="customerQbId">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>Qb Object Id</Col>
-                        <Col sm="6">
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="customerQbId">
+                            <Form.Label>QB Object Id</Form.Label>
                             {qbId}
-                            
-                        </Col>
+                        </Form.Group>
+                    </Form.Row>
+                    <Form.Group id="defaultPayment">
+                        <Form.Check type="checkbox" id="defaultPaymentId" label="C.O.D." defaultChecked={cus.DefaultPaymentType=="COD"} />
                     </Form.Group>
-
-                    <Form.Group as={Row} controlId="defaultPayment">
-                        <Col className="col-form-label" sm={3} as={Form.Label}>C.O.D.</Col>
-                        <Col sm="6">
-                            <input
-                                id="defaultPaymentId"
-                                type="checkbox"
-                                checked={cus.DefaultPaymentType == "COD"}
-                            />
-
-                        </Col>
-                        
-                    </Form.Group>
-
 
                 </Form>
                 

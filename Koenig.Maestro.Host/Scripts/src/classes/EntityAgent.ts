@@ -5,6 +5,7 @@ import AxiosAgent from './AxiosAgent';
 import { IQbProductMap } from './dbEntities/IQbProductMap';
 import OrderMaster, { IOrderMaster } from './dbEntities/IOrderMaster';
 import MaestroProduct from './dbEntities/IMaestroProduct';
+import { DbEntityBase } from './dbEntities/DbEntityBase';
 
 
 export interface ICustomerDisplay {

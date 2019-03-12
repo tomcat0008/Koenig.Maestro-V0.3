@@ -13,6 +13,7 @@ namespace Koenig.Maestro.Entity
         public string Text { get; set; }
         public bool Sort { get; set; }
         public string DataField { get; set; }
+        public string Align { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]

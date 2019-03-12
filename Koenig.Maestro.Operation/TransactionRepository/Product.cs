@@ -75,8 +75,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             product.CreateDate = DateTime.Now;
 
             pm.InsertNewItem(product);
-
-            Context.TransactionObject = product;
+            response.TransactionResult = product;
+            //Context.TransactionObject = product;
             
         }
 

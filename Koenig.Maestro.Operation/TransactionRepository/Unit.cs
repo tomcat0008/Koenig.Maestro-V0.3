@@ -60,7 +60,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
             new UnitManager(Context).InsertNewItem(item);
 
-            Context.TransactionObject = item;
+            response.TransactionResult = item;
             
         }
 

@@ -69,9 +69,9 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             call.SetVarchar("@REGION_DESCRIPTION", region.Description);
             call.SetDateTime("@CREATE_DATE", DateTime.Now);
             call.SetVarchar("@CREATE_USER", Context.UserName);
-            region.Id = db.ExecuteNonQuery(call);
+            region.Id = db.ExecuteScalar<long>(call);
 
-            Context.TransactionObject = region;
+            response.TransactionResult = region;
         }
 
         protected override void Update()

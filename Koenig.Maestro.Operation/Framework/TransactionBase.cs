@@ -134,6 +134,7 @@ namespace Koenig.Maestro.Operation.Framework
                             dic.Add("dataField", dp.DataField);
                             dic.Add("sort", dp.Sort);
                             dic.Add("columnOrder", dp.DisplayOrder);
+                            dic.Add("align", dp.Align ?? "right");
                             gcd.Add(dic);
                         });
                     ;

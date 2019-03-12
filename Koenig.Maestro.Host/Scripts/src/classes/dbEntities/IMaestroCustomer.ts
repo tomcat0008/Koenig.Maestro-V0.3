@@ -1,4 +1,5 @@
 ﻿import { IMaestroRegion } from "./IMaestroRegion";
+import { DbEntityBase } from "./DbEntityBase";
 
 export interface IMaestroCustomer extends DbEntityBase {
     Name: string;

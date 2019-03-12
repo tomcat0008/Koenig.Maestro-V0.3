@@ -327,9 +327,9 @@
     <TypeScriptCompile Include="Scripts\src\components\GridDisplay.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\ICrudComponent.ts" />
     <TypeScriptCompile Include="Scripts\src\components\IModalContainerState.ts" />
+    <TypeScriptCompile Include="Scripts\src\components\IModalContent.ts" />
     <TypeScriptCompile Include="Scripts\src\components\ModalConatiner.tsx" />
-    <TypeScriptCompile Include="Scripts\src\components\NewItemDisplay.tsx" />
-    <TypeScriptCompile Include="Scripts\src\components\TransactionDisplay.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\OrderProductItem.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\MaestroCustomerComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\mainMenu\MainMenu.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\mainMenu\MenuItem.tsx" />

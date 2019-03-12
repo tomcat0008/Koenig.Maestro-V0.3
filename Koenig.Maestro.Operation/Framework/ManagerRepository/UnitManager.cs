@@ -21,7 +21,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetVarchar("@QB_UNIT", item.QuickBooksUnit);
             call.SetDateTime("@CREATE_DATE", item.CreateDate);
             call.SetVarchar("@CREATE_USER", item.CreatedUser);
-            item.Id = db.ExecuteNonQuery(call);
+            item.Id = db.ExecuteScalar<long>(call);
         }
 
         public MaestroUnit GetUnknownItem()

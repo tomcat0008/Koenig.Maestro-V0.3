@@ -24,7 +24,7 @@ export default class NewItemDisplay extends React.Component {
         });
     }
     render() {
-        if (this.props.tranCode == "ORDER") {
+        if (this.props.TranCode == "ORDER") {
             let orderDef = new OrderMaster(0);
             return (React.createElement("div", null,
                 React.createElement(OrderComponent, Object.assign({}, orderDef))));

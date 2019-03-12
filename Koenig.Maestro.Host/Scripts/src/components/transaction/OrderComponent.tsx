@@ -1,11 +1,13 @@
 ﻿import * as React from 'react';
-import { Form, Col } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
+
 import OrderMaster, { IOrderMaster } from '../../classes/dbEntities/IOrderMaster';
 import ResponseMessage, { IResponseMessage } from '../../classes/ResponseMessage';
 import AxiosAgent from '../../classes/AxiosAgent';
 import { ICrudComponent } from '../ICrudComponent';
 import EntityAgent from '../../classes/EntityAgent';
+import { Form, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+
 
 interface IOrderState { order: IOrderMaster, response: IResponseMessage, init:boolean  }
 
@@ -17,6 +19,9 @@ export default class OrderComponent extends React.Component<IOrderMaster, IOrder
         super(props);
         this.setState({ order: props });
     }
+
+    Disable() { }
+
 
     async Save(): Promise<IResponseMessage> {
         

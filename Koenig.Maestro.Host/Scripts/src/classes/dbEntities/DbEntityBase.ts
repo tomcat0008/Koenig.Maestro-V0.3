@@ -1,4 +1,4 @@
-﻿interface DbEntityBase {
+﻿export interface DbEntityBase {
     Id: number;
     CreatedUser: string;
     UpdatedUser: string;

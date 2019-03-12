@@ -96,8 +96,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 OrderMaster om = (OrderMaster)request.TransactionEntityList[0];
                 om.CreatedUser = Context.UserName;
                 orderMan.InsertOrder(om);
-                Context.TransactionObject = om;
-
+                //Context.TransactionObject = om;
+                response.TransactionResult = om;
                 ExportQb();
             }
             else

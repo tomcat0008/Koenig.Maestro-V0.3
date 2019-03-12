@@ -1,4 +1,6 @@
-﻿export interface IOrderItem extends DbEntityBase {
+﻿import { DbEntityBase } from "./DbEntityBase";
+
+export interface IOrderItem extends DbEntityBase {
     OrderId: number;
     ProductId: number;
     ProductName: string;

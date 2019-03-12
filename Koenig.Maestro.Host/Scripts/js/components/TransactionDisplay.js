@@ -23,7 +23,7 @@ export default class TransactionDisplay extends React.Component {
                 $('#errorInfo').text(msg);
             };
             try {
-                let response = yield new AxiosAgent().getImport(this.props.tranCode, this.props.msgExtension);
+                let response = yield new AxiosAgent().getImport(this.props.TranCode, this.props.MsgExtension);
                 this.setState({ responseMessage: response, init: false });
                 console.log(response);
             }

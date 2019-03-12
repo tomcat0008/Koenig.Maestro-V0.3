@@ -1,4 +1,6 @@
-﻿export interface IMaestroRegion extends DbEntityBase {
+﻿import { DbEntityBase } from "./DbEntityBase";
+
+export interface IMaestroRegion extends DbEntityBase {
     Name: string;
     Description: string;
     PostalCode: string;

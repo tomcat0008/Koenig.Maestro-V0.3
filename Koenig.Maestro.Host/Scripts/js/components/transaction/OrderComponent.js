@@ -7,18 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as React from 'react';
-import { Form, Col } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
 import OrderMaster from '../../classes/dbEntities/IOrderMaster';
 import ResponseMessage from '../../classes/ResponseMessage';
 import AxiosAgent from '../../classes/AxiosAgent';
 import EntityAgent from '../../classes/EntityAgent';
+import { Form, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 export default class OrderComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = { response: new ResponseMessage(), init: true, order: new OrderMaster(0) };
         this.setState({ order: props });
     }
+    Disable() { }
     Save() {
         return __awaiter(this, void 0, void 0, function* () {
             let order = new OrderMaster(0);

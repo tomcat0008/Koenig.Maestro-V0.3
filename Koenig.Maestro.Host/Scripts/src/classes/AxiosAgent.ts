@@ -3,6 +3,7 @@ import MessageHeader from "./MessageHeader";
 import { IResponseMessage } from "./ResponseMessage";
 import axios from 'axios';
 import ErrorInfo, { IErrorInfo } from "./ErrorInfo";
+import { DbEntityBase } from "./dbEntities/DbEntityBase";
 
 export default class AxiosAgent {
 

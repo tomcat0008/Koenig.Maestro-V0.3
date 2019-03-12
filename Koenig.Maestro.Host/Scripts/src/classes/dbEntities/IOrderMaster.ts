@@ -1,4 +1,5 @@
 ﻿import { IOrderItem } from "./IOrderItem";
+import { DbEntityBase } from "./DbEntityBase";
 
 export interface IOrderMaster extends DbEntityBase {
     ProductId: number;

@@ -12,27 +12,78 @@ import MenuItem from './MenuItem';
 import GridDisplay from '../GridDisplay';
 import TranRequest from '../../classes/ListRequest';
 import TransactionDisplay from '../TransactionDisplay';
-import NewItemDisplay from '../NewItemDisplay';
-import { Modal, Button, Alert } from 'react-bootstrap';
 import ErrorInfo from '../../classes/ErrorInfo';
 import ResponseMessage from '../../classes/ResponseMessage';
 import EntityAgent from '../../classes/EntityAgent';
-import MaestroCustomerComponent from '../transaction/MaestroCustomerComponent';
-import OrderComponent from '../transaction/OrderComponent';
+import ModalContainer from '../ModalConatiner';
+import OrderProductItem from '../OrderProductItem';
 export default class MainMenu extends React.Component {
     constructor() {
         super(null);
+        /*
+        handleNew(tranCode:string) {
+    
+            let entity: DbEntityBase = EntityAgent.FactoryCreate(tranCode);
+            this.setState({ ShowModal: true, ModalCaption: "New " + tranCode.toLowerCase(), Action: "New", TranCode: tranCode, Entity:entity });
+        }
+    
+        private displayModal(caption: string, item: DbEntityBase, itemAction: string, tranCode:string) {
+    
+            this.setState({ ShowModal: true, ModalCaption: caption, Action: itemAction, TranCode:tranCode });
+        }
+        */
         this.saveFct = () => __awaiter(this, void 0, void 0, function* () {
             try {
                 let response = yield this.tranComponent.Save();
-                this.setState({ showSuccess: true, successMessage: response.ResultMessage });
-                this.handleClose();
+                this.setState({ ShowSuccess: true, SuccessMessage: response.ResultMessage });
+                this.handleModalClose;
             }
             catch (error) {
-                this.setState({ errorInfo: error, showError: true });
+                this.setState({ ErrorInfo: error, ShowError: true });
             }
         });
-        this.mainmenuRender = (React.createElement("div", { className: "container", style: { width: "800px", paddingTop: "50px" } },
+        this.handleModalClose = () => {
+            this.setState({ ShowModal: false });
+        };
+        this.handleClick = (id) => __awaiter(this, void 0, void 0, function* () {
+            //this.setState({ loading: true })
+            let req = new TranRequest();
+            req.ListTitle = id.props.caption;
+            req.Action = id.props.action;
+            req.TranCode = id.props.tranCode;
+            req.MsgExtension = id.props.msgExtension;
+            if (id.props.action == "New") {
+                let tranCode = id.props.tranCode;
+                let entity = EntityAgent.FactoryCreate(tranCode);
+                yield this.setState({ ShowModal: true, ModalCaption: "New " + tranCode.toLowerCase(), Action: "New", TranCode: tranCode, Entity: entity });
+            }
+            if (id.props.action == "List") {
+                $('#mainMenu').hide();
+                $('#wait').show();
+                ReactDOM.render(React.createElement(GridDisplay, Object.assign({}, req)), document.getElementById('content'));
+                return;
+            }
+            if (id.props.action == "ImportQb") {
+                $('#wait').show();
+                ReactDOM.render(React.createElement(TransactionDisplay, Object.assign({}, req)), document.getElementById('content'));
+                return;
+            }
+            //this.setState({ loading: false })
+        });
+        let errorInfo = new ErrorInfo();
+        errorInfo.StackTrace = "";
+        errorInfo.UserFriendlyMessage = "";
+        this.setState({
+            ShowError: false, ErrorInfo: new ErrorInfo(), Action: "", TranCode: "",
+            ShowSuccess: false, SuccessMessage: "", Init: true, Entity: null,
+            ShowModal: false, ModalContent: null, ModalCaption: "",
+            ResponseMessage: new ResponseMessage()
+        });
+        this.saveFct = this.saveFct.bind(this);
+    }
+    render() {
+        console.debug(this.state);
+        return (React.createElement("div", { className: "container", style: { width: "800px", paddingTop: "50px" } },
             React.createElement("div", { className: "row" },
                 React.createElement("div", { className: "col-6" },
                     React.createElement("div", { className: "plate" },
@@ -59,73 +110,16 @@ export default class MainMenu extends React.Component {
                         React.createElement(MenuItem, { imgName: "map.png", action: "List", tranCode: "REGION", eventHandler: this.handleClick, caption: "Regions", itemType: "button", msgExtension: {}, height: "70px", width: "100%" }),
                         React.createElement(MenuItem, { imgName: "cup.png", action: "List", tranCode: "CUSTOMER_PRODUCT_UNIT", eventHandler: this.handleClick, caption: "Customer Product Units", itemType: "button", msgExtension: {}, height: "70px", width: "100%" }),
                         React.createElement(MenuItem, { imgName: "cup.png", action: "List", tranCode: "QUICKBOOKS_INVOICE", eventHandler: this.handleClick, caption: "Invoices Logs", itemType: "button", msgExtension: {}, height: "70px", width: "100%" })))),
-            React.createElement(Modal, { show: this.state.showModal, dialogClassName: "modal-90w", onHide: this.handleClose, centered: true, size: "lg" },
-                React.createElement(Modal.Header, { closeButton: true },
-                    React.createElement(Modal.Title, null, this.state.modalCaption)),
-                React.createElement(Modal.Body, null,
-                    React.createElement(Alert, { id: "modalAlertId", dismissible: true, show: this.state.showError, variant: "danger", "data-dismiss": "alert" },
-                        React.createElement(Alert.Heading, { id: "modalAlertHeadingId" }, "Exception occured"),
-                        React.createElement("p", { id: "modalAlertUserFriendlyId" }, this.state.errorInfo.UserFriendlyMessage),
-                        React.createElement("hr", null),
-                        React.createElement("p", { id: "modalAlertStackTraceId" }, this.state.errorInfo.StackTrace)),
-                    React.createElement("div", { id: "modalRender" }, this.state.modalContent)),
-                React.createElement(Modal.Footer, null,
-                    React.createElement(Button, { variant: "secondary", onClick: () => this.setState({ showModal: false }) }, "Close"),
-                    React.createElement(Button, { variant: "primary", onClick: () => this.saveFct() }, "Save changes")))));
-        this.handleClose = this.handleClose.bind(this);
-        let errorInfo = new ErrorInfo();
-        errorInfo.StackTrace = "";
-        errorInfo.UserFriendlyMessage = "";
-        this.state = {
-            showError: false, errorInfo: errorInfo,
-            showSuccess: false, successMessage: "",
-            showModal: false, modalContent: null, modalCaption: "",
-            responseMessage: new ResponseMessage()
-        };
-        this.saveFct = this.saveFct.bind(this);
-        this.handleNew = this.handleNew.bind(this);
-        //this.handleClick = this.handleClick.bind(this);
-    }
-    handleNew(tranCode) {
-        let entity = EntityAgent.FactoryCreate(tranCode);
-        this.displayModal("New " + tranCode.toLowerCase(), entity, "New");
-    }
-    displayModal(caption, item, itemAction) {
-        let data;
-        if (this.props.tranCode == "CUSTOMER")
-            data = React.createElement(MaestroCustomerComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, item));
-        else if (this.props.tranCode == "ORDER")
-            data = React.createElement(OrderComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, item));
-        this.setState({ modalContent: data, showModal: true, modalCaption: caption });
-    }
-    handleClose() {
-        this.setState({ showModal: false });
-    }
-    handleClick(id) {
-        //this.setState({ loading: true })
-        let req = new TranRequest();
-        req.listTitle = id.props.caption;
-        req.action = id.props.action;
-        req.tranCode = id.props.tranCode;
-        req.msgExtension = id.props.msgExtension;
-        $('#mainMenu').hide();
-        if (id.props.action == "New") {
-            ReactDOM.render(React.createElement(NewItemDisplay, Object.assign({}, req)), document.getElementById('content'));
-        }
-        if (id.props.action == "List") {
-            $('#wait').show();
-            ReactDOM.render(React.createElement(GridDisplay, Object.assign({}, req)), document.getElementById('content'));
-            return;
-        }
-        if (id.props.action == "ImportQb") {
-            $('#wait').show();
-            ReactDOM.render(React.createElement(TransactionDisplay, Object.assign({}, req)), document.getElementById('content'));
-            return;
-        }
-        //this.setState({ loading: false })
-    }
-    render() {
-        return this.mainmenuRender;
+            React.createElement(ModalContainer, Object.assign({}, {
+                TranCode: (this.state == null ? "" : this.state.TranCode),
+                Action: (this.state == null ? "" : this.state.Action),
+                Entity: (this.state == null ? null : this.state.Entity),
+                Show: (this.state == null ? false : this.state.ShowModal),
+                Caption: (this.state == null ? "" : "New " + this.state.TranCode.toLowerCase()),
+                Close: this.handleModalClose
+            })),
+            React.createElement(OrderProductItem, null),
+            React.createElement(OrderProductItem, null)));
     }
 }
 //# sourceMappingURL=MainMenu.js.map

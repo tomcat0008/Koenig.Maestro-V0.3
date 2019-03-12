@@ -1,4 +1,6 @@
-﻿interface IMaestroProduct extends DbEntityBase {
+﻿import { DbEntityBase } from "./DbEntityBase";
+
+interface IMaestroProduct extends DbEntityBase {
     
     Name: string;
     Description: string;
