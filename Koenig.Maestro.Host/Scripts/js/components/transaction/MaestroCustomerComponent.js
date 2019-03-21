@@ -11,20 +11,21 @@ import { Form, Col } from 'react-bootstrap';
 import MaestroCustomer from '../../classes/dbEntities/IMaestroCustomer';
 import EntityAgent from '../../classes/EntityAgent';
 import MaestroRegion from '../../classes/dbEntities/IMaestroRegion';
+import ErrorInfo from '../../classes/ErrorInfo';
 export default class MaestroCustomerComponent extends React.Component {
     //item:IMaestroCustomer;
     constructor(props) {
         super(props);
-        this.state = { Customer: null, Regions: [], init: true };
-        this.setState({ Customer: props, Regions: [], init: true });
+        this.state = { Customer: null, Regions: [], Init: true, ErrorInfo: new ErrorInfo() };
+        //this.setState({ Customer: props.Entity as IMaestroCustomer, Regions: [], Init: true, ErrorInfo: new ErrorInfo()  });
     }
     componentDidMount() {
         return __awaiter(this, void 0, void 0, function* () {
             let ea = new EntityAgent();
-            let cd = yield ea.GetCustomerDisplay(this.props.Id);
+            let cd = yield ea.GetCustomerDisplay(this.props.Entity.Id);
             this.Save = this.Save.bind(this);
             this.setState(cd);
-            if (this.props.IsNew)
+            if (this.props.Entity.IsNew)
                 document.getElementById("customerId").value = '';
         });
     }
@@ -44,38 +45,44 @@ export default class MaestroCustomerComponent extends React.Component {
             cust.MaestroRegion = new MaestroRegion(parseInt(document.getElementById("customerRegionId").value));
             cust.DefaultPaymentType = document.getElementById("defaultPaymentId").checked ? "COD" : "";
             let result = yield ea.SaveCustomer(cust);
-            if (result.ErrorInfo != null)
+            this.DisableEnable(true);
+            if (result.ErrorInfo != null) {
+                this.DisableEnable(false);
                 throw result.ErrorInfo;
-            if (cust.Id <= 0) {
-                cust.Id = (result.TransactionResult.Id);
-                document.getElementById("customerIdId").value = cust.Id.toString();
+                //this.props.ExceptionMethod(result.ErrorInfo);
             }
-            cust.IsNew = false;
-            this.Disable();
-            return result;
+            else {
+                if (cust.Id <= 0) {
+                    cust.Id = (result.TransactionResult.Id);
+                    document.getElementById("customerIdId").value = cust.Id.toString();
+                }
+                cust.IsNew = false;
+                this.DisableEnable(true);
+                return result;
+            }
         });
     }
-    Disable() {
-        document.getElementById("customerIdId").disabled = true;
-        document.getElementById("qbCompanyId").disabled = true;
-        document.getElementById("customerNameId").disabled = true;
-        document.getElementById("qbListId").disabled = true;
-        document.getElementById("customerTitleId").disabled = true;
-        document.getElementById("customerRegionId").disabled = true;
-        document.getElementById("customerAddressId").disabled = true;
-        document.getElementById("customerEmailId").disabled = true;
-        document.getElementById("customerPhoneId").disabled = true;
-        document.getElementById("defaultPaymentId").disabled = true;
+    DisableEnable(disable) {
+        document.getElementById("customerIdId").disabled = disable;
+        document.getElementById("qbCompanyId").disabled = disable;
+        document.getElementById("customerNameId").disabled = disable;
+        document.getElementById("qbListId").disabled = disable;
+        document.getElementById("customerTitleId").disabled = disable;
+        document.getElementById("customerRegionId").disabled = disable;
+        document.getElementById("customerAddressId").disabled = disable;
+        document.getElementById("customerEmailId").disabled = disable;
+        document.getElementById("customerPhoneId").disabled = disable;
+        document.getElementById("defaultPaymentId").disabled = disable;
     }
     render() {
         let cus = this.state.Customer;
         let regions = this.state.Regions;
-        if (this.state.init) {
+        if (this.state.Init) {
             return (React.createElement("p", null));
         }
         else {
             let qbCompany, qbId;
-            if (this.props.IsNew) {
+            if (this.props.Entity.IsNew) {
                 qbCompany = React.createElement(Form.Control, { id: "qbCompanyId", type: "input" });
                 qbId = React.createElement(Form.Control, { id: "qbListId", type: "input" });
             }

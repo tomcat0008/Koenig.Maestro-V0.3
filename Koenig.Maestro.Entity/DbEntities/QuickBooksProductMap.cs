@@ -23,6 +23,8 @@ namespace Koenig.Maestro.Entity
         [JsonConverter(typeof(EntityJsonConverter))]
         public MaestroUnit Unit { get; set; }
 
+        public bool UnitTypeCanHaveUnits { get { return this.Product == null ? false : this.Product.UnitTypeCanHaveUnits; } }
+        public long ProductGroupId { get { return this.Product == null ? 0 : this.Product.GroupId; } }
         [DisplayProperty(Text = "Quickbooks full name", DataField = "FullName", Sort = true, DisplayOrder = 10)]
         public string FullName
         {
@@ -59,5 +61,14 @@ namespace Koenig.Maestro.Entity
 
             return sb.ToString();
         }
+
+        public long UnitTypeId { get { return this.Product == null ? 0 : (this.Product.UnitType == null ? 0 : this.Product.UnitType.Id); } }
+        public string UnitTypeName { get { return this.Product == null ? string.Empty : (this.Product.UnitType ==null ? string.Empty :this.Product.UnitType.Name); } }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿import ErrorInfo, { IErrorInfo } from "./ErrorInfo";
 
 export interface IResponseMessage {
-    readonly ErrorInfo: IErrorInfo;
+    ErrorInfo: IErrorInfo;
     ResultMessage: string;
     TransactionResult: any;
     TransactionStatus: string;

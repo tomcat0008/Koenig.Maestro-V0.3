@@ -23,5 +23,11 @@ namespace Koenig.Maestro.Entity
             return string.Format(TostringTemplate + ", TranCode: `{0}`, CodeBase: `{1}`", TranCode, CodeBase);
         }
 
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

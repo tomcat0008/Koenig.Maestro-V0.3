@@ -96,7 +96,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             {
                 unknowProduct = new MaestroProduct()
                 {
-                    GroupId = 0,
+                    ProductGroup = new ProductGroupManager(context).GetUnknownItem(),
                     Name = MaestroApplication.Instance.UNKNOWN_ITEM_NAME,
                     MinimumOrderQuantity = 0,
                     QuickBooksProductId = string.Empty,

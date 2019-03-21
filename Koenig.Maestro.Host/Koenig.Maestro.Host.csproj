@@ -183,6 +183,7 @@
   <ItemGroup>
     <Content Include="Content\react-bootstrap-table2-paginator.css" />
     <Content Include="Content\react-bootstrap-table2.min.css" />
+    <Content Include="Content\react-datepicker.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -196,6 +197,7 @@
     <Content Include="img\check.png" />
     <Content Include="img\clients.png" />
     <Content Include="img\close.png" />
+    <Content Include="img\closeWindow.png" />
     <Content Include="img\cup.png" />
     <Content Include="img\delete.png" />
     <Content Include="img\edit.png" />
@@ -206,6 +208,7 @@
     <Content Include="img\invoice_export.png" />
     <Content Include="img\map.png" />
     <Content Include="img\measure.png" />
+    <Content Include="img\orderSummary.png" />
     <Content Include="img\order_new.png" />
     <Content Include="img\please-wait.gif" />
     <Content Include="img\qb_customers.png" />
@@ -310,14 +313,19 @@
     <TypeScriptCompile Include="Scripts\index.d.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\AxiosAgent.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\DbEntityBase.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\dbEntities\ICustomerProductUnit.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroProduct.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroRegion.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroUnit.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IOrderItem.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IOrderMaster.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IProductGroup.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IQbProductMap.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroUnitType.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\EntityAgent.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\ErrorInfo.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroCustomer.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\ITranComponentProp.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\ITranRequest.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\ITranState.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\ListRequest.ts" />
@@ -329,6 +337,7 @@
     <TypeScriptCompile Include="Scripts\src\components\IModalContainerState.ts" />
     <TypeScriptCompile Include="Scripts\src\components\IModalContent.ts" />
     <TypeScriptCompile Include="Scripts\src\components\ModalConatiner.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\CustomerProductUnitsComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\OrderProductItem.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\MaestroCustomerComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\mainMenu\MainMenu.tsx" />

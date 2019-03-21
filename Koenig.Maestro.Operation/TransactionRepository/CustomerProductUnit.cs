@@ -2,10 +2,12 @@
 using Koenig.Maestro.Operation.Cache.CacheRepository;
 using Koenig.Maestro.Operation.Data;
 using Koenig.Maestro.Operation.Framework;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using e = Koenig.Maestro.Entity;
 namespace Koenig.Maestro.Operation.TransactionRepository
 {
     internal class CustomerProductUnit : TransactionBase
@@ -27,9 +29,23 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             
         }
 
+        public override void Deserialize(JToken token)
+        {
+            e.CustomerProductUnit resultObj = new e.CustomerProductUnit();
+
+            JObject entityObj = JObject.Parse(token.ToString());
+
+            resultObj.Id = entityObj["Id"].ToObject<long>();
+            resultObj.Customer = CustomerCache.Instance[entityObj["CustomerId"].ToObject<long>()];
+            resultObj.Product = ProductCache.Instance[entityObj["ProductId"].ToObject<long>()];
+            resultObj.Unit = UnitCache.Instance[entityObj["UnitId"].ToObject<long>()];
+
+            Context.TransactionObject = resultObj;
+        }
+
         protected override void DeserializeLog(byte[] logData)
         {
-            throw new NotImplementedException();
+
         }
 
         protected override void ExportQb()

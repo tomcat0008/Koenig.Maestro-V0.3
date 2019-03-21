@@ -17,5 +17,6 @@ namespace Koenig.Maestro.Entity.Enums
         public static readonly string IMPORT_TYPE = "IMPORT_TYPE";
         public static readonly string EXPORT_TYPE = "EXPORT_TYPE";
         public static readonly string SEND_TO_QB = "SEND_TO_QB";
+        public static readonly string CREATE_INVOICE = "CREATE_INVOICE";
     }
 }

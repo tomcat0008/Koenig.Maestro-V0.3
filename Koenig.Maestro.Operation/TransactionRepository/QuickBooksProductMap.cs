@@ -66,6 +66,17 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         }
 
+        protected override void BackUp()
+        {
+            string guid = Guid.NewGuid().ToString();
+            SpCall call = new SpCall("BCK.BACK_UP_QB_PRODUCT_MAP");
+            call.SetVarchar("@BATCH_ID", guid);
+            call.SetDateTime("@BATCH_DATE", DateTime.Now);
+            db.ExecuteNonQuery(call);
+            response.TransactionResult = guid;
+            response.ResultMessage = string.Format("Backup created with batch id `{0}`", guid) + Environment.NewLine ;
+        }
+
         protected override void Update()
         {
             Entity.QuickBooksProductMapDef map = (Entity.QuickBooksProductMapDef)request.TransactionEntityList[0];

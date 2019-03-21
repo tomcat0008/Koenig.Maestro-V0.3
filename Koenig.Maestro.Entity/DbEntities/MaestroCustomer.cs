@@ -35,5 +35,10 @@ namespace Koenig.Maestro.Entity
 
         }
 
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

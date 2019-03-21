@@ -24,6 +24,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         QuickBooksInvoiceManager qim;
         OrderRequestType requestType;
         OrderManager orderMan;
+
         public Order(TransactionContext context) : base("ORDER", context)
         {
             qim = new QuickBooksInvoiceManager(Context);
@@ -98,7 +99,10 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 orderMan.InsertOrder(om);
                 //Context.TransactionObject = om;
                 response.TransactionResult = om;
-                ExportQb();
+
+                if(request.MessageDataExtension.ContainsKey(MessageDataExtensionKeys.CREATE_INVOICE))
+                    if(request.MessageDataExtension[MessageDataExtensionKeys.CREATE_INVOICE].Equals(bool.TrueString))
+                        ExportQb();
             }
             else
             {
@@ -178,14 +182,16 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         public override void Deserialize(JToken token)
         {
+            JObject entityObj = JObject.Parse(token.ToString());
+
             OrderMaster result = new OrderMaster()
             {
-                Id = token["Id"].ToObject<long>(),
-                OrderDate = token["OrderDate"].ToObject<DateTime>(),
-                DeliveryDate = token["DeliveryDate"].ToObject<DateTime>(),
-                PaymentType = token["PaymentType"].ToObject<string>(),
-                Notes = token["Notes"].ToObject<string>(),
-                OrderStatus = token["OrderStatus"].ToObject<string>(),
+                Id = entityObj["Id"].ToObject<long>(),
+                OrderDate = entityObj["OrderDate"].ToObject<DateTime>(),
+                DeliveryDate = entityObj["DeliveryDate"].ToObject<DateTime>(),
+                PaymentType = entityObj["PaymentType"].ToObject<string>(),
+                Notes = entityObj["Notes"].ToObject<string>(),
+                OrderStatus = entityObj.ContainsKey("OrderStatus") ? token["OrderStatus"].ToObject<string>() : string.Empty,
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
                 RecordStatus = "A",
@@ -194,13 +200,15 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 OrderItems = new List<OrderItem>()
             };
 
-            result.Customer = CustomerCache.Instance[token["Customer"].ToObject<long>()];
-            List<JToken> orderItemTokens = token["OrderItems"].Children().ToList();
+            result.Customer = CustomerCache.Instance[entityObj["CustomerId"].ToObject<long>()];
+            UnitManager um = new UnitManager(Context);
+            List<JToken> orderItemTokens = entityObj["OrderItems"].Children().ToList();
             foreach(JToken itemToken in orderItemTokens)
             {
-                Koenig.Maestro.Entity.QuickBooksProductMapDef map = QuickBooksProductMapCache.Instance[itemToken["QbProductMap"].ToObject<long>()];
-                MaestroProduct product = ProductCache.Instance[map.Product.Id];
-                MaestroUnit unit = UnitCache.Instance[itemToken["Unit"].ToObject<long>()];
+                QuickBooksProductMapDef map = QuickBooksProductMapCache.Instance[itemToken["MapId"].ToObject<long>()];
+                MaestroProduct product = ProductCache.Instance[itemToken["ProductId"].ToObject<long>()];
+                long unitId = itemToken["UnitId"].ToObject<long>();
+                MaestroUnit unit = unitId> 0 ? UnitCache.Instance[unitId] : um.GetUnknownItem();
                 OrderItem orderItem = new OrderItem()
                 {
                     OrderId = result.Id,
@@ -208,7 +216,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                     QbProductMap = map,
                     Quantity = itemToken["Quantity"].ToObject<int>(),
                     Unit = unit,
-                    Price = itemToken["Price"].ToObject<decimal>(),
+                    Price = map.Price,
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     RecordStatus = "A",

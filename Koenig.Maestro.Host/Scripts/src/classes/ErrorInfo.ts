@@ -3,6 +3,7 @@
     StackTrace: string;
     TransactionCode: string;
     ActionType: string;
+    DisableAction: boolean;
 }
 export default class ErrorInfo implements IErrorInfo{
 
@@ -10,11 +11,13 @@ export default class ErrorInfo implements IErrorInfo{
         this.UserFriendlyMessage="";
         this.StackTrace="";
         this.TransactionCode="";
-        this.ActionType="";
+        this.ActionType = "";
+        this.DisableAction = true;
     }
 
     UserFriendlyMessage: string;
     StackTrace: string;
     TransactionCode: string;
     ActionType: string;
+    DisableAction: boolean;
 }

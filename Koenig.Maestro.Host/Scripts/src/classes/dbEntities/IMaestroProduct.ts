@@ -1,14 +1,18 @@
 ﻿import { DbEntityBase } from "./DbEntityBase";
+import { IMaestroUnitType } from "./IMaestroUnitType";
 
-interface IMaestroProduct extends DbEntityBase {
+export interface IMaestroProduct extends DbEntityBase {
     
     Name: string;
     Description: string;
     QuickBooksProductId: string;
     Price: number;
     MinimumOrderQuantity: number;
-    MaestroUnitType: number;
+    MaestroUnitType: IMaestroUnitType;
     GroupId: number;
+    UnitTypeName: string;
+    UnitTypeId: number;
+    UnitTypeCanHaveUnits: boolean;
 }
 
 export default class MaestroProduct implements IMaestroProduct
@@ -23,7 +27,7 @@ export default class MaestroProduct implements IMaestroProduct
     QuickBooksProductId: string;
     Price: number;
     MinimumOrderQuantity: number;
-    MaestroUnitType: number;
+    MaestroUnitType: IMaestroUnitType;
     GroupId: number;
     Id: number;
     CreatedUser: string;
@@ -32,6 +36,7 @@ export default class MaestroProduct implements IMaestroProduct
     UpdateDate: string;
     RecordStatus: string;
     TypeName: string;
-
-
+    UnitTypeName: string;
+    UnitTypeId: number;
+    UnitTypeCanHaveUnits: boolean;
 }

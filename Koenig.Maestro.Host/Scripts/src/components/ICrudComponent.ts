@@ -2,5 +2,5 @@
 
 export interface ICrudComponent {
     Save(): Promise<IResponseMessage>;
-    Disable(): void;
+    DisableEnable(disable:boolean): void;
 }

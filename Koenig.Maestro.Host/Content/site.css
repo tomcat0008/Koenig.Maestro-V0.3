@@ -6,11 +6,99 @@
     border-radius: 5px;
 }
 
+img.disabled {
+    opacity: 0.5;
+}
+
+.tabRegion {
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: left;
+    font-size: 11px;
+    padding: 3px;
+    background-clip: padding-box;
+    border-bottom: 1px solid #ced4da;
+    border-left: 1px solid #ced4da;
+    border-right: 1px solid #ced4da;
+    height: 550px;
+    width: 100%;
+}
+
+.summaryTableHeaderRow {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: right;
+}
+.summaryTable {
+    background-color: #f1f1f1;
+    padding: 6px;
+    width:90%;
+}
+
+    .summaryTable td {
+        background-color: #f1f1f1;
+        border: 1px solid #d3d3d3;
+        padding: 6px;
+        text-align: right;
+    }
+
+.orderSummary {
+    position: absolute;
+    bottom: 300px;
+    right: -430px;
+    z-index: 0;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    height: 400px;
+    width: 650px;
+    padding: 10px;
+    text-align: center;
+    overflow-y: auto;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.orderSummaryHeader {
+    position: absolute;
+    bottom: 700px;
+    right: -430px;
+    padding: 10px;
+    cursor: move;
+    z-index: 1;
+    background-color: #007bff;
+    text-align: center;
+    color: #fff;
+    height: 50px;
+    width: 650px;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+
 table {
     font-family: 'Calibri';
     font-size: 15px;
     background-color: #fff;
     color: #333;
+}
+
+.errorHeader {
+    overflow-y: auto;
+    height: 40px;
+    max-height: 30px;
+    text-align: left;
+    font-size: 11px;
+}
+
+.errorStackTrace {
+    overflow-y: auto;
+    height: 200px;
+    max-height: 100px;
+    text-align: left;
+    font-size: 11px;
 }
 
 .grid-header-style {
@@ -19,6 +107,12 @@ table {
     font-family: 'Calibri';
     font-size: 15px;
     font-weight:bold;
+}
+
+
+.modal-90w {
+    width: 1000px;
+    max-width: none !important;
 }
 
 .modal-header {
@@ -248,5 +342,3 @@ table {
     pointer-events: none;
     font-size: 25px;
 }
-
-

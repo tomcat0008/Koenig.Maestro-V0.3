@@ -49,6 +49,7 @@
     <Compile Include="DbEntities\CustomerProductUnit.cs" />
     <Compile Include="DbEntities\MaestroCustomer.cs" />
     <Compile Include="DbEntities\MaestroProduct.cs" />
+    <Compile Include="DbEntities\MaestroProductGroup.cs" />
     <Compile Include="DbEntities\MaestroRegion.cs" />
     <Compile Include="DbEntities\MaestroUnit.cs" />
     <Compile Include="DbEntities\MaestroUnitType.cs" />

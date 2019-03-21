@@ -19,7 +19,7 @@ namespace Koenig.Maestro.Entity
         public string Notes { get; set; }
         [DisplayProperty(Text = "Order status", DataField = "OrderStatus",Sort = true, DisplayOrder = 30)]
         public string OrderStatus { get; set; }
-        [JsonConverter(typeof(EntityJsonConverter))]
+        
         public List<OrderItem> OrderItems { get; set; }
         [DisplayProperty(Text = "Customer", DataField = "CustomerName", Sort = true, DisplayOrder = 5)]
         public string CustomerName
@@ -32,6 +32,8 @@ namespace Koenig.Maestro.Entity
         {
             get { return this.OrderItems.Count; }
         }
+
+        public long CustomerId { get { return this.Customer != null ? this.Customer.Id : 0; } }
 
         [DisplayProperty(Text = "Integration status", DataField = "IntegrationStatus",Sort = true, DisplayOrder = 50)]
         public string IntegrationStatus
@@ -58,5 +60,11 @@ namespace Koenig.Maestro.Entity
             return builder.ToString() ;
 
         }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

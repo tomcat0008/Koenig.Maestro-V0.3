@@ -17,6 +17,11 @@ namespace Koenig.Maestro.Entity
         
         public MaestroUnit Unit { get;set; }
 
+
+        public long UnitId { get { return this.Unit.Id; } }
+
+        public long MapId { get { return this.QbProductMap.Id; } }
+
         [JsonConverter(typeof(EntityJsonConverter))]
         public QuickBooksProductMapDef QbProductMap { get; set; }
 
@@ -33,6 +38,11 @@ namespace Koenig.Maestro.Entity
 
         [DisplayProperty(Text = "Price", DataField = "ItemPrice", Sort = true, DisplayOrder = 30)]
         public decimal ItemPrice { get { return QbProductMap.Price; } }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
 
         public override string ToString()
         {

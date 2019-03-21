@@ -106,6 +106,12 @@ namespace Koenig.Maestro.Operation.Framework
                 case ActionType.Undelete:
                     Undelete();
                     break;
+                case ActionType.Clone:
+                    Clone();
+                    break;
+                case ActionType.Backup:
+                    BackUp();
+                    break;
             }
             response.ResultMessage = responseMessage;
             response.Warnings = Warnings;
@@ -156,6 +162,8 @@ namespace Koenig.Maestro.Operation.Framework
         protected virtual void DeserializeLog(byte[] logData) { }
         protected virtual void Undelete() { }
         protected virtual void Erase() { }
+        protected virtual void Clone() { }
+        protected virtual void BackUp() { }
 
         public virtual void Deserialize(JToken token) { }
 

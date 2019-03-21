@@ -11,7 +11,7 @@ namespace Koenig.Maestro.Entity.Enums
         public const string WAITING = "WAITING";
         public const string ERROR = "ERROR";
         public const string OK = "OK";
-        public const string UNKNOWN = "UNKNOW";
+        public const string UNKNOWN = "UNKNOWN";
         public const string REVOKED = "REVOKED";
         public const string CANCELLED = "CANCELLED";
     }

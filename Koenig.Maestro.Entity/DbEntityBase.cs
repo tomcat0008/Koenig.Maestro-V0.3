@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Koenig.Maestro.Entity
 {
-    public abstract class DbEntityBase: ITransactionEntity
+    public abstract class DbEntityBase: ITransactionEntity, ICloneable
     {
         protected string TostringTemplate
         {
@@ -33,6 +33,8 @@ namespace Koenig.Maestro.Entity
                 return this.GetType().Name;
             }
         }
+
+        public abstract object Clone();
 
     }
 }

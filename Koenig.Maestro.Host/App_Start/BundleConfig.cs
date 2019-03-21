@@ -27,6 +27,7 @@ namespace Koenig.Maestro.Host
             StyleBundle styleBundle = new StyleBundle("~/Content/dist");
             styleBundle.Include(
                 "~/Content/bootstrap.css",
+                "~/Content/react-datepicker.min.css",
                 "~/Content/site.css");
 
             bundles.Add(styleBundle);

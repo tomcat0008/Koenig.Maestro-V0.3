@@ -15,6 +15,7 @@ import EntityAgent from '../../classes/EntityAgent';
 import { ICrudComponent } from '../ICrudComponent';
 import ModalContainer from '../ModalConatiner';
 import { DbEntityBase } from '../../classes/dbEntities/DbEntityBase';
+import { Alert } from 'react-bootstrap';
 
 
 
@@ -27,14 +28,11 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
 
         
         let errorInfo: IErrorInfo = new ErrorInfo();
-        errorInfo.StackTrace = "";
-        errorInfo.UserFriendlyMessage = "";
-        this.setState({
+        this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), Action: "", TranCode: "",
             ShowSuccess: false, SuccessMessage: "", Init: true, Entity: null,
             ShowModal: false, ModalContent: null, ModalCaption: "",
-            ResponseMessage: new ResponseMessage()
-        });
+            ResponseMessage: new ResponseMessage()};
         this.saveFct = this.saveFct.bind(this);
 
     }
@@ -64,6 +62,8 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
 
     handleModalClose= ()=> {
         this.setState({ ShowModal: false });
+        $('#mainMenu').show();
+        $('#wait').hide();
     }
 
     handleClick = async (id: MenuItem)=>{
@@ -165,7 +165,23 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
                         </div>
 
                     </div>
-                    
+                    <Alert id="mmAlertId" dismissible show={this.state == null ? false : this.state.ShowError} variant="danger" data-dismiss="alert" >
+                        <Alert.Heading id="mmAlertHeadingId">Exception occured</Alert.Heading>
+                        <div className="errorStackTrace">
+                        <p id="mmAlertUserFriendlyId">
+                            {this.state == null ? "" : this.state.ErrorInfo.UserFriendlyMessage}
+                        </p>
+                        </div>
+                    <hr />
+                        <div className="errorStackTrace">
+                        <p id="mmAlertStackTraceId">
+                            {this.state == null ? "" : this.state.ErrorInfo.StackTrace}
+                        </p>
+                        </div>
+                    </Alert>
+                    <Alert variant="success" dismissible show={this.state == null ? false : this.state.ShowSuccess} data-dismiss="alert">
+                        <p id="mmSuccess">{this.state == null ? "" : this.state.SuccessMessage}</p>
+                    </Alert>
                     <ModalContainer  {
                         ...{
                             TranCode: (this.state == null ? "" : this.state.TranCode),

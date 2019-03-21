@@ -4,6 +4,7 @@ export default class ErrorInfo {
         this.StackTrace = "";
         this.TransactionCode = "";
         this.ActionType = "";
+        this.DisableAction = true;
     }
 }
 //# sourceMappingURL=ErrorInfo.js.map

@@ -49,10 +49,10 @@ namespace Koenig.Maestro.Operation.Cache.CacheRepository
             product.Price = reader.GetDecimal("PRICE");
             product.QuickBooksProductId = reader.GetString("QB_PRODUCT_ID");
             product.UnitType = UnitTypeCache.Instance[reader.GetInt64("UNIT_TYPE_ID")];
-            product.QbProductMaps = QuickBooksProductMapCache.Instance.GetByProductId(product.Id);
-            product.QbProductMaps.ForEach(q => q.Product = product);
+            /*product.QbProductMaps = QuickBooksProductMapCache.Instance.GetByProductId(product.Id);
+            product.QbProductMaps.ForEach(q => q.Product = product);*/
 
-            product.GroupId = reader.GetInt64("PRODUCT_GROUP_ID");
+            product.ProductGroup = ProductGroupCache.Instance[reader.GetInt64("PRODUCT_GROUP_ID")];
             product.CreateDate = reader.GetDateTime("CREATE_DATE");
             product.RecordStatus = reader.GetString("RECORD_STATUS");
             product.UpdateDate = reader.GetDateTime("UPDATE_DATE");

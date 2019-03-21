@@ -28,5 +28,11 @@ namespace Koenig.Maestro.Entity.DbEntities
             return string.Format(TostringTemplate + ", TransactionCode: `{0}`, ActionType: `{1}`", TransactionCode, ActionType);
 
         }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

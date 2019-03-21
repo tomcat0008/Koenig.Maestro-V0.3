@@ -16,7 +16,7 @@ import ErrorInfo from '../../classes/ErrorInfo';
 import ResponseMessage from '../../classes/ResponseMessage';
 import EntityAgent from '../../classes/EntityAgent';
 import ModalContainer from '../ModalConatiner';
-import OrderProductItem from '../OrderProductItem';
+import { Alert } from 'react-bootstrap';
 export default class MainMenu extends React.Component {
     constructor() {
         super(null);
@@ -44,6 +44,8 @@ export default class MainMenu extends React.Component {
         });
         this.handleModalClose = () => {
             this.setState({ ShowModal: false });
+            $('#mainMenu').show();
+            $('#wait').hide();
         };
         this.handleClick = (id) => __awaiter(this, void 0, void 0, function* () {
             //this.setState({ loading: true })
@@ -71,18 +73,15 @@ export default class MainMenu extends React.Component {
             //this.setState({ loading: false })
         });
         let errorInfo = new ErrorInfo();
-        errorInfo.StackTrace = "";
-        errorInfo.UserFriendlyMessage = "";
-        this.setState({
+        this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), Action: "", TranCode: "",
             ShowSuccess: false, SuccessMessage: "", Init: true, Entity: null,
             ShowModal: false, ModalContent: null, ModalCaption: "",
             ResponseMessage: new ResponseMessage()
-        });
+        };
         this.saveFct = this.saveFct.bind(this);
     }
     render() {
-        console.debug(this.state);
         return (React.createElement("div", { className: "container", style: { width: "800px", paddingTop: "50px" } },
             React.createElement("div", { className: "row" },
                 React.createElement("div", { className: "col-6" },
@@ -110,6 +109,15 @@ export default class MainMenu extends React.Component {
                         React.createElement(MenuItem, { imgName: "map.png", action: "List", tranCode: "REGION", eventHandler: this.handleClick, caption: "Regions", itemType: "button", msgExtension: {}, height: "70px", width: "100%" }),
                         React.createElement(MenuItem, { imgName: "cup.png", action: "List", tranCode: "CUSTOMER_PRODUCT_UNIT", eventHandler: this.handleClick, caption: "Customer Product Units", itemType: "button", msgExtension: {}, height: "70px", width: "100%" }),
                         React.createElement(MenuItem, { imgName: "cup.png", action: "List", tranCode: "QUICKBOOKS_INVOICE", eventHandler: this.handleClick, caption: "Invoices Logs", itemType: "button", msgExtension: {}, height: "70px", width: "100%" })))),
+            React.createElement(Alert, { id: "mmAlertId", dismissible: true, show: this.state == null ? false : this.state.ShowError, variant: "danger", "data-dismiss": "alert" },
+                React.createElement(Alert.Heading, { id: "mmAlertHeadingId" }, "Exception occured"),
+                React.createElement("div", { className: "errorStackTrace" },
+                    React.createElement("p", { id: "mmAlertUserFriendlyId" }, this.state == null ? "" : this.state.ErrorInfo.UserFriendlyMessage)),
+                React.createElement("hr", null),
+                React.createElement("div", { className: "errorStackTrace" },
+                    React.createElement("p", { id: "mmAlertStackTraceId" }, this.state == null ? "" : this.state.ErrorInfo.StackTrace))),
+            React.createElement(Alert, { variant: "success", dismissible: true, show: this.state == null ? false : this.state.ShowSuccess, "data-dismiss": "alert" },
+                React.createElement("p", { id: "mmSuccess" }, this.state == null ? "" : this.state.SuccessMessage)),
             React.createElement(ModalContainer, Object.assign({}, {
                 TranCode: (this.state == null ? "" : this.state.TranCode),
                 Action: (this.state == null ? "" : this.state.Action),
@@ -117,9 +125,7 @@ export default class MainMenu extends React.Component {
                 Show: (this.state == null ? false : this.state.ShowModal),
                 Caption: (this.state == null ? "" : "New " + this.state.TranCode.toLowerCase()),
                 Close: this.handleModalClose
-            })),
-            React.createElement(OrderProductItem, null),
-            React.createElement(OrderProductItem, null)));
+            }))));
     }
 }
 //# sourceMappingURL=MainMenu.js.map

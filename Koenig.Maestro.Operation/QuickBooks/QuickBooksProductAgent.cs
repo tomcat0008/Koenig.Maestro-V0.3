@@ -16,12 +16,14 @@ namespace Koenig.Maestro.Operation.QuickBooks
     {
         QuickBooksProductMapManager qmanager;
         ProductManager pm;
+        ProductGroupManager pgm;
         UnitManager um;
         public QuickBooksProductAgent(TransactionContext context) : base(context)
         {
             pm = new ProductManager(context);
             um = new UnitManager(context);
             qmanager = new QuickBooksProductMapManager(context);
+            pgm = new ProductGroupManager(context);
         }
 
         public override List<ITransactionEntity> Import()
@@ -107,6 +109,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
                 {
                     product.Id = existing.Id;
                     product.UnitType = existing.UnitType;
+                    product.ProductGroup = existing.ProductGroup;
                     pm.Update(product);
                     updatedProducts.Add(existing);
                 }
@@ -426,7 +429,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             {
                 Name = ReadString(item.ORSalesPurchase.SalesOrPurchase.Desc),
                 Description = ReadString(item.Name),
-                GroupId = 0,
+                ProductGroup = pgm.GetUnknownItem(),
                 MinimumOrderQuantity = 0,
                 Price = ReadPrice(item.ORSalesPurchase.SalesOrPurchase.ORPrice.Price),
                 QuickBooksProductId = ReadQbId(item.ListID),

@@ -2,7 +2,6 @@
 import { DbEntityBase } from "./DbEntityBase";
 
 export interface IOrderMaster extends DbEntityBase {
-    ProductId: number;
     CustomerId: number;
     OrderDate: Date;
     DeliveryDate: Date;
@@ -13,17 +12,19 @@ export interface IOrderMaster extends DbEntityBase {
     OrderItems: IOrderItem[];
     IntegrationStatus: string;
     CustomerName: string;
-    
+    CreateInvoiceOnQb: boolean;
 }
 
 export default class OrderMaster implements IOrderMaster {
 
     constructor(id: number) {
         this.Id = id;
+        this.OrderDate = new Date();
+        this.DeliveryDate = new Date();
+        this.DeliveryDate.setDate(this.OrderDate.getDate() + 1);
     }
 
     IsNew: boolean;
-    ProductId: number;
     CustomerId: number;
     OrderDate: Date;
     DeliveryDate: Date;
@@ -41,5 +42,5 @@ export default class OrderMaster implements IOrderMaster {
     UpdateDate: string;
     RecordStatus: string;
     TypeName: string;
-
+    CreateInvoiceOnQb: boolean;
 }

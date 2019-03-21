@@ -16,10 +16,13 @@ export interface IMaestroCustomer extends DbEntityBase {
 
 export default class MaestroCustomer implements IMaestroCustomer {
 
+        
+
     constructor(id: number) {
         this.Id = id;
         this.IsNew = id == 0;
     }
+
 
     IsNew: boolean;
     Name: string;

@@ -62,11 +62,18 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 
         public static void DisposeTransaction(TransactionBase tb)
         {
-            Guid ticket = tb.Context.TransactionId;
-            TransactionContext result = contextCache[ticket];
-            result.Database.Dispose();
-            contextCache.Remove(ticket);
-            tb.Dispose();
+            try
+            {
+                Guid ticket = tb.Context.TransactionId;
+                TransactionContext result = contextCache[ticket];
+                result.Database.Dispose();
+                contextCache.Remove(ticket);
+                tb.Dispose();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "Exception while transaction dispose");
+            }
         }
     }
 }

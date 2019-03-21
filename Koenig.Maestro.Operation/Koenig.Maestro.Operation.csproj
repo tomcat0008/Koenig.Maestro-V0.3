@@ -113,6 +113,7 @@
     <Compile Include="Cache\CacheValue.cs" />
     <Compile Include="Cache\DbLoadCache.cs" />
     <Compile Include="Cache\ICacheDictionary.cs" />
+    <Compile Include="Cache\CacheRepository\ProductGroupCache.cs" />
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\SpCall.cs" />
     <Compile Include="Data\SqlReader.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Framework\ManagerRepository\CustomerManager.cs" />
     <Compile Include="Framework\ManagerRepository\ManagerBase.cs" />
     <Compile Include="Framework\ManagerRepository\OrderManager.cs" />
+    <Compile Include="Framework\ManagerRepository\ProductGroupManager.cs" />
     <Compile Include="Framework\ManagerRepository\ProductManager.cs" />
     <Compile Include="Framework\ManagerRepository\QuickBooksProductMapManager.cs" />
     <Compile Include="Framework\ManagerRepository\RegionManager.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="TransactionRepository\CustomerProductUnit.cs" />
     <Compile Include="TransactionRepository\Order.cs" />
     <Compile Include="TransactionRepository\Product.cs" />
+    <Compile Include="TransactionRepository\ProductGroup.cs" />
     <Compile Include="TransactionRepository\QuickbooksInvoice.cs" />
     <Compile Include="TransactionRepository\QuickBooksProductMap.cs" />
     <Compile Include="TransactionRepository\Region.cs" />

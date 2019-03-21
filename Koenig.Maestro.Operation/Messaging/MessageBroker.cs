@@ -63,7 +63,8 @@ namespace Koenig.Maestro.Operation.Messaging
                 double duration = DateTime.Now.Subtract(start).TotalMilliseconds;
                 string resultMessage = string.Format("Transaction complete in {0} ms", duration);
                 
-                response.ResultMessage += resultMessage;
+                response.ResultMessage = string.IsNullOrWhiteSpace(response.ResultMessage) ? resultMessage :
+                    response.ResultMessage + resultMessage;
                 response.TransactionCode = tranCode;
                 response.TransactionDuration = duration;
                 response.ActionType = at.ToString();
@@ -80,7 +81,8 @@ namespace Koenig.Maestro.Operation.Messaging
                         response.ResultMessage += Environment.NewLine + exceptionMsg;
                     }
                 }
-                TransactionManager.DisposeTransaction(tranBase);
+                if(tranBase != null)
+                    TransactionManager.DisposeTransaction(tranBase);
             }
             return response;
 

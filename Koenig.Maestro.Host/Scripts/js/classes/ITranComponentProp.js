@@ -1,0 +1,1 @@
+//# sourceMappingURL=ITranComponentProp.js.map

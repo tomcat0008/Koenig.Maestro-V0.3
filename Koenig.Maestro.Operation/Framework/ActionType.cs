@@ -11,11 +11,13 @@ namespace Koenig.Maestro.Operation.Framework
         Update,
         Delete,
         Get,
+        Clone,
         List,
         ExportQb,
         ImportQb,
         Undefined,
         Undelete,
-        Erase
+        Erase,
+        Backup
     }
 }

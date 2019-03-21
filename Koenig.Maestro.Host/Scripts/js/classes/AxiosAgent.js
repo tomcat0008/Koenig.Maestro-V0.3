@@ -57,10 +57,11 @@ export default class AxiosAgent {
             return result;
         });
     }
-    createItem(tranCode, item) {
+    createItem(tranCode, item, mde) {
         return __awaiter(this, void 0, void 0, function* () {
             let url = "/MainPage/CreateItem";
-            let mde = {};
+            if (mde == undefined || mde == null)
+                mde = {};
             let itemList = [item];
             let msgJson = this.getMessage(mde, "New", tranCode, "", itemList);
             let result = yield this.sendRequest(url, msgJson);
@@ -78,19 +79,24 @@ export default class AxiosAgent {
             };
             yield axios.post(url, { requestMessage: message })
                 .then(({ data }) => {
-                if (data.ErrorInfo != null) {
-                    throw (data.ErrorInfo);
-                }
-                if (this.actionType == 'List') {
-                    if (data.TransactionResult == null)
-                        throw (getErrorInfo("Exception:Transaction returned empty resultset"));
-                    if (data.TransactionResult.length == 0)
-                        throw (getErrorInfo("Transaction returned empty resultset (length=0)"));
-                }
                 result = data;
+                if (this.actionType == 'List') {
+                    if (data.TransactionResult == null) {
+                        result.TransactionStatus = "ERROR";
+                        result.ErrorInfo = getErrorInfo("Exception:Transaction returned empty resultset");
+                    }
+                    if (data.TransactionResult.length == 0) {
+                        result.TransactionStatus = "ERROR";
+                        result.ErrorInfo = getErrorInfo("Transaction returned empty resultset (length=0)");
+                    }
+                }
             })
                 .catch(function (error) {
-                throw (getErrorInfo(error));
+                result.TransactionStatus = "ERROR";
+                if (typeof (error) == "string")
+                    result.ErrorInfo = getErrorInfo(error);
+                else
+                    result.ErrorInfo = error;
             });
             return result;
         });

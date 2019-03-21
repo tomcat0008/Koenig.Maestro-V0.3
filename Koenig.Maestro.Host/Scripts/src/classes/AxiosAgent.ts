@@ -1,9 +1,10 @@
 ﻿import RequestMessage from "./RequestMessage";
 import MessageHeader from "./MessageHeader";
-import { IResponseMessage } from "./ResponseMessage";
+import ResponseMessage, { IResponseMessage } from "./ResponseMessage";
 import axios from 'axios';
 import ErrorInfo, { IErrorInfo } from "./ErrorInfo";
 import { DbEntityBase } from "./dbEntities/DbEntityBase";
+import { string } from "prop-types";
 
 export default class AxiosAgent {
 
@@ -14,7 +15,8 @@ export default class AxiosAgent {
         let mde: { [key: string]: string } = {};
         let url: string = "/MainPage/List";
         let msgJson = this.getMessage(msgExtension, "List", tranCode, "", null);
-        let result: IResponseMessage = await this.sendRequest(url, msgJson) ;
+        let result: IResponseMessage = await this.sendRequest(url, msgJson);
+       
         return result;
     }
 
@@ -52,9 +54,10 @@ export default class AxiosAgent {
         return result;
     }
 
-    public async createItem(tranCode:string, item:DbEntityBase): Promise<IResponseMessage> {
+    public async createItem(tranCode: string, item: DbEntityBase, mde?: { [key: string]: string }): Promise<IResponseMessage> {
         let url: string = "/MainPage/CreateItem";
-        let mde: { [key: string]: string } = {};
+        if (mde == undefined || mde == null)
+            mde = {};
         let itemList = [item];
         let msgJson = this.getMessage(mde, "New", tranCode, "", itemList);
         let result: IResponseMessage = await this.sendRequest(url, msgJson);
@@ -73,24 +76,29 @@ export default class AxiosAgent {
         await axios.post<IResponseMessage>(url, { requestMessage: message })
             .then(
                 ({ data }) => {
-                    if (data.ErrorInfo != null) {
-                        throw (data.ErrorInfo);
-                    }
-
+                    result = data;   
                     if (this.actionType == 'List') {
-                        if (data.TransactionResult == null)
-                            throw (getErrorInfo("Exception:Transaction returned empty resultset"));
+                        if (data.TransactionResult == null) {
+                            result.TransactionStatus = "ERROR";
+                            result.ErrorInfo = getErrorInfo("Exception:Transaction returned empty resultset");
+                        }
                         
-                        if (data.TransactionResult.length == 0)
-                            throw (getErrorInfo("Transaction returned empty resultset (length=0)"));
+                        if (data.TransactionResult.length == 0) {
+                            result.TransactionStatus = "ERROR";
+                            result.ErrorInfo = getErrorInfo("Transaction returned empty resultset (length=0)");
+                        }
                     }
-                    result = data;
+                    
 
                 })
             .catch(function (error)
             {
+                result.TransactionStatus = "ERROR";
+                if (typeof (error) == "string")
 
-                throw (getErrorInfo(error));
+                    result.ErrorInfo = getErrorInfo(error);
+                else
+                    result.ErrorInfo = error;
             });
         return result;
 

@@ -6,24 +6,26 @@ import EntityAgent, { ICustomerDisplay } from '../../classes/EntityAgent';
 import MaestroRegion, { IMaestroRegion } from '../../classes/dbEntities/IMaestroRegion';
 import { IResponseMessage } from '../../classes/ResponseMessage';
 import { ICrudComponent } from '../ICrudComponent';
+import ErrorInfo from '../../classes/ErrorInfo';
+import { ITranComponentProp } from '../../classes/ITranComponentProp';
 
-export default class MaestroCustomerComponent extends React.Component<IMaestroCustomer, ICustomerDisplay> implements ICrudComponent {
+export default class MaestroCustomerComponent extends React.Component<ITranComponentProp, ICustomerDisplay> implements ICrudComponent {
 
-    state = { Customer: null, Regions: [], init: true}
+    state = { Customer: null, Regions: [], Init: true, ErrorInfo: new ErrorInfo() }
 
     //item:IMaestroCustomer;
-    constructor(props:IMaestroCustomer) {
+    constructor(props: ITranComponentProp) {
         super(props);
-        this.setState({ Customer: props, Regions:[], init:true });
+        //this.setState({ Customer: props.Entity as IMaestroCustomer, Regions: [], Init: true, ErrorInfo: new ErrorInfo()  });
     }
 
     async componentDidMount() {
         let ea: EntityAgent = new EntityAgent();
-        let cd: ICustomerDisplay = await ea.GetCustomerDisplay(this.props.Id);
+        let cd: ICustomerDisplay = await ea.GetCustomerDisplay(this.props.Entity.Id);
         
         this.Save = this.Save.bind(this);
         this.setState(cd);
-        if(this.props.IsNew)
+        if(this.props.Entity.IsNew)
             (document.getElementById("customerId") as HTMLInputElement).value = '';
     }
 
@@ -43,30 +45,36 @@ export default class MaestroCustomerComponent extends React.Component<IMaestroCu
         cust.MaestroRegion = new MaestroRegion(parseInt((document.getElementById("customerRegionId") as HTMLInputElement).value));
         cust.DefaultPaymentType = (document.getElementById("defaultPaymentId") as HTMLInputElement).checked ? "COD" : "";
         let result: IResponseMessage = await ea.SaveCustomer(cust);
-        if (result.ErrorInfo != null)
+        this.DisableEnable(true);
+        if (result.ErrorInfo != null) {
+            this.DisableEnable(false);
             throw result.ErrorInfo;
-        if (cust.Id <= 0) {
-            cust.Id = ((result.TransactionResult as MaestroCustomer).Id);
-            (document.getElementById("customerIdId") as HTMLInputElement).value = cust.Id.toString();
+            //this.props.ExceptionMethod(result.ErrorInfo);
         }
-        cust.IsNew = false;
-        
-        this.Disable();
-        return result;
+        else {
+            if (cust.Id <= 0) {
+                cust.Id = ((result.TransactionResult as MaestroCustomer).Id);
+                (document.getElementById("customerIdId") as HTMLInputElement).value = cust.Id.toString();
+            }
+            cust.IsNew = false;
+
+            this.DisableEnable(true);
+            return result;
+        }
     }
 
 
-    Disable() {
-        (document.getElementById("customerIdId") as HTMLInputElement).disabled = true;
-        (document.getElementById("qbCompanyId") as HTMLInputElement).disabled = true;
-        (document.getElementById("customerNameId") as HTMLInputElement).disabled = true;
-        (document.getElementById("qbListId") as HTMLInputElement).disabled = true;
-        (document.getElementById("customerTitleId") as HTMLInputElement).disabled = true;
-        (document.getElementById("customerRegionId") as HTMLInputElement).disabled = true;
-        (document.getElementById("customerAddressId") as HTMLInputElement).disabled = true;
-        (document.getElementById("customerEmailId") as HTMLInputElement).disabled = true;
-        (document.getElementById("customerPhoneId") as HTMLInputElement).disabled = true;
-        (document.getElementById("defaultPaymentId") as HTMLInputElement).disabled = true;
+    DisableEnable(disable:boolean) {
+        (document.getElementById("customerIdId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("qbCompanyId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("customerNameId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("qbListId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("customerTitleId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("customerRegionId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("customerAddressId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("customerEmailId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("customerPhoneId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("defaultPaymentId") as HTMLInputElement).disabled = disable;
 
     }
 
@@ -74,12 +82,12 @@ export default class MaestroCustomerComponent extends React.Component<IMaestroCu
         let cus: IMaestroCustomer = this.state.Customer;
         let regions: IMaestroRegion[] = this.state.Regions;
 
-        if (this.state.init) {
+        if (this.state.Init) {
             return (<p></p>);
         }
         else {
             let qbCompany, qbId;
-            if (this.props.IsNew) {
+            if (this.props.Entity.IsNew) {
                 qbCompany = <Form.Control id="qbCompanyId" type="input" />
                 qbId = <Form.Control id="qbListId" type="input" />
             }

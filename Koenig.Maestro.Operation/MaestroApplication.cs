@@ -21,7 +21,7 @@ namespace Koenig.Maestro.Operation
         static short qbMinorVersion = 0;
         static string qbCountryCode = string.Empty;
         
-        public readonly string UNKNOWN_ITEM_NAME = "UNKNOW";
+        public readonly string UNKNOWN_ITEM_NAME = "UNKNOWN";
 
         
 
