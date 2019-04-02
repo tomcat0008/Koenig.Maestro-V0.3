@@ -61,10 +61,12 @@
     <Compile Include="DbEntities\TransactionLog.cs" />
     <Compile Include="DbEntityBase.cs" />
     <Compile Include="EntityJsonConverter.cs" />
+    <Compile Include="Enums\DatePeriod.cs" />
     <Compile Include="Enums\ExportRequestType.cs" />
     <Compile Include="Enums\ImportRequestType.cs" />
     <Compile Include="Enums\MessageDataExtensionKeys.cs" />
     <Compile Include="Enums\OrderRequestType.cs" />
+    <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\QbIntegrationLogStatus.cs" />
     <Compile Include="GridColumnDefinition.cs" />
     <Compile Include="ITransactionEntity.cs" />

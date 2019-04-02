@@ -17,6 +17,7 @@ namespace Koenig.Maestro.Operation.Framework
 {
     internal abstract class TransactionBase : IDisposable
     {
+        protected ITransactionEntity MainEntitySample;
         public TransactionContext Context { get; private set; }
         protected Database db;
         protected QuickBooksAgent qbAgent;
@@ -76,6 +77,7 @@ namespace Koenig.Maestro.Operation.Framework
             request = requestMessage;
             extendedData = request.MessageDataExtension;
             response = new ResponseMessage();
+            
             ValidateRequest();
             switch (request.MessageHeader.ActionType)
             {
@@ -124,31 +126,34 @@ namespace Koenig.Maestro.Operation.Framework
 
             if (this.response.TransactionResult is List<ITransactionEntity>)
             {
-                List<ITransactionEntity> lst = (List<ITransactionEntity>)response.TransactionResult;
-                if(lst.Count > 0)
-                {
-                    List<Dictionary<string, object>> gcd = new List<Dictionary<string, object>>();
-                    ITransactionEntity entity = lst[0];
 
-                    entity.GetType().GetProperties().ToList()
-                        .Where(p => p.GetCustomAttributes(typeof(DisplayProperty), true).Any())
-                        .ToList().ForEach(delegate (PropertyInfo pi)
-                        {
-                            DisplayProperty dp = pi.GetCustomAttribute<DisplayProperty>();
-                            Dictionary<string, object> dic = new Dictionary<string, object>();
-                            dic.Add("text", dp.Text);
-                            dic.Add("dataField", dp.DataField);
-                            dic.Add("sort", dp.Sort);
-                            dic.Add("columnOrder", dp.DisplayOrder);
-                            dic.Add("align", dp.Align ?? "right");
-                            gcd.Add(dic);
-                        });
-                    ;
-                    response.GridDisplayMembers = gcd.OrderBy(d => Convert.ToInt32(d["columnOrder"])).ToList();
-                }
+                List<Dictionary<string, object>> gcd = new List<Dictionary<string, object>>();
+                ITransactionEntity entity = this.MainEntitySample;
 
+                entity.GetType().GetProperties().ToList()
+                    .Where(p => p.GetCustomAttributes(typeof(DisplayProperty), true).Any())
+                    .ToList().ForEach(delegate (PropertyInfo pi)
+                    {
+                        DisplayProperty dp = pi.GetCustomAttribute<DisplayProperty>();
+                        Dictionary<string, object> dic = new Dictionary<string, object>();
+                        dic.Add("text", dp.Text);
+                        dic.Add("dataField", dp.DataField);
+                        dic.Add("sort", dp.Sort);
+                        dic.Add("columnOrder", dp.DisplayOrder);
+                        dic.Add("align", dp.Align ?? "right");
+
+                        if (dp.Filter)
+                            dic.Add("filterType", pi.PropertyType.Name);
+
+                        if (!string.IsNullOrWhiteSpace(dp.ColumnWidth))
+                            dic.Add("columnWidth", dp.ColumnWidth);
+
+                        gcd.Add(dic);
+                    });
+                ;
+                response.GridDisplayMembers = gcd.OrderBy(d => Convert.ToInt32(d["columnOrder"])).ToList();
             }
-
+            
         }
 
         protected abstract void Get();

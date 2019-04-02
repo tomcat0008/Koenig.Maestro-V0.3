@@ -64,6 +64,17 @@ export default class AxiosAgent {
         return result;
     }
 
+    public async exportItemQb(tranCode: string, items: DbEntityBase[], mde?: { [key: string]: string }): Promise<IResponseMessage> {
+        let url: string = "/MainPage/ExportItem";
+        if (mde == undefined || mde == null)
+            mde = {};
+        let itemList = items;
+        let msgJson = this.getMessage(mde, "ExportQb", tranCode, "", itemList);
+        let result: IResponseMessage = await this.sendRequest(url, msgJson);
+        return result;
+    }
+
+
     private async sendRequest(url:string, message:string): Promise<IResponseMessage> {
 
         let result: IResponseMessage;

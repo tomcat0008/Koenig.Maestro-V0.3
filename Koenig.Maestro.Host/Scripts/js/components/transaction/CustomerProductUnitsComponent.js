@@ -26,6 +26,16 @@ export default class CustomerProductUnitsComponent extends React.Component {
         };
         //props.Entity.IsNew = props.Entity.Id > 0;
     }
+    Cancel() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
+        });
+    }
+    Integrate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
+        });
+    }
     Save() {
         return __awaiter(this, void 0, void 0, function* () {
             let cpu = new CustomerProductUnit(0);
@@ -83,6 +93,7 @@ export default class CustomerProductUnitsComponent extends React.Component {
                 }
                 this.setState(cd);
             }
+            this.props.ButtonSetMethod(cd.Entity.Actions);
         });
     }
     render() {

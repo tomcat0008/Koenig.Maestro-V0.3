@@ -42,5 +42,6 @@ export class OrderItem implements IOrderItem {
     RecordStatus: string;
     TypeName: string;
 
+    Actions: string[];
 
 }

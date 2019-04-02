@@ -206,6 +206,7 @@
     <Content Include="img\icon-order.png" />
     <Content Include="img\icon_add.png" />
     <Content Include="img\invoice_export.png" />
+    <Content Include="img\loading.gif" />
     <Content Include="img\map.png" />
     <Content Include="img\measure.png" />
     <Content Include="img\orderSummary.png" />
@@ -242,6 +243,9 @@
     <Content Include="Scripts\js\maestro.js" />
     <Content Include="webpack.config.js" />
     <Content Include="appSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -304,6 +308,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Scripts\src\components\admin\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
@@ -320,6 +325,7 @@
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IOrderItem.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IOrderMaster.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IProductGroup.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IQbInvoiceLog.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IQbProductMap.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroUnitType.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\EntityAgent.ts" />
@@ -343,6 +349,10 @@
     <TypeScriptCompile Include="Scripts\src\components\mainMenu\MainMenu.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\mainMenu\MenuItem.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\OrderComponent.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\QbInvoiceLogComponent.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\RegionComponent.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\UnitComponent.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\UnitTypeComponent.tsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Koenig.Maestro.Entity\Koenig.Maestro.Entity.csproj">

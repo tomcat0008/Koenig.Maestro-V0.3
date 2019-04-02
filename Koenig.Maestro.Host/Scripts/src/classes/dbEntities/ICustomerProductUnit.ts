@@ -35,4 +35,7 @@ export default class CustomerProductUnit implements ICustomerProductUnit
     RecordStatus: string;
     TypeName: string;
     IsNew: boolean;
+
+    Actions: string[];
+
 }

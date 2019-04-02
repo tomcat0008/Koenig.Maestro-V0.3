@@ -43,7 +43,9 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
 
         this.renderTabs = this.renderTabs.bind(this);
         this.renderMaps = this.renderMaps.bind(this);
+        this.Integrate = this.Integrate.bind(this);
     }
+
 
     DisableEnable = (disable:boolean)=> {
         (document.getElementById("orderCustomerId") as HTMLSelectElement).disabled = disable;
@@ -101,6 +103,7 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
     }
 
     UpdateOrder = (mapId: number, unitId: number, quantity: number) => {
+        $("body").addClass("loading");
         let order: IOrderMaster = this.state.Entity;
         if (order.OrderItems == undefined)
             order.OrderItems = new Array<IOrderItem>();
@@ -131,12 +134,35 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
 
         this.setState({ Entity: order });
         this.UpdateSummary(order);
+        $("body").removeClass("loading");
+    }
+
+    async Cancel(): Promise<IResponseMessage> {
+        return null;
+    }
+
+    async Integrate(): Promise<IResponseMessage> {
+
+        $("body").addClass("loading");
+        let order: OrderMaster = this.state.Entity;
+        let ea: EntityAgent = new EntityAgent();
+        this.DisableEnable(true);
+        let result: IResponseMessage = await ea.ExportOrder(order);
+        if (result.ErrorInfo != null) {
+            $("body").removeClass("loading");
+            throw result.ErrorInfo;
+        }
+        order = result.TransactionResult as IOrderMaster;
+        this.setState({ Entity: order });
+        (document.getElementById("intergationStatusId") as HTMLInputElement).value = order.IntegrationStatus;
+        $("body").removeClass("loading");
+        return result;
     }
 
 
     async Save(): Promise<IResponseMessage> {
 
-
+        $("body").addClass("loading");
         let order: OrderMaster = this.state.Entity;
         const getError = (msg: string): IErrorInfo => {
             let result: ErrorInfo = new ErrorInfo();
@@ -147,11 +173,14 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
 
         if (order.CustomerId == undefined || order.CustomerId <= 0) {
             //alert("Please select customer");
+            $("body").removeClass("loading");
             throw getError("Please select customer");
         } else if (order.OrderItems == undefined || order.OrderItems.length == 0) {
             //alert("Please select at least 1 product");
+            $("body").removeClass("loading");
             throw getError("Please select at least 1 product");
         } else if (order.OrderItems.find(i => i.UnitId <= 0) != undefined) {
+            $("body").removeClass("loading");
             let msg: string = "Please select unit for `" + (this.state.ProductMaps as IQbProductMap[]).find(m => m.Id == order.OrderItems.find(i => i.UnitId <= 0).MapId).QuickBooksDescription + "`";
             //alert(msg);
             throw getError(msg);
@@ -167,13 +196,25 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
         let ea: EntityAgent = new EntityAgent();
         this.DisableEnable(true);
         let result: IResponseMessage = await ea.SaveOrder(order);
-
+        order.Actions = new Array<string>();
         if (result.ErrorInfo != null) {
             this.DisableEnable(false);
+            order.Actions.push("Save");
+            $("body").removeClass("loading");
+            this.setState({ Entity: order });
+            
             throw result.ErrorInfo;
         }
         else {
+            $("body").removeClass("loading");
+            order.Actions.push("Cancel");
+            if (!order.CreateInvoiceOnQb)
+                order.Actions.push("Integrate");
+            this.setState({ Entity: order });
+            
+            
             return result;
+
         }
     }
 
@@ -185,8 +226,8 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
         let response: IResponseMessage;
         let order: IOrderMaster;
 
-
-
+        $("body").addClass("loading");
+        
         if (this.props.Entity.Id == 0) {
             response = await new AxiosAgent().getNewOrderId();
 
@@ -194,10 +235,23 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                 throw (response.ErrorInfo);
             order = new OrderMaster(response.TransactionResult);
             order.IsNew = true;
+            order.Actions = new Array<string>();
+            order.Actions.push("Save");
         }
         else {
             order = this.props.Entity as IOrderMaster;
             order.IsNew = false;
+            order.Actions = new Array<string>();
+            
+            order.Actions.push("Cancel");
+            if (order.OrderStatus == "QB" || order.OrderStatus == "CC") {
+                order.Actions.push("Cancel");    
+            }
+            else {
+                order.Actions.push("Integrate");
+                order.Actions.push("Save");
+            }
+
         }
 
         let ea: EntityAgent = new EntityAgent();
@@ -211,10 +265,9 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
             cd.OrderDate = order.OrderDate;
             this.setState(cd);
             this.UpdateSummary(order);
-            if (order.IntegrationStatus == "OK" || order.IntegrationStatus == "CANCELLED") {
+            if (order.OrderStatus == "QB" || order.OrderStatus == "CC") { //cancelled or integrated
                 this.DisableEnable(true);
-                (document.getElementById('btnSave') as HTMLButtonElement).disabled = true;
-                (document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;            
+                //this.props.ButtonSetMethod(order.Actions);
             }
         };
 
@@ -228,8 +281,9 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
 
         if (!exOccured)
             setOrderState();
-         
-        $('#wait').hide();
+
+        $("body").removeClass("loading");
+        //$('#wait').hide();
 
 
     }
@@ -303,7 +357,12 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
             customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
 
             let order: IOrderMaster = this.state.Entity;
-            
+
+
+
+
+
+            this.props.ButtonSetMethod(order.Actions);
             return (
                 <div className="container">
 
@@ -320,9 +379,15 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                     </Row>
                     <Row >
                         <Col style={{ paddingTop: "5px" }} sm={2}>Integration status</Col>
-                        <Col style={{ paddingTop: "5px" }} sm={6}>
-                            <Form.Control plaintext readOnly defaultValue={order.IntegrationStatus} />
+                        <Col style={{ paddingTop: "5px" }} sm={2}>
+                            <Form.Control id="intergationStatusId" plaintext readOnly defaultValue={order.IntegrationStatus} />
                         </Col>
+                        <Col style={{ paddingTop: "5px" }} sm={2}>Order status</Col>
+                        <Col style={{ paddingTop: "5px" }} sm={2}>
+                            <Form.Control id="orderStatusId" plaintext readOnly defaultValue={order.OrderStatus} />
+                        </Col>
+
+
                     </Row>
                     <Row>
                         <Col style={{ paddingTop: "5px" }} sm={2}>Customer</Col>
@@ -368,6 +433,9 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                             {this.renderTabs()}
                         </Col>
                     </Row>
+
+
+
                     <Draggable
                         axis="both"
                         handle=".orderSummaryHeader"

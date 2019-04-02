@@ -120,6 +120,7 @@
     <Compile Include="Framework\ActionType.cs" />
     <Compile Include="Framework\MaestroReceiver.cs" />
     <Compile Include="Framework\ManagerRepository\CustomerManager.cs" />
+    <Compile Include="Framework\ManagerRepository\CustomerProductUnitManager.cs" />
     <Compile Include="Framework\ManagerRepository\ManagerBase.cs" />
     <Compile Include="Framework\ManagerRepository\OrderManager.cs" />
     <Compile Include="Framework\ManagerRepository\ProductGroupManager.cs" />

@@ -7,12 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import MaestroCustomer from './dbEntities/IMaestroCustomer';
+import MaestroRegion from './dbEntities/IMaestroRegion';
 import AxiosAgent from './AxiosAgent';
 import OrderMaster from './dbEntities/IOrderMaster';
 import MaestroProduct from './dbEntities/IMaestroProduct';
 import CustomerProductUnit from './dbEntities/ICustomerProductUnit';
+import ErrorInfo from './ErrorInfo';
 import MaestroUnit from './dbEntities/IMaestroUnit';
 import MaestroProductGroup from './dbEntities/IProductGroup';
+import MaestroUnitType from './dbEntities/IMaestroUnitType';
+import QbInvoiceLog from './dbEntities/IQbInvoiceLog';
 export default class EntityAgent {
     static GetFirstSelecItem(tranCode) {
         let result;
@@ -38,6 +42,16 @@ export default class EntityAgent {
                 pg.Name = selectText;
                 result = pg;
                 break;
+            case "REGION":
+                let region = new MaestroRegion(-1);
+                region.Name = selectText;
+                result = region;
+                break;
+            case "UNIT_TYPE":
+                let unitType = new MaestroUnitType(-1);
+                unitType.Name = selectText;
+                result = unitType;
+                break;
         }
         return result;
     }
@@ -61,6 +75,18 @@ export default class EntityAgent {
             case "PRODUCT_GROUP":
                 result = new MaestroProductGroup(0);
                 result.IsNew = true;
+                break;
+            case "REGION":
+                result = new MaestroRegion(0);
+                break;
+            case "UNIT":
+                result = new MaestroUnit(0);
+                break;
+            case "UNIT_TYPE":
+                result = new MaestroUnitType(0);
+                break;
+            case "QUICKBOOKS_INVOICE":
+                result = new QbInvoiceLog(0);
                 break;
         }
         return result;
@@ -102,6 +128,13 @@ export default class EntityAgent {
             return result;
         });
     }
+    ExportOrder(item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let ax = new AxiosAgent();
+            let result = yield ax.exportItemQb("ORDER", [item]);
+            return result;
+        });
+    }
     SaveCustomerProductUnit(item) {
         return __awaiter(this, void 0, void 0, function* () {
             let result;
@@ -109,6 +142,36 @@ export default class EntityAgent {
                 result = yield this.UpdateItem("CUSTOMER_PRODUCT_UNIT", item);
             else
                 result = yield this.CreateItem("CUSTOMER_PRODUCT_UNIT", item);
+            return result;
+        });
+    }
+    SaveUnitType(item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result;
+            if (item.Id > 0)
+                result = yield this.UpdateItem("UNIT_TYPE", item);
+            else
+                result = yield this.CreateItem("UNIT_TYPE", item);
+            return result;
+        });
+    }
+    SaveUnit(item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result;
+            if (item.Id > 0)
+                result = yield this.UpdateItem("UNIT", item);
+            else
+                result = yield this.CreateItem("UNIT", item);
+            return result;
+        });
+    }
+    SaveRegion(item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result;
+            if (item.Id > 0)
+                result = yield this.UpdateItem("REGION", item);
+            else
+                result = yield this.CreateItem("REGION", item);
             return result;
         });
     }
@@ -139,6 +202,8 @@ export default class EntityAgent {
             }
             if (response.TransactionStatus != "ERROR")
                 unitList = response.TransactionResult;
+            let cpu = new CustomerProductUnit(0);
+            cpu.Actions = new Array("Save");
             let result = {
                 Init: true,
                 Customers: cusList,
@@ -146,7 +211,7 @@ export default class EntityAgent {
                 Products: productList,
                 Units: unitList,
                 ProductId: 0,
-                Entity: new CustomerProductUnit(0),
+                Entity: cpu,
                 UnitTypeId: 0
             };
             return result;
@@ -191,6 +256,80 @@ export default class EntityAgent {
             return result;
         });
     }
+    GetQbInvoiceLogDisplay(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let log;
+            let response;
+            let errorInfo;
+            let ax = new AxiosAgent();
+            response = yield ax.getItem(id, "QUICKBOOKS_INVOICE");
+            log = response.TransactionResult;
+            errorInfo = response.ErrorInfo;
+            log.Actions = new Array();
+            let result = { ErrorInfo: errorInfo, InvoiceLog: log, Init: false };
+            return result;
+        });
+    }
+    GetRegionDisplay(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let region;
+            let response;
+            let errorInfo;
+            let ax = new AxiosAgent();
+            if (id > 0) {
+                response = yield ax.getItem(id, "REGION");
+                region = response.TransactionResult;
+                errorInfo = response.ErrorInfo;
+            }
+            else {
+                errorInfo = new ErrorInfo();
+                region = new MaestroRegion(0);
+            }
+            region.Actions = new Array("Save");
+            let result = { ErrorInfo: errorInfo, Region: region, Init: false };
+            return result;
+        });
+    }
+    GetUnitTypeDisplay(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let unitType;
+            let response;
+            let errorInfo;
+            let ax = new AxiosAgent();
+            if (id > 0) {
+                response = yield ax.getItem(id, "UNIT_TYPE");
+                unitType = response.TransactionResult;
+                errorInfo = response.ErrorInfo;
+            }
+            else {
+                unitType = new MaestroUnitType(0);
+                errorInfo = new ErrorInfo();
+            }
+            unitType.Actions = new Array("Save");
+            let result = { ErrorInfo: errorInfo, UnitType: unitType, Init: false };
+            return result;
+        });
+    }
+    GetUnitDisplay(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let unit;
+            let unitTypeList;
+            let response;
+            let ax = new AxiosAgent();
+            if (id > 0) {
+                response = yield ax.getItem(id, "UNIT");
+                unit = response.TransactionResult;
+            }
+            else {
+                unit = new MaestroUnit(0);
+            }
+            unit.Actions = new Array("Save");
+            response = yield ax.getList("UNIT_TYPE", {});
+            unitTypeList = response.TransactionResult;
+            let result = { ErrorInfo: response.ErrorInfo, Unit: unit, UnitTypes: unitTypeList, Init: false };
+            return result;
+        });
+    }
     GetCustomerDisplay(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let cust;
@@ -206,6 +345,8 @@ export default class EntityAgent {
             }
             response = yield ax.getList("REGION", {});
             regionList = response.TransactionResult;
+            cust.Actions = new Array();
+            cust.Actions.push("Save");
             let result = { ErrorInfo: response.ErrorInfo, Customer: cust, Regions: regionList, Init: false };
             return result;
         });

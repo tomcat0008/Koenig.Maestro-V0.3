@@ -67,6 +67,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                             }
                         log.QuickBooksInvoiceId = qbInvoiceId;
                         log.QuickBooksTxnId = qbTxnId;
+                        log.IntegrationStatus = QbIntegrationLogStatus.OK;
                     }
                     catch (Exception ex)
                     {
@@ -75,6 +76,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                         log.IntegrationStatus = QbIntegrationLogStatus.ERROR;
                         log.ErrorLog = ex.ToString();
                         context.Warnings.Add(message);
+                        
                     }
 
                     InsertIntegrationLog(log);
@@ -89,7 +91,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
        
 
 
-        QuickBooksInvoiceLog CreateInvoiceLog(OrderMaster om, string status)
+        public QuickBooksInvoiceLog CreateInvoiceLog(OrderMaster om, string status)
         {
             QuickBooksInvoiceLog log = new QuickBooksInvoiceLog()
             {
@@ -159,7 +161,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 
         }
 
-        void InsertIntegrationLog(QuickBooksInvoiceLog log)
+        public void InsertIntegrationLog(QuickBooksInvoiceLog log)
         {
             SpCall spCall = new SpCall("DAT.QB_INVOICE_LOG_INSERT");
             spCall.SetBigInt("@ORDER_ID", log.OrderId);
@@ -221,6 +223,52 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 
 
         }
+
+        public QuickBooksInvoiceLog InitLog(DataRow row)
+        {
+
+            QuickBooksInvoiceLog result = new QuickBooksInvoiceLog()
+            {
+                Id = row.Field<long>("ID"),
+                BatchId = row.Field<long>("BATCH_ID"),
+                CreateDate = row.Field<DateTime>("CREATE_DATE"),
+                CreatedUser = row.Field<string>("CREATE_USER"),
+                Customer = CustomerCache.Instance[row.Field<long>("MAESTRO_CUSTOMER_ID")],
+                ErrorLog = row.Field<string>("ERROR_LOG"),
+                IntegrationDate = row.Field<DateTime>("INTEGRATION_DATE"),
+                IntegrationStatus = row.Field<string>("INTEGRATION_STATUS"),
+                OrderId = row.Field<long>("ORDER_ID"),
+                QuickBooksCustomerId = row.Field<string>("QB_CUSTOMER_ID"),
+                QuickBooksInvoiceId = row.Field<string>("QB_INVOICE_NO"),
+                QuickBooksTxnId = row.Field<string>("QB_TXN_ID"),
+                RecordStatus = row.Field<string>("RECORD_STATUS"),
+                UpdateDate = row.Field<DateTime>("UPDATE_DATE"),
+                UpdatedUser = row.Field<string>("UPDATE_USER")
+            };
+            return result;
+
+
+        }
+
+
+        public List<QuickBooksInvoiceLog> List(DateTime begin, DateTime end, long customerId, string status, long batchId)
+        {
+            List<QuickBooksInvoiceLog> result = new List<QuickBooksInvoiceLog>();
+
+            SpCall spCall = new SpCall("DAT.QB_INVOICE_LOG_LIST");
+            spCall.SetVarchar("@INTEGRATION_STATUS", status);
+            spCall.SetDateTime("@INTEGRATION_DATE_BEGIN", begin);
+            spCall.SetDateTime("@INTEGRATION_DATE_END", end);
+            spCall.SetBigInt("@BATCH_ID", batchId);
+            spCall.SetBigInt("@CUSTOMER_ID", customerId);
+
+            DataSet ds = db.ExecuteDataSet(spCall);
+
+            ds.Tables[0].AsEnumerable().ToList().ForEach(logRow => { result.Add(InitLog(logRow)); });
+
+            return result;
+        }
+
 
     }
 }

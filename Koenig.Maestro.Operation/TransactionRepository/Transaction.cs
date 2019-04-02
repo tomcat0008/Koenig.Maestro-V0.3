@@ -15,7 +15,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
     {
         public Transaction(TransactionContext context) : base("TRAN_DEFINITION", context)
         {
-            
+            this.MainEntitySample = new TransactionDefinition();
         }
 
         protected override void DeserializeLog(byte[] logData)

@@ -208,7 +208,6 @@ namespace Koenig.Maestro.Operation.Cache
             }
             else
             {
-                //TODO:key not found
                 return default(TValue);
             }
         }

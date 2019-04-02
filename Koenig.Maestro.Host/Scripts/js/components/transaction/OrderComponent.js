@@ -74,6 +74,7 @@ export default class OrderComponent extends React.Component {
                 }
         };
         this.UpdateOrder = (mapId, unitId, quantity) => {
+            $("body").addClass("loading");
             let order = this.state.Entity;
             if (order.OrderItems == undefined)
                 order.OrderItems = new Array();
@@ -101,6 +102,7 @@ export default class OrderComponent extends React.Component {
             }
             this.setState({ Entity: order });
             this.UpdateSummary(order);
+            $("body").removeClass("loading");
         };
         this.state = {
             Customers: [], Products: [], ProductMaps: [], CustomerProductUnits: [],
@@ -110,9 +112,34 @@ export default class OrderComponent extends React.Component {
         };
         this.renderTabs = this.renderTabs.bind(this);
         this.renderMaps = this.renderMaps.bind(this);
+        this.Integrate = this.Integrate.bind(this);
+    }
+    Cancel() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
+        });
+    }
+    Integrate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            $("body").addClass("loading");
+            let order = this.state.Entity;
+            let ea = new EntityAgent();
+            this.DisableEnable(true);
+            let result = yield ea.ExportOrder(order);
+            if (result.ErrorInfo != null) {
+                $("body").removeClass("loading");
+                throw result.ErrorInfo;
+            }
+            order = result.TransactionResult;
+            this.setState({ Entity: order });
+            document.getElementById("intergationStatusId").value = order.IntegrationStatus;
+            $("body").removeClass("loading");
+            return result;
+        });
     }
     Save() {
         return __awaiter(this, void 0, void 0, function* () {
+            $("body").addClass("loading");
             let order = this.state.Entity;
             const getError = (msg) => {
                 let result = new ErrorInfo();
@@ -122,13 +149,16 @@ export default class OrderComponent extends React.Component {
             };
             if (order.CustomerId == undefined || order.CustomerId <= 0) {
                 //alert("Please select customer");
+                $("body").removeClass("loading");
                 throw getError("Please select customer");
             }
             else if (order.OrderItems == undefined || order.OrderItems.length == 0) {
                 //alert("Please select at least 1 product");
+                $("body").removeClass("loading");
                 throw getError("Please select at least 1 product");
             }
             else if (order.OrderItems.find(i => i.UnitId <= 0) != undefined) {
+                $("body").removeClass("loading");
                 let msg = "Please select unit for `" + this.state.ProductMaps.find(m => m.Id == order.OrderItems.find(i => i.UnitId <= 0).MapId).QuickBooksDescription + "`";
                 //alert(msg);
                 throw getError(msg);
@@ -143,11 +173,20 @@ export default class OrderComponent extends React.Component {
             let ea = new EntityAgent();
             this.DisableEnable(true);
             let result = yield ea.SaveOrder(order);
+            order.Actions = new Array();
             if (result.ErrorInfo != null) {
                 this.DisableEnable(false);
+                order.Actions.push("Save");
+                $("body").removeClass("loading");
+                this.setState({ Entity: order });
                 throw result.ErrorInfo;
             }
             else {
+                $("body").removeClass("loading");
+                order.Actions.push("Cancel");
+                if (!order.CreateInvoiceOnQb)
+                    order.Actions.push("Integrate");
+                this.setState({ Entity: order });
                 return result;
             }
         });
@@ -157,16 +196,28 @@ export default class OrderComponent extends React.Component {
             //this.Save = this.Save.bind(this);
             let response;
             let order;
+            $("body").addClass("loading");
             if (this.props.Entity.Id == 0) {
                 response = yield new AxiosAgent().getNewOrderId();
                 if (response.TransactionStatus == "ERROR")
                     throw (response.ErrorInfo);
                 order = new OrderMaster(response.TransactionResult);
                 order.IsNew = true;
+                order.Actions = new Array();
+                order.Actions.push("Save");
             }
             else {
                 order = this.props.Entity;
                 order.IsNew = false;
+                order.Actions = new Array();
+                order.Actions.push("Cancel");
+                if (order.OrderStatus == "QB" || order.OrderStatus == "CC") {
+                    order.Actions.push("Cancel");
+                }
+                else {
+                    order.Actions.push("Integrate");
+                    order.Actions.push("Save");
+                }
             }
             let ea = new EntityAgent();
             let cd = yield ea.GetOrderDisplay();
@@ -176,6 +227,11 @@ export default class OrderComponent extends React.Component {
                 cd.DeliveryDate = order.DeliveryDate;
                 cd.OrderDate = order.OrderDate;
                 this.setState(cd);
+                this.UpdateSummary(order);
+                if (order.OrderStatus == "QB" || order.OrderStatus == "CC") { //cancelled or integrated
+                    this.DisableEnable(true);
+                    //this.props.ButtonSetMethod(order.Actions);
+                }
             };
             let exOccured = false;
             if (cd.ErrorInfo != null) {
@@ -186,7 +242,8 @@ export default class OrderComponent extends React.Component {
             }
             if (!exOccured)
                 setOrderState();
-            $('#wait').hide();
+            $("body").removeClass("loading");
+            //$('#wait').hide();
         });
     }
     renderMaps(mapId, productId, productLabel, unitTypeLabel, units) {
@@ -218,6 +275,7 @@ export default class OrderComponent extends React.Component {
                 customers.unshift(EntityAgent.GetFirstSelecItem("CUSTOMER"));
             customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
             let order = this.state.Entity;
+            this.props.ButtonSetMethod(order.Actions);
             return (React.createElement("div", { className: "container" },
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Order Id"),
@@ -227,8 +285,11 @@ export default class OrderComponent extends React.Component {
                         React.createElement("img", { src: "/img/orderSummary.png", className: this.state.SummaryDisplay.display == "none" ? "" : "disabled", onClick: () => { this.setState({ SummaryDisplay: { display: "block" } }); }, style: { float: "right", cursor: this.state.SummaryDisplay.display == "none" ? "pointer" : "default" } }))),
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Integration status"),
-                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 6 },
-                        React.createElement(Form.Control, { plaintext: true, readOnly: true, defaultValue: order.IntegrationStatus }))),
+                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
+                        React.createElement(Form.Control, { id: "intergationStatusId", plaintext: true, readOnly: true, defaultValue: order.IntegrationStatus })),
+                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Order status"),
+                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
+                        React.createElement(Form.Control, { id: "orderStatusId", plaintext: true, readOnly: true, defaultValue: order.OrderStatus }))),
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Customer"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 6 },

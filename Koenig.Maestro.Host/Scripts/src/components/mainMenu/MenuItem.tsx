@@ -9,7 +9,9 @@ export interface IMenuItemDef {
     action: string, 
     tranCode: string,
     msgExtension: { [key: string]: string },
-    eventHandler(mi: MenuItem): void
+    eventHandler(mi: MenuItem): void,
+    buttonList: string[],
+    listSelect:boolean,
 }
 
 export default class MenuItem extends React.Component<IMenuItemDef>

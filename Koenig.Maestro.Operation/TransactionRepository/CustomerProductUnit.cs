@@ -2,6 +2,7 @@
 using Koenig.Maestro.Operation.Cache.CacheRepository;
 using Koenig.Maestro.Operation.Data;
 using Koenig.Maestro.Operation.Framework;
+using Koenig.Maestro.Operation.Framework.ManagerRepository;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,13 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 {
     internal class CustomerProductUnit : TransactionBase
     {
+
+        CustomerProductUnitManager cm;
+
         public CustomerProductUnit(TransactionContext context) : base("CUSTOMER_PRODUCT_UNIT", context)
         {
-
+            this.MainEntitySample = new e.CustomerProductUnit();
+            cm = new CustomerProductUnitManager(context);
         }
 
         protected override void Delete()
@@ -120,6 +125,13 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         protected override void Erase()
         {
             throw new NotImplementedException();
+        }
+
+
+        protected override void BackUp()
+        {
+            Guid guid = Guid.NewGuid();
+            this.cm.BackUp(guid);
         }
     }
 }

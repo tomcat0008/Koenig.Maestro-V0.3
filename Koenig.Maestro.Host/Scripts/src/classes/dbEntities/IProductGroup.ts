@@ -23,4 +23,5 @@ export default class MaestroProductGroup implements IMaestroProductGroup {
     TypeName: string;
     IsNew: boolean;
 
+    Actions: string[];
 }

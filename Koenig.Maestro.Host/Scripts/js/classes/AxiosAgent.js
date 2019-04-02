@@ -68,6 +68,17 @@ export default class AxiosAgent {
             return result;
         });
     }
+    exportItemQb(tranCode, items, mde) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = "/MainPage/ExportItem";
+            if (mde == undefined || mde == null)
+                mde = {};
+            let itemList = items;
+            let msgJson = this.getMessage(mde, "ExportQb", tranCode, "", itemList);
+            let result = yield this.sendRequest(url, msgJson);
+            return result;
+        });
+    }
     sendRequest(url, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let result;

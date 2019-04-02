@@ -72,7 +72,14 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             productGroup.Id = db.ExecuteScalar<long>(call);
         }
 
+        public void BackUp(Guid guid)
+        {
+            SpCall call = new SpCall("BCK.BACK_UP_PRODUCT_GROUPS");
+            call.SetVarchar("@BATCH_ID", guid.ToString());
+            call.SetDateTime("@BATCH_DATE", DateTime.Now);
+            db.ExecuteNonQuery(call);
 
+        }
 
     }
 }

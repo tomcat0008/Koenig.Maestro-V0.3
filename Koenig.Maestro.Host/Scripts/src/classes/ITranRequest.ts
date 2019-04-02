@@ -3,5 +3,7 @@
     TranCode: string,
     Action: string,
     ListTitle: string,
-    MsgExtension: { [key: string]: string }
+    MsgExtension: { [key: string]: string },
+    ButtonList: string[],
+    ListSelect:boolean
 }

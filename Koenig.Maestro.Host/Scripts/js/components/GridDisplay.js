@@ -15,31 +15,18 @@ import ErrorInfo from '../classes/ErrorInfo';
 import ModalContainer from './ModalConatiner';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import filterFactory, { textFilter, dateFilter, numberFilter } from 'react-bootstrap-table2-filter';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 export default class GridDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), Entity: null,
             ShowSuccess: false, SuccessMessage: "",
-            ResponseMessage: new ResponseMessage(), TranCode: "",
-            Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: ""
+            ResponseMessage: new ResponseMessage(), TranCode: "", ConfirmText: "", ConfirmShow: false,
+            Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
+            MsgDataExtension: {}
         };
-        /*
-        saveFct = async () => {
-            try {
-                let response: IResponseMessage = await this.tranComponent.Save();
-                this.setState({ ShowSuccess: true, SuccessMessage: response.ResultMessage });
-                await this.loadGridData();
-                this.handleModalClose();
-            }
-            catch(error)
-            {
-                this.setState({ ErrorInfo: error, ShowError: true });
-                console.debug(error);
-            }
-    
-        }
-        */
         this.handleModalClose = () => __awaiter(this, void 0, void 0, function* () {
             this.setState({ ShowModal: false });
             yield this.loadGridData();
@@ -53,8 +40,9 @@ export default class GridDisplay extends React.Component {
         this.state = {
             ShowError: false, ErrorInfo: errorInfo, Entity: null,
             ShowSuccess: false, SuccessMessage: "",
-            ResponseMessage: new ResponseMessage(), TranCode: props.TranCode,
-            Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: ""
+            ResponseMessage: new ResponseMessage(), TranCode: props.TranCode, ConfirmText: "", ConfirmShow: false,
+            Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
+            MsgDataExtension: props.MsgExtension
         };
         //this.saveFct = this.saveFct.bind(this);
         this.handleNew = this.handleNew.bind(this);
@@ -62,16 +50,23 @@ export default class GridDisplay extends React.Component {
     loadGridData() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let response = yield new AxiosAgent().getList(this.props.TranCode, this.props.MsgExtension);
+                let response = yield new AxiosAgent().getList(this.props.TranCode, this.state.MsgDataExtension);
                 this.setState({ ResponseMessage: response, Init: false });
-                if (response.TransactionStatus == "ERROR")
+                if (response.TransactionStatus == "ERROR") {
+                    $("body").removeClass("loading");
                     throw (response.ErrorInfo);
+                }
             }
             catch (error) {
                 this.setState({ ErrorInfo: error, ShowError: true });
                 console.error(error);
             }
-            $('#wait').hide();
+            const dummyCol = {
+                filter: textFilter()
+            };
+            console.debug(dummyCol);
+            $("body").removeClass("loading");
+            //$('#wait').hide();
         });
     }
     componentDidMount() {
@@ -85,6 +80,12 @@ export default class GridDisplay extends React.Component {
     onDoubleClick(e, itemObject) {
         this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "Editing " + this.props.TranCode.toLowerCase() + " " + itemObject.Id, Entity: itemObject, Action: "Update" });
     }
+    handleDateSelect(period) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let dataExt = { ['PERIOD']: period };
+            yield this.setState({ MsgDataExtension: dataExt });
+        });
+    }
     renderList() {
         const selectRow = {
             mode: 'checkbox',
@@ -95,6 +96,11 @@ export default class GridDisplay extends React.Component {
                 return { backgroundColor };
             }
         };
+        const hideSelect = {
+            mode: 'checkbox',
+            clickToSelect: false,
+            hideSelectColumn: true
+        };
         const customTotal = (from, to, size) => (React.createElement("span", { className: "react-bootstrap-table-pagination-total" },
             " ",
             "Showing ",
@@ -104,7 +110,7 @@ export default class GridDisplay extends React.Component {
             " of ",
             size,
             " Results"));
-        const options = {
+        const pageOpts = {
             noDataText: 'This is custom text for empty data',
             paginationSize: 4,
             pageStartIndex: 0,
@@ -129,11 +135,50 @@ export default class GridDisplay extends React.Component {
                 }
             ]
         };
+        let displayMembers = this.state.ResponseMessage.GridDisplayMembers;
+        if (displayMembers != null && displayMembers != undefined) {
+            for (let col of displayMembers) {
+                if (col["columnWidth"] != null && col["columnWidth"] != undefined && col["columnWidth"] != "") {
+                    col["headerStyle"] = (column, colIndex) => {
+                        return { width: col["columnWidth"] };
+                    };
+                }
+                if (col["filterType"] == "DateTime")
+                    col["filter"] = dateFilter();
+                else if (col["filterType"] == "String")
+                    col["filter"] = textFilter();
+                else if (col["filterType"] == "Int" || col["filterType"] == "Long")
+                    col["filter"] = numberFilter();
+            }
+        }
+        let data = this.state.ResponseMessage.TransactionResult == null ? [] : (this.state.ResponseMessage.TransactionResult.length == 0 ? [] : this.state.ResponseMessage.TransactionResult);
+        const { ExportCSVButton } = CSVExport;
+        const MyExportCSV = (props) => {
+            const handleClick = () => {
+                props.onExport();
+            };
+            return (React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px" }, onClick: handleClick }, "Export CSV"));
+        };
+        const basePropsObj = {
+            keyField: 'Id',
+            data: { data },
+            columns: { displayMembers },
+            filter: filterFactory()
+        };
+        let nr = Date.now();
         return (React.createElement("div", null,
-            React.createElement("div", { style: { textAlign: "left" } },
-                React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px" }, href: "/MainPage/Index" }, "Return"),
-                React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px" }, onClick: this.handleNew }, "New")),
-            React.createElement(BootstrapTable, { keyField: 'Id', bootstrap4: "true", condensed: true, hover: true, rowEvents: { onDoubleClick: this.onDoubleClick }, headerClasses: "grid-header-style", selectRow: selectRow, data: this.state.ResponseMessage.TransactionResult == null ? [] : this.state.ResponseMessage.TransactionResult, columns: this.state.ResponseMessage.GridDisplayMembers == null ? [{ "text": "" }] : this.state.ResponseMessage.GridDisplayMembers, pagination: paginationFactory(options) })));
+            React.createElement(ToolkitProvider, { keyField: "Id", data: data, columns: displayMembers, baseProps: basePropsObj, exportAll: true, exportCSV: {
+                    fileName: this.state.TranCode + "_" + nr + ".csv"
+                } }, props => (React.createElement("div", null,
+                React.createElement("div", { style: { textAlign: "left" } },
+                    React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }, href: "/MainPage/Index" }, "Return"),
+                    React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }, onClick: this.handleNew }, "New"),
+                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Today"); } }, "Today"),
+                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Week"); } }, "Week"),
+                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Month") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Month"); } }, "Month"),
+                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Year"); } }, "Year"),
+                    React.createElement(MyExportCSV, Object.assign({}, props.csvProps), "Export CSV!!")),
+                React.createElement(BootstrapTable, Object.assign({}, props.baseProps, { pagination: paginationFactory(pageOpts), condensed: true, hover: true, bootstrap4: true, rowEvents: { onDoubleClick: this.onDoubleClick }, headerClasses: "grid-header-style", selectRow: this.props.ListSelect ? selectRow : hideSelect, noDataIndication: "No data found" })))))));
     }
     render() {
         if (!this.state.Init) {
@@ -152,7 +197,8 @@ export default class GridDisplay extends React.Component {
                             React.createElement("p", { id: "gridSuccessMessage" }, this.state.SuccessMessage)))),
                 React.createElement(Row, null,
                     React.createElement(Col, null,
-                        React.createElement("div", null, this.renderList()))),
+                        React.createElement("div", null, this.state.ResponseMessage == null ? "" :
+                            (this.state.ResponseMessage.TransactionStatus == "ERROR" ? "" : this.renderList())))),
                 React.createElement(ModalContainer, Object.assign({}, {
                     TranCode: this.props.TranCode,
                     Action: this.state.Action,

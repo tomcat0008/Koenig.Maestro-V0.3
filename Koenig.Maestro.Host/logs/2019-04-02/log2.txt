@@ -1,0 +1,45 @@
+2019-04-02 12:40:01.1247    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 80
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:40:28.2208   30 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 80
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:41:24.1358    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 80
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:42:24.2424    5 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 80
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:46:02.7207    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 80
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:49:04.6767    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 81
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:54:43.4079    8 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 81
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 12:57:18.8403    8 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 81
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 13:23:28.8037   61 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 81
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 13:55:18.5996    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Unknown enum string `MONTH` for type `Koenig.Maestro.Entity.Enums.DatePeriod`
+   at Koenig.Maestro.Operation.Utility.EnumUtils.GetEnum[T](String value) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Utility\EnumUtils.cs:line 14
+   at Koenig.Maestro.Operation.TransactionRepository.Order.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 80
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 91
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 14:35:41.1013   95 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 81
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37

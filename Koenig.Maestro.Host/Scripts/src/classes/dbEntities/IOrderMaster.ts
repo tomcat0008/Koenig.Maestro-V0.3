@@ -43,4 +43,7 @@ export default class OrderMaster implements IOrderMaster {
     RecordStatus: string;
     TypeName: string;
     CreateInvoiceOnQb: boolean;
+    Actions: string[];
+
+    
 }

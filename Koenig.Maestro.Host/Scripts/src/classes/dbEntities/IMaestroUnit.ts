@@ -31,5 +31,5 @@ export default class MaestroUnit implements IMaestroUnit {
     IsNew: boolean;
     UnitType: IMaestroUnitType;
 
-
+    Actions: string[];
 }

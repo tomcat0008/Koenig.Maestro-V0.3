@@ -27,4 +27,7 @@ export default class MaestroRegion implements IMaestroRegion {
     Name: string;
     Description: string;
     PostalCode: string;
+
+    Actions: string[];
+
 }

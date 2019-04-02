@@ -114,7 +114,7 @@ namespace Koenig.Maestro.Operation.Data
             {
                 if (!reader.ContainedReader.IsClosed)
                 {
-                    // TODO: Debug mode kullanılarak (web.config içinde) çalıştırılan tüm SP'ler loglanabilir.
+                    //Debug mode kullanılarak (web.config içinde) çalıştırılan tüm SP'ler loglanabilir.
                     // Bu sayede kapatılmayan SqlDataReader'ı bulmak daha kolay olur.
                     logger.Warn("Kapatılmayan SqlDataReader kapatıldı.");
                 }
@@ -198,7 +198,6 @@ namespace Koenig.Maestro.Operation.Data
         {
             if (!InTransaction)
             {
-                // TODO: 
                 logger.Fatal("No open transaction found to Commit.");
                 throw new Exception("No open transaction found to Commit.");
             }

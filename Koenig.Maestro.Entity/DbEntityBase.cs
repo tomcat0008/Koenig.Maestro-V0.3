@@ -17,7 +17,7 @@ namespace Koenig.Maestro.Entity
         }
 
         [JsonConversionTarget]
-        [DisplayProperty(Text = "Id", DataField = "Id",Sort = true, DisplayOrder =0, Align="left" )]
+        [DisplayProperty(Text = "Id", DataField = "Id",Sort = true, DisplayOrder =0, Align="left", ColumnWidth ="100px" )]
         public long Id { get; set; }
         public string CreatedUser { get; set; }
         public string UpdatedUser { get; set; }

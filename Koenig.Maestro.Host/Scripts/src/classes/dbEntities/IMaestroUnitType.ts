@@ -10,6 +10,10 @@ export interface IMaestroUnitType extends DbEntityBase {
 }
 
 export default class MaestroUnitType implements IMaestroUnitType {
+    constructor(id: number) {
+        this.Id = id;
+    }
+
     Id: number;
     CreatedUser: string;
     UpdatedUser: string;
@@ -22,4 +26,7 @@ export default class MaestroUnitType implements IMaestroUnitType {
     Name: string;
     Description: string;
     CanHaveUnits: boolean;
+
+    Actions: string[];
+
 }

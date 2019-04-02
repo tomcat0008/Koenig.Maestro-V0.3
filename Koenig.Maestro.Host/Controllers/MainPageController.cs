@@ -51,6 +51,11 @@ namespace Koenig.Maestro.Host.Controllers
             return ExecuteMessage(requestMessage);
         }
 
+        public JsonResult ExportItem(string requestMessage)
+        {
+            return ExecuteMessage(requestMessage);
+        }
+
 
         JsonResult ExecuteMessage(string requestMessage)
         {

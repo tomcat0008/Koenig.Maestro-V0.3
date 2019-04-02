@@ -40,4 +40,6 @@ export class QbProductMap implements IQbProductMap {
     QuickBooksParentCode: string;
     ProductGroupId: number;
     QuickBooksCode: string;
+
+    Actions: string[];
 }

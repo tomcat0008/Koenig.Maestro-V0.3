@@ -10,6 +10,10 @@ import { IModalContainerState } from './IModalContainerState';
 import ModalContainer from './ModalConatiner';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import filterFactory, { textFilter, dateFilter, numberFilter } from 'react-bootstrap-table2-filter';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
+
+
 
 export default class GridDisplay extends React.Component<ITranRequest, IModalContainerState> {
 
@@ -17,8 +21,10 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
     state = {
     ShowError: false, ErrorInfo: new ErrorInfo(), Entity: null,
     ShowSuccess: false, SuccessMessage: "",
-    ResponseMessage: new ResponseMessage(), TranCode: "",
-    Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: ""
+        ResponseMessage: new ResponseMessage(), TranCode: "", ConfirmText:"", ConfirmShow:false,
+        Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
+        MsgDataExtension: {}
+    
     };
 
     constructor(props: ITranRequest) {
@@ -32,28 +38,14 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
         this.state = {
             ShowError: false, ErrorInfo: errorInfo, Entity:null,
             ShowSuccess:false, SuccessMessage:"",
-            ResponseMessage: new ResponseMessage(),TranCode:props.TranCode,
-            Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: ""
+            ResponseMessage: new ResponseMessage(), TranCode: props.TranCode, ConfirmText:"", ConfirmShow:false,
+            Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
+            MsgDataExtension:props.MsgExtension
         };
         //this.saveFct = this.saveFct.bind(this);
         this.handleNew = this.handleNew.bind(this);
     }
-    /*
-    saveFct = async () => {
-        try {
-            let response: IResponseMessage = await this.tranComponent.Save();
-            this.setState({ ShowSuccess: true, SuccessMessage: response.ResultMessage });
-            await this.loadGridData();
-            this.handleModalClose();
-        }
-        catch(error)
-        {
-            this.setState({ ErrorInfo: error, ShowError: true });
-            console.debug(error);
-        }
 
-    }
-    */
     handleModalClose = async () => {
         this.setState({ ShowModal: false });
         await this.loadGridData();
@@ -63,18 +55,24 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
 
     async loadGridData() {
         try {
-            let response: IResponseMessage = await new AxiosAgent().getList(this.props.TranCode, this.props.MsgExtension);
+            let response: IResponseMessage = await new AxiosAgent().getList(this.props.TranCode, this.state.MsgDataExtension);
             this.setState({ ResponseMessage: response, Init: false });
             
-            if (response.TransactionStatus == "ERROR")
+            if (response.TransactionStatus == "ERROR") {
+                $("body").removeClass("loading");
                 throw (response.ErrorInfo);
+            }
         }
         catch (error) {
             this.setState({ ErrorInfo: error, ShowError: true });
-            console.error(error);
+            //console.error(error);
         }
-
-        $('#wait').hide();
+        const dummyCol = {
+            filter: textFilter()
+        }
+        //console.debug(dummyCol);
+        $("body").removeClass("loading");
+        //$('#wait').hide();
     }
     
     async componentDidMount() {
@@ -90,6 +88,12 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
         this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "Editing " + this.props.TranCode.toLowerCase() + " " + itemObject.Id, Entity: itemObject, Action: "Update" });
     }
 
+    async handleDateSelect(period: string) {
+        let dataExt: { [key: string]: string } = { ['PERIOD']: period };
+        await this.setState({ MsgDataExtension: dataExt });
+        await this.loadGridData();
+    }
+
     renderList() {
 
 
@@ -103,13 +107,22 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
             }
         }
 
+
+        const hideSelect = {
+            mode: 'checkbox',
+            clickToSelect: false,
+            hideSelectColumn:true
+        }
+
+        
+
         const customTotal = (from, to, size) => (
             <span className="react-bootstrap-table-pagination-total">
                 {" " }Showing {from} to {to} of {size} Results
             </span>
         );
 
-        const options = {
+        const pageOpts = {
             noDataText: 'This is custom text for empty data',
             paginationSize: 4,
             pageStartIndex: 0,
@@ -136,22 +149,89 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
             ]
         };
 
+
+
+        let displayMembers = this.state.ResponseMessage.GridDisplayMembers;
+        if (displayMembers != null && displayMembers != undefined) {
+            for (let col of displayMembers) {
+                
+                if (col["columnWidth"] != null && col["columnWidth"] != undefined && col["columnWidth"] != "") {
+                    col["headerStyle"] = (column, colIndex) => {
+                        return { width: col["columnWidth"] }
+                    }
+                }
+
+                if (col["filterType"] == "DateTime")
+                    col["filter"] = dateFilter();
+                else if (col["filterType"] == "String")
+                    col["filter"] = textFilter();
+                else if (col["filterType"] == "Int" || col["filterType"] == "Long")
+                    col["filter"] = numberFilter();
+            }
+        }
+
+        let data = this.state.ResponseMessage.TransactionResult == null ? [] : (this.state.ResponseMessage.TransactionResult.length == 0 ? [] : this.state.ResponseMessage.TransactionResult);
+        const { ExportCSVButton } = CSVExport;
+        const MyExportCSV = (props) => {
+            const handleClick = () => {
+                props.onExport();
+            };
+            return (
+                    <Button key="add" variant="outline-secondary" style={{ width: "120px" }} onClick={handleClick} >Export CSV</Button>
+            );
+        };
+
+        const basePropsObj = {
+            keyField: 'Id',
+            data: { data },
+            columns: { displayMembers },
+            filter: filterFactory()
+        }
+        let nr: number = Date.now();
         return (
             <div>
-                <div style={{ textAlign:"left"}}>
-                    <Button key="add" variant="outline-secondary" style={{ width: "120px" }} href="/MainPage/Index" >Return</Button>
-                    <Button key="add" variant="outline-secondary" style={{ width: "120px" }} onClick={this.handleNew} >New</Button>
-                </div>
-                <BootstrapTable keyField='Id' bootstrap4="true"
-                    condensed hover
-                    rowEvents={{ onDoubleClick: this.onDoubleClick }}
-                    headerClasses="grid-header-style"
-                    selectRow={selectRow}
-                    data={this.state.ResponseMessage.TransactionResult == null ? [] : this.state.ResponseMessage.TransactionResult}
-                    columns={this.state.ResponseMessage.GridDisplayMembers == null ? [{ "text":""}] : this.state.ResponseMessage.GridDisplayMembers}
-                    pagination={paginationFactory(options)}
-                    
-            />
+                
+                <ToolkitProvider
+                    keyField="Id"
+                    data={data}
+                    columns={displayMembers}
+                    baseProps={basePropsObj}
+                    exportAll
+                    exportCSV={{
+                        fileName: this.state.TranCode+"_"+nr+".csv"
+                    }}
+
+                >
+                    {
+                        props => (
+                            <div>
+                                <div style={{ textAlign: "left" }}>
+                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Return")>-1 ? "" : "none"  }} href="/MainPage/Index" >Return</Button>
+                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }} onClick={this.handleNew} >New</Button>
+                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Today"); }} >Today</Button>
+                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Week"); }} >Week</Button>
+                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Month") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Month"); }} >Month</Button>
+                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Year"); }} >Year</Button>
+                                    <MyExportCSV {...props.csvProps}>Export CSV!!</MyExportCSV>
+                                </div>
+                                <BootstrapTable {...props.baseProps}
+                                    pagination={paginationFactory(pageOpts)}
+                                    condensed
+                                    hover
+                                    bootstrap4
+                                    filter={filterFactory()}
+                                    rowEvents={{ onDoubleClick: this.onDoubleClick }}
+                                    headerClasses="grid-header-style"
+                                    selectRow={this.props.ListSelect ? selectRow : hideSelect}  
+                                    noDataIndication="No data found"
+                                />
+                            </div>
+                        )
+
+                    }
+                </ToolkitProvider>
+
+                
             </div>
         );
     }
@@ -182,7 +262,10 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
                         </Alert>
                     </Col></Row>
                     <Row><Col>
-                       <div >{this.renderList()}</div>
+                        <div >{
+                            this.state.ResponseMessage == null ? "" :
+                            (this.state.ResponseMessage.TransactionStatus == "ERROR" ? "" : this.renderList())
+                        }</div>
                     </Col></Row>
                     <ModalContainer { 
                         ...{

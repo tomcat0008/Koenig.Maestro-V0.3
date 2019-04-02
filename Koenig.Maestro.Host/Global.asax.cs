@@ -12,6 +12,7 @@ namespace Koenig.Maestro.Host
 
         protected void Application_Start()
         {
+            logger.Debug("starting...");
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);

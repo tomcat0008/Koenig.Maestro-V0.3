@@ -10,6 +10,25 @@ img.disabled {
     opacity: 0.5;
 }
 
+
+.loadingModal {
+    display: none;
+    position: fixed;
+    z-index: 300000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba( 255, 255, 255, .8 ) url('../img/loading.gif') 50% 50% no-repeat;
+}
+
+body.loading .loadingModal {
+    overflow: hidden;
+    display: block;
+    z-index:-100;
+}
+
+
 .tabRegion {
     overflow-y: auto;
     overflow-x: hidden;
@@ -113,6 +132,11 @@ table {
 .modal-90w {
     width: 1000px;
     max-width: none !important;
+}
+
+.modal-300p {
+    width: 300px;
+    max-width: 300px;
 }
 
 .modal-header {

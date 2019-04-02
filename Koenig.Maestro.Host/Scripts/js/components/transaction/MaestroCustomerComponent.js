@@ -27,6 +27,17 @@ export default class MaestroCustomerComponent extends React.Component {
             this.setState(cd);
             if (this.props.Entity.IsNew)
                 document.getElementById("customerId").value = '';
+            this.props.ButtonSetMethod(cd.Customer.Actions);
+        });
+    }
+    Cancel() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
+        });
+    }
+    Integrate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
         });
     }
     Save() {
@@ -77,6 +88,8 @@ export default class MaestroCustomerComponent extends React.Component {
     render() {
         let cus = this.state.Customer;
         let regions = this.state.Regions;
+        if (regions.find(c => c.Id == -1) == undefined)
+            regions.unshift(EntityAgent.GetFirstSelecItem("REGION"));
         if (this.state.Init) {
             return (React.createElement("p", null));
         }

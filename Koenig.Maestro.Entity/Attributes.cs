@@ -14,6 +14,8 @@ namespace Koenig.Maestro.Entity
         public bool Sort { get; set; }
         public string DataField { get; set; }
         public string Align { get; set; }
+        public bool Filter { get; set; }
+        public string ColumnWidth { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]

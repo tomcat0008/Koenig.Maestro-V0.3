@@ -2,6 +2,8 @@
 
 export default class TranRequest implements ITranRequest
 {
+    ListSelect: boolean;
+    ButtonList: string[];
     TranCode: string;
     Action: string;
     ListTitle: string;

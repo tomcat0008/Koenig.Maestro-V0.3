@@ -14,6 +14,9 @@ export interface IModalContainerState {
     Action: string,
     Init: boolean,
     Entity: DbEntityBase,
-    TranCode:string
-
+    TranCode: string,
+    ConfirmText: string,
+    ConfirmShow: boolean,
+    ButtonAction: string,
+    MsgDataExtension: { [key: string]: string }
 }

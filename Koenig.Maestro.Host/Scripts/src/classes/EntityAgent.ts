@@ -1,5 +1,5 @@
 ﻿import MaestroCustomer, { IMaestroCustomer } from './dbEntities/IMaestroCustomer';
-import { IMaestroRegion } from './dbEntities/IMaestroRegion';
+import MaestroRegion, { IMaestroRegion } from './dbEntities/IMaestroRegion';
 import { IResponseMessage } from './ResponseMessage';
 import AxiosAgent from './AxiosAgent';
 import { IQbProductMap } from './dbEntities/IQbProductMap';
@@ -7,9 +7,11 @@ import OrderMaster, { IOrderMaster } from './dbEntities/IOrderMaster';
 import MaestroProduct, { IMaestroProduct } from './dbEntities/IMaestroProduct';
 import { DbEntityBase } from './dbEntities/DbEntityBase';
 import CustomerProductUnit, { ICustomerProductUnit } from './dbEntities/ICustomerProductUnit';
-import { IErrorInfo } from './ErrorInfo';
+import ErrorInfo, { IErrorInfo } from './ErrorInfo';
 import MaestroUnit, { IMaestroUnit } from './dbEntities/IMaestroUnit';
 import MaestroProductGroup, { IMaestroProductGroup } from './dbEntities/IProductGroup';
+import MaestroUnitType, { IMaestroUnitType } from './dbEntities/IMaestroUnitType';
+import QbInvoiceLog, { IQbInvoiceLog } from './dbEntities/IQbInvoiceLog';
 
 interface IDisplayBase {
     Init: boolean;
@@ -20,6 +22,23 @@ export interface ICustomerDisplay extends IDisplayBase {
     Regions: IMaestroRegion[];
     Customer: IMaestroCustomer;
     
+}
+
+export interface IQbInvoiceLogDisplay extends IDisplayBase {
+    InvoiceLog: IQbInvoiceLog;
+}
+
+export interface IRegionDisplay extends IDisplayBase {
+    Region: IMaestroRegion;
+}
+
+export interface IUnitDisplay extends IDisplayBase {
+    Unit: IMaestroUnit;
+    UnitTypes: IMaestroUnitType[];
+}
+
+export interface IUnitTypeDisplay extends IDisplayBase {
+    UnitType: IMaestroUnitType;
 }
 
 export interface IOrderDisplay extends IDisplayBase {
@@ -73,6 +92,16 @@ export default class EntityAgent {
                 pg.Name = selectText;
                 result = pg;
                 break;
+            case "REGION":
+                let region: MaestroRegion = new MaestroRegion(-1);
+                region.Name = selectText;
+                result = region;
+                break;
+            case "UNIT_TYPE":
+                let unitType: MaestroUnitType = new MaestroUnitType(-1);
+                unitType.Name = selectText;
+                result = unitType;
+                break;
 
         }
         return result;
@@ -98,6 +127,18 @@ export default class EntityAgent {
             case "PRODUCT_GROUP":
                 result = new MaestroProductGroup(0);
                 result.IsNew = true;
+                break;
+            case "REGION":
+                result = new MaestroRegion(0);
+                break;
+            case "UNIT":
+                result = new MaestroUnit(0);
+                break;
+            case "UNIT_TYPE":
+                result = new MaestroUnitType(0);
+                break;
+            case "QUICKBOOKS_INVOICE":
+                result = new QbInvoiceLog(0);
                 break;
         }
 
@@ -141,12 +182,49 @@ export default class EntityAgent {
         
     }
 
+    async ExportOrder(item: IOrderMaster): Promise<IResponseMessage> {
+
+        
+        let ax: AxiosAgent = new AxiosAgent();
+        let result: IResponseMessage = await ax.exportItemQb("ORDER", [item]);
+        return result;
+
+    }
+
+
     async SaveCustomerProductUnit(item: ICustomerProductUnit): Promise<IResponseMessage> {
         let result: IResponseMessage;
         if (item.Id > 0)
             result = await this.UpdateItem("CUSTOMER_PRODUCT_UNIT", item);
         else
             result = await this.CreateItem("CUSTOMER_PRODUCT_UNIT", item);
+        return result;
+    }
+
+    async SaveUnitType(item: IMaestroUnitType): Promise<IResponseMessage> {
+        let result: IResponseMessage;
+        if (item.Id > 0)
+            result = await this.UpdateItem("UNIT_TYPE", item);
+        else
+            result = await this.CreateItem("UNIT_TYPE", item);
+        return result;
+    }
+
+    async SaveUnit(item: IMaestroUnit): Promise<IResponseMessage> {
+        let result: IResponseMessage;
+        if (item.Id > 0)
+            result = await this.UpdateItem("UNIT", item);
+        else
+            result = await this.CreateItem("UNIT", item);
+        return result;
+    }
+
+    async SaveRegion(item: IMaestroRegion): Promise<IResponseMessage> {
+        let result: IResponseMessage;
+        if (item.Id > 0)
+            result = await this.UpdateItem("REGION", item);
+        else
+            result = await this.CreateItem("REGION", item);
         return result;
     }
 
@@ -182,6 +260,8 @@ export default class EntityAgent {
         if (response.TransactionStatus != "ERROR")
             unitList = response.TransactionResult as IMaestroUnit[];
 
+        let cpu: ICustomerProductUnit = new CustomerProductUnit(0);
+        cpu.Actions = new Array<string>("Save");
         let result: ICustomerProductUnitDisplay = {
             Init: true,
             Customers: cusList,
@@ -189,8 +269,9 @@ export default class EntityAgent {
             Products: productList,
             Units: unitList,
             ProductId: 0,
-            Entity: new CustomerProductUnit(0),
-            UnitTypeId:0
+            Entity: cpu,
+            UnitTypeId: 0
+            
             
         };
         return result;
@@ -240,12 +321,95 @@ export default class EntityAgent {
         if (response.TransactionStatus != "ERROR")
             productGroups = response.TransactionResult as IMaestroProductGroup[];
 
+
+
+
         let result: IOrderDisplay = { DeliveryDate: new Date(), OrderDate: new Date(),Units:units,
             Entity: null, Customers: cusList, ErrorInfo: response.ErrorInfo, ProductGroups: productGroups, SummaryDisplay: { display: "block" },
             Products: productList, ProductMaps: productMapList, CustomerProductUnits: customerProductUnits, Init: true
         };
         return result;
     }
+
+    async GetQbInvoiceLogDisplay(id: number): Promise<IQbInvoiceLogDisplay> {
+        let log: IQbInvoiceLog;
+        let response: IResponseMessage;
+        let errorInfo: IErrorInfo;
+        let ax: AxiosAgent = new AxiosAgent();
+
+        response = await ax.getItem(id, "QUICKBOOKS_INVOICE");
+        log = response.TransactionResult;
+        errorInfo = response.ErrorInfo;
+        log.Actions = new Array<string>();
+
+        let result: IQbInvoiceLogDisplay = { ErrorInfo: errorInfo, InvoiceLog: log, Init: false };
+        return result;
+    }
+
+
+    async GetRegionDisplay(id: number): Promise<IRegionDisplay> {
+        let region: IMaestroRegion;
+        let response: IResponseMessage;
+        let errorInfo: IErrorInfo;
+        let ax: AxiosAgent = new AxiosAgent();
+        if (id > 0) {
+            response = await ax.getItem(id, "REGION");
+            region = response.TransactionResult;
+            errorInfo = response.ErrorInfo;
+        }
+        else {
+            errorInfo = new ErrorInfo();
+            region = new MaestroRegion(0);
+        }
+        region.Actions = new Array<string>("Save");
+        let result: IRegionDisplay = { ErrorInfo: errorInfo, Region: region, Init: false };
+        return result;
+    }
+
+    async GetUnitTypeDisplay(id: number): Promise<IUnitTypeDisplay> {
+        let unitType: IMaestroUnitType;
+        let response: IResponseMessage;
+        let errorInfo: IErrorInfo;
+        let ax: AxiosAgent = new AxiosAgent();
+        if (id > 0) {
+            response = await ax.getItem(id, "UNIT_TYPE");
+            unitType = response.TransactionResult;
+            errorInfo = response.ErrorInfo;
+        }
+        else {
+            unitType = new MaestroUnitType(0);
+            errorInfo = new ErrorInfo();
+        }
+        unitType.Actions = new Array<string>("Save");
+        let result: IUnitTypeDisplay = { ErrorInfo: errorInfo, UnitType: unitType, Init: false };
+        return result;
+    }
+
+    async GetUnitDisplay(id: number): Promise<IUnitDisplay> {
+
+
+        let unit: IMaestroUnit;
+        let unitTypeList: IMaestroUnitType[]
+
+        let response: IResponseMessage;
+
+        let ax: AxiosAgent = new AxiosAgent();
+        if (id > 0) {
+            response = await ax.getItem(id, "UNIT");
+            unit= response.TransactionResult;
+        }
+        else {
+            unit = new MaestroUnit(0);
+        }
+        unit.Actions = new Array<string>("Save");
+        response = await ax.getList("UNIT_TYPE", {});
+        unitTypeList = response.TransactionResult;
+        
+
+        let result: IUnitDisplay = { ErrorInfo: response.ErrorInfo, Unit: unit, UnitTypes: unitTypeList, Init: false };
+        return result;
+    }
+
 
     async GetCustomerDisplay(id:number):Promise<ICustomerDisplay> {
 
@@ -266,6 +430,9 @@ export default class EntityAgent {
         response = await ax.getList("REGION", {});
         regionList = response.TransactionResult;
 
+        cust.Actions = new Array<string>();
+        cust.Actions.push("Save");
+        
         let result: ICustomerDisplay = { ErrorInfo:response.ErrorInfo, Customer:cust, Regions:regionList, Init:false };
         return result;
     }

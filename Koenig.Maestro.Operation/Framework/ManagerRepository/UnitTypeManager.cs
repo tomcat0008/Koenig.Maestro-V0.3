@@ -21,8 +21,8 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetVarchar("@UNIT_TYPE_NAME", item.Name);
             call.SetVarchar("@UNIT_TYPE_DESCRIPTION", item.Description);
             call.SetBit("@CAN_HAVE_UNITS", item.CanHaveUnits);
-            call.SetDateTime("@CREATE_DATE", item.CreateDate);
-            call.SetVarchar("@CREATE_USER", item.CreatedUser);
+            call.SetDateTime("@CREATE_DATE", DateTime.Now);
+            call.SetVarchar("@CREATE_USER", context.UserName);
             item.Id = db.ExecuteScalar<long>(call);
         }
 

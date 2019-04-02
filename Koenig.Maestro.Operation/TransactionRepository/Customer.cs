@@ -20,6 +20,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         CustomerManager cm = null;
         public Customer(TransactionContext context) : base("CUSTOMER", context)
         {
+            this.MainEntitySample = new MaestroCustomer();
             cm = new CustomerManager(context);
         }
 
@@ -120,6 +121,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             */
             List<MaestroCustomer> qbCustomers = null;
 
+            BackUp();
+
             using (qbAgent = new QuickBooksCustomerAgent(Context))
             {
                 qbCustomers = qbAgent.Import().Cast<MaestroCustomer>().ToList();
@@ -172,5 +175,18 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         {
             throw new NotImplementedException();
         }
+
+        protected override void BackUp()
+        {
+            string guid = Guid.NewGuid().ToString();
+            SpCall call = new SpCall("BCK.BACK_UP_CUSTOMER");
+            call.SetVarchar("@BATCH_ID", guid);
+            call.SetDateTime("@BATCH_DATE", DateTime.Now);
+            db.ExecuteNonQuery(call);
+            response.TransactionResult = guid;
+            response.ResultMessage = string.Format("Backup created with batch id `{0}`", guid) + Environment.NewLine;
+        }
+
+
     }
 }

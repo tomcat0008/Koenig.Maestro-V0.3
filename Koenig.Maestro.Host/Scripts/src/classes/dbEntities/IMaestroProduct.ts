@@ -39,4 +39,6 @@ export default class MaestroProduct implements IMaestroProduct
     UnitTypeName: string;
     UnitTypeId: number;
     UnitTypeCanHaveUnits: boolean;
+    Actions: string[];
+
 }

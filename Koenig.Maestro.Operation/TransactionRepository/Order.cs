@@ -19,14 +19,13 @@ namespace Koenig.Maestro.Operation.TransactionRepository
     internal class Order : TransactionBase
     {
 
-        private static readonly  NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
         QuickBooksInvoiceManager qim;
         OrderRequestType requestType;
         OrderManager orderMan;
 
         public Order(TransactionContext context) : base("ORDER", context)
         {
+            this.MainEntitySample = new OrderMaster();
             qim = new QuickBooksInvoiceManager(Context);
             orderMan = new OrderManager(Context);
         }
@@ -68,11 +67,38 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void List()
         {
-            DateTime endDate = DateTime.Now.AddDays(1);
-            DateTime beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            /*DateTime endDate = DateTime.Now.AddDays(1);
+            DateTime beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);*/
+            DateTime endDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1).AddDays(-1);
+            DateTime beginDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
             long customerId = -1;
             string status = string.Empty;
             string dateField = OrderRequestType.ListByOrderDate.ToString();
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.PERIOD))
+            {
+                DatePeriod period = EnumUtils.GetEnum<DatePeriod>(extendedData[MessageDataExtensionKeys.PERIOD]);
+                switch(period)
+                {
+                    case DatePeriod.Today:
+                        beginDate = DateTime.Today;
+                        endDate = DateTime.Now.AddDays(1);
+                        break;
+                    case DatePeriod.Week:
+                        beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+                        endDate = DateTime.Now.AddDays(1);
+                        break;
+                    case DatePeriod.Month:
+                        beginDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        endDate = beginDate.AddMonths(1);
+                        break;
+                    case DatePeriod.Year:
+                        beginDate = new DateTime(DateTime.Now.Year, 1, 1);
+                        endDate = beginDate.AddYears(1);
+                        break;
+                }
+
+            }
             if (extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE))
                 DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], out beginDate);
             if (extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE))
@@ -84,7 +110,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             if (extendedData.ContainsKey(MessageDataExtensionKeys.REQUEST_TYPE))
                 dateField = extendedData[MessageDataExtensionKeys.REQUEST_TYPE];
 
-
+            
             List<OrderMaster> result = orderMan.List(beginDate, endDate, customerId, status, dateField);
             this.response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
 
@@ -98,11 +124,20 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 om.CreatedUser = Context.UserName;
                 orderMan.InsertOrder(om);
                 //Context.TransactionObject = om;
-                response.TransactionResult = om;
 
-                if(request.MessageDataExtension.ContainsKey(MessageDataExtensionKeys.CREATE_INVOICE))
-                    if(request.MessageDataExtension[MessageDataExtensionKeys.CREATE_INVOICE].Equals(bool.TrueString))
+
+                if (request.MessageDataExtension.ContainsKey(MessageDataExtensionKeys.CREATE_INVOICE))
+                    if (request.MessageDataExtension[MessageDataExtensionKeys.CREATE_INVOICE].Equals(bool.TrueString.ToLower()))
+                    {
                         ExportQb();
+                        
+                    }
+                    else
+                    {
+                        QuickBooksInvoiceLog log = qim.CreateInvoiceLog(om, QbIntegrationLogStatus.WAITING);
+                        qim.InsertIntegrationLog(log);
+                    }
+                response.TransactionResult = om;
             }
             else
             {
@@ -137,13 +172,50 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             qim.IntegrateOrderToQuickBooks(omList);
 
             List<QuickBooksInvoiceLog> logs = (List<QuickBooksInvoiceLog>)Context.TransactionObject;
-
-            if(logs.Exists(l=>l.IntegrationStatus == QbIntegrationLogStatus.ERROR))
+            logs.ForEach(delegate (QuickBooksInvoiceLog log)
             {
+                OrderMaster o = omList.Find(ord => ord.Id == log.OrderId);
+                o.OrderStatus = log.IntegrationStatus == QbIntegrationLogStatus.ERROR ? OrderStatus.ERROR : OrderStatus.INTEGRATED;
+                o.InvoiceLog = log;
+            });
+                
+                
+
+            if (logs.Exists(l=>l.IntegrationStatus == QbIntegrationLogStatus.ERROR))
+            {
+                List<long> errorOrderIds = logs.Where(l => l.IntegrationStatus == QbIntegrationLogStatus.ERROR).Select(l => l.OrderId).ToList();
+
+                orderMan.UpdateOrderStatus(errorOrderIds, OrderStatus.ERROR);
+
                 string logIds = logs.Where(l => l.IntegrationStatus == QbIntegrationLogStatus.ERROR).Select(l => l.Id.ToString()).Aggregate("", (current, next) => current + "," + next);
                 warnings.Add(string.Format("Integration to Quickbooks failed. You can trigger manual integration. Integration log id`s: {0}", logIds));
+
+
+
+                string orderIds = logs.Where(l => l.IntegrationStatus == QbIntegrationLogStatus.ERROR).Select(l => l.OrderId.ToString()).Aggregate("", (current, next) => current + "," + next);
+                responseMessage = string.Format("Exception occured while creating invoice for Orders: {0}", orderIds);
             }
-            
+
+            if(logs.Exists(l=>l.IntegrationStatus == QbIntegrationLogStatus.OK))
+            {
+                List<long> doneIds = logs.Where(l => l.IntegrationStatus == QbIntegrationLogStatus.OK).Select(l => l.OrderId).ToList();
+
+                orderMan.UpdateOrderStatus(doneIds, OrderStatus.INTEGRATED);
+
+                if (!string.IsNullOrWhiteSpace(response.ResultMessage))
+                    responseMessage += Environment.NewLine;
+
+                string invoiceIds = logs.Where(l => l.IntegrationStatus == QbIntegrationLogStatus.OK).Select(l => l.QuickBooksInvoiceId.ToString()).Aggregate("", (current, next) => current + "," + next);
+                responseMessage += string.Format("Following invoice id's have been created: {0}", invoiceIds.Remove(0,1));
+            }
+
+            if (logs.All(l => l.IntegrationStatus == QbIntegrationLogStatus.ERROR))
+                throw new Exception(responseMessage);
+
+            if (omList.Count == 1)
+                response.TransactionResult = omList[0];
+            else
+                response.TransactionResult = omList;
         }
 
         protected override void ValidateRequest()
@@ -162,6 +234,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                     if (!extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.PERIOD)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
                         throw new Exception("MessageDataExtension does not contain any of order listing keys");
 
@@ -206,8 +279,11 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             foreach(JToken itemToken in orderItemTokens)
             {
                 QuickBooksProductMapDef map = QuickBooksProductMapCache.Instance[itemToken["MapId"].ToObject<long>()];
-                MaestroProduct product = ProductCache.Instance[itemToken["ProductId"].ToObject<long>()];
-                long unitId = itemToken["UnitId"].ToObject<long>();
+                MaestroProduct product = ProductCache.Instance[map.ProductId];
+                long unitId = 0;
+                if (map.UnitTypeCanHaveUnits)
+                    unitId = itemToken["UnitId"].ToObject<long>();
+
                 MaestroUnit unit = unitId> 0 ? UnitCache.Instance[unitId] : um.GetUnknownItem();
                 OrderItem orderItem = new OrderItem()
                 {

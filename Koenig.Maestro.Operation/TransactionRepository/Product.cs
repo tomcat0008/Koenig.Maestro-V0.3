@@ -18,6 +18,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         ProductManager pm;
         public Product(TransactionContext context) :base("PRODUCT", context)
         {
+            this.MainEntitySample = new MaestroProduct();
             pm = new ProductManager(context);
         }
 
@@ -106,13 +107,14 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void BackUp()
         {
-            string guid = Guid.NewGuid().ToString();
-            SpCall call = new SpCall("BCK.BACK_UP_PRODUCT");
-            call.SetVarchar("@BATCH_ID", guid);
-            call.SetDateTime("@BATCH_DATE", DateTime.Now);
-            db.ExecuteNonQuery(call);
-            response.TransactionResult = guid;
-            response.ResultMessage = string.Format("Backup created with batch id `{0}`", guid) + Environment.NewLine;
+            Guid guid = Guid.NewGuid();
+            pm.BackUp(guid);
+
+            new ProductGroupManager(Context).BackUp(guid);
+            new QuickBooksProductMapManager(Context).BackUp(guid);
+            new CustomerProductUnitManager(Context).BackUp(guid);
+
+
         }
 
 

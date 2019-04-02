@@ -24,6 +24,14 @@ export default class CustomerProductUnitsComponent extends React.Component<ITran
 
     }
 
+    async Cancel(): Promise<IResponseMessage> {
+        return null;
+    }
+
+    async Integrate(): Promise<IResponseMessage> {
+        return null;
+    }
+
     async Save(): Promise<IResponseMessage> {
 
         let cpu: ICustomerProductUnit = new CustomerProductUnit(0);
@@ -91,7 +99,7 @@ export default class CustomerProductUnitsComponent extends React.Component<ITran
             this.setState(cd);
         }
 
-
+        this.props.ButtonSetMethod(cd.Entity.Actions);
     }
 
     

@@ -7,4 +7,5 @@
     RecordStatus: string;
     TypeName: string;
     IsNew: boolean;
+    Actions: string[];
 }

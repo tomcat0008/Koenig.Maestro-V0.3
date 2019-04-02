@@ -64,7 +64,7 @@ namespace Koenig.Maestro.Operation.Messaging
                 string resultMessage = string.Format("Transaction complete in {0} ms", duration);
                 
                 response.ResultMessage = string.IsNullOrWhiteSpace(response.ResultMessage) ? resultMessage :
-                    response.ResultMessage + resultMessage;
+                    resultMessage + Environment.NewLine + response.ResultMessage;
                 response.TransactionCode = tranCode;
                 response.TransactionDuration = duration;
                 response.ActionType = at.ToString();

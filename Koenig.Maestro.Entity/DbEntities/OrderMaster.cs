@@ -10,18 +10,18 @@ namespace Koenig.Maestro.Entity
     {
         [JsonConverter(typeof(EntityJsonConverter))]
         public MaestroCustomer Customer { get; set; }
-        [DisplayProperty(Text = "Order date", DataField = "OrderDate",Sort = true, DisplayOrder = 10)]
+        [DisplayProperty(Text = "Order date", DataField = "OrderDate",Sort = true, DisplayOrder = 10, Filter = true)]
         public DateTime OrderDate { get; set; }
         [DisplayProperty(Text = "Delivery date", DataField = "DeliveryDate",Sort = true, DisplayOrder = 20)]
         public DateTime DeliveryDate { get; set; }
         public string PaymentType { get; set; }
         [DisplayProperty(Text = "Notes", DataField = "Notes",Sort = true, DisplayOrder = 40)]
         public string Notes { get; set; }
-        [DisplayProperty(Text = "Order status", DataField = "OrderStatus",Sort = true, DisplayOrder = 30)]
+        [DisplayProperty(Text = "Order status", DataField = "OrderStatus",Sort = true, DisplayOrder = 30, Filter =true)]
         public string OrderStatus { get; set; }
         
         public List<OrderItem> OrderItems { get; set; }
-        [DisplayProperty(Text = "Customer", DataField = "CustomerName", Sort = true, DisplayOrder = 5)]
+        [DisplayProperty(Text = "Customer", DataField = "CustomerName", Sort = true, DisplayOrder = 5, Filter = true)]
         public string CustomerName
         {
             get { return this.Customer.Name; }
@@ -35,7 +35,7 @@ namespace Koenig.Maestro.Entity
 
         public long CustomerId { get { return this.Customer != null ? this.Customer.Id : 0; } }
 
-        [DisplayProperty(Text = "Integration status", DataField = "IntegrationStatus",Sort = true, DisplayOrder = 50)]
+        [DisplayProperty(Text = "Integration status", DataField = "IntegrationStatus",Sort = true, DisplayOrder = 50, Filter = true)]
         public string IntegrationStatus
         {
             get

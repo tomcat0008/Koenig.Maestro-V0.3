@@ -15,11 +15,17 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 {
     internal class QuickbooksInvoice : TransactionBase
     {
-        public QuickbooksInvoice(TransactionContext context) : base("QUICKBOOKS_INVOICE", context) { }
         QuickBooksInvoiceManager invMan;
+
+        public QuickbooksInvoice(TransactionContext context) : base("QUICKBOOKS_INVOICE", context)
+        {
+            this.MainEntitySample = new QuickBooksInvoiceLog();
+            invMan = new QuickBooksInvoiceManager(Context);
+        }
+        
         protected override void Delete()
         {
-            invMan = new QuickBooksInvoiceManager(Context);
+            
         }
 
         protected override void ExportQb()
@@ -82,7 +88,26 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void List()
         {
-            throw new NotImplementedException();
+            DateTime endDate = DateTime.Now.AddDays(1);
+            DateTime beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            long customerId = -1, batchID = 0;
+            string status = string.Empty;
+
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE))
+                DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], out beginDate);
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE))
+                DateTime.TryParse(extendedData[MessageDataExtensionKeys.END_DATE], out endDate);
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID))
+                long.TryParse(extendedData[MessageDataExtensionKeys.CUSTOMER_ID], out customerId);
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
+                status = extendedData[MessageDataExtensionKeys.STATUS];
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.BATCH_ID))
+                long.TryParse(extendedData[MessageDataExtensionKeys.BATCH_ID], out batchID);
+
+
+            List<QuickBooksInvoiceLog> result = invMan.List(beginDate, endDate, customerId, status, batchID);
+            this.response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
+
         }
 
         protected override void New()
@@ -94,5 +119,33 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         {
 
         }
+
+        protected override void ValidateRequest()
+        {
+            //dont go base
+            //base.ValidateRequest();
+
+            switch (request.MessageHeader.ActionType)
+            {
+                case ActionType.Get:
+                case ActionType.Delete:
+                    if (!extendedData.ContainsKey(MessageDataExtensionKeys.ID))
+                        throw new Exception(string.Format("MessageDataExtension does not contain key {0}", MessageDataExtensionKeys.ID));
+                    break;
+                case ActionType.List:
+                    if (!extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
+                        throw new Exception("MessageDataExtension does not contain any of order listing keys");
+
+                    break;
+                case ActionType.New:
+                case ActionType.Update:
+                case ActionType.ExportQb:
+                    break;
+            }
+        }
+
     }
 }

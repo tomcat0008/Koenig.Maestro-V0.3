@@ -12,6 +12,7 @@ export interface IMaestroCustomer extends DbEntityBase {
     MaestroRegion: IMaestroRegion;
     RegionId: number;
     DefaultPaymentType: string;
+    Actions: string[];
 }
 
 export default class MaestroCustomer implements IMaestroCustomer {
@@ -42,6 +43,5 @@ export default class MaestroCustomer implements IMaestroCustomer {
     UpdateDate: string;
     RecordStatus: string;
     TypeName: string;
-
-
+    Actions: string[];
 }

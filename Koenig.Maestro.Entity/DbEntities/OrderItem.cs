@@ -39,6 +39,10 @@ namespace Koenig.Maestro.Entity
         [DisplayProperty(Text = "Price", DataField = "ItemPrice", Sort = true, DisplayOrder = 30)]
         public decimal ItemPrice { get { return QbProductMap.Price; } }
 
+        [DisplayProperty(Text = "Amount", DataField = "Amount", Sort = true, DisplayOrder = 50)]
+        public decimal Amount { get; set; }
+
+
         public override object Clone()
         {
             throw new NotImplementedException();

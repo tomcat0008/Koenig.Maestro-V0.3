@@ -27,6 +27,16 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
         this.setState(cd);
         if(this.props.Entity.IsNew)
             (document.getElementById("customerId") as HTMLInputElement).value = '';
+
+        this.props.ButtonSetMethod(cd.Customer.Actions);
+    }
+
+    async Cancel(): Promise<IResponseMessage> {
+        return null;
+    }
+
+    async Integrate(): Promise<IResponseMessage> {
+        return null;
     }
 
     async Save(): Promise<IResponseMessage> {
@@ -81,6 +91,8 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
     render() {
         let cus: IMaestroCustomer = this.state.Customer;
         let regions: IMaestroRegion[] = this.state.Regions;
+        if (regions.find(c => c.Id == -1) == undefined)
+            regions.unshift(EntityAgent.GetFirstSelecItem("REGION") as IMaestroRegion);
 
         if (this.state.Init) {
             return (<p></p>);

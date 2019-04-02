@@ -8,12 +8,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Transactions;
 using Koenig.Maestro.Operation.Framework.ManagerRepository;
+using Newtonsoft.Json.Linq;
 
 namespace Koenig.Maestro.Operation.TransactionRepository
 {
     internal sealed class Unit : TransactionBase
     {
-        public Unit(TransactionContext context) : base("UNIT", context) { }
+        public Unit(TransactionContext context) : base("UNIT", context) {
+            this.MainEntitySample = new MaestroUnit();
+        }
 
         protected override void Delete()
         {
@@ -62,6 +65,22 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
             response.TransactionResult = item;
             
+        }
+
+        public override void Deserialize(JToken token)
+        {
+            MaestroUnit resultObj = new MaestroUnit();
+
+            JObject entityObj = JObject.Parse(token.ToString());
+
+            resultObj.Id = entityObj["Id"].ToObject<long>();
+            resultObj.Name = entityObj["Name"].ToString();
+
+            resultObj.QuickBooksUnit = entityObj["QuickBooksUnit"].ToString();
+            resultObj.UnitType = UnitTypeCache.Instance[entityObj["UnitTypeId"].ToObject<long>()];
+
+
+            Context.TransactionObject = resultObj;
         }
 
         protected override void Update()

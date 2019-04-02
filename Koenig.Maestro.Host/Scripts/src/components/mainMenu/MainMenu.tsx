@@ -15,7 +15,7 @@ import EntityAgent from '../../classes/EntityAgent';
 import { ICrudComponent } from '../ICrudComponent';
 import ModalContainer from '../ModalConatiner';
 import { DbEntityBase } from '../../classes/dbEntities/DbEntityBase';
-import { Alert } from 'react-bootstrap';
+import { Alert, Modal, Row, Col, Button } from 'react-bootstrap';
 
 
 
@@ -25,29 +25,17 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
 
     constructor() {
         super(null);
-
-        
-        let errorInfo: IErrorInfo = new ErrorInfo();
         this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), Action: "", TranCode: "",
             ShowSuccess: false, SuccessMessage: "", Init: true, Entity: null,
             ShowModal: false, ModalContent: null, ModalCaption: "",
-            ResponseMessage: new ResponseMessage()};
+            ResponseMessage: new ResponseMessage(), ConfirmText: "", ConfirmShow: false, ButtonAction: "",
+            MsgDataExtension: {}
+        }
         this.saveFct = this.saveFct.bind(this);
 
     }
-    /*
-    handleNew(tranCode:string) {
 
-        let entity: DbEntityBase = EntityAgent.FactoryCreate(tranCode);
-        this.setState({ ShowModal: true, ModalCaption: "New " + tranCode.toLowerCase(), Action: "New", TranCode: tranCode, Entity:entity });
-    }
-
-    private displayModal(caption: string, item: DbEntityBase, itemAction: string, tranCode:string) {
-
-        this.setState({ ShowModal: true, ModalCaption: caption, Action: itemAction, TranCode:tranCode });
-    }
-    */
     saveFct = async () => {
         try {
             let response: IResponseMessage = await this.tranComponent.Save();
@@ -62,8 +50,9 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
 
     handleModalClose= ()=> {
         this.setState({ ShowModal: false });
-        $('#mainMenu').show();
-        $('#wait').hide();
+        //$('#mainMenu').show();
+        //$('#wait').hide();
+        $("body").removeClass("loading");
     }
 
     handleClick = async (id: MenuItem)=>{
@@ -74,6 +63,8 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
         req.Action = id.props.action;
         req.TranCode = id.props.tranCode;
         req.MsgExtension = id.props.msgExtension;
+        req.ButtonList = id.props.buttonList;
+        req.ListSelect = id.props.listSelect;
 
         if (id.props.action == "New") {
             let tranCode: string = id.props.tranCode;
@@ -83,24 +74,65 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
 
         if (id.props.action == "List")
         {
+
             $('#mainMenu').hide();
-            $('#wait').show();
+            $("body").addClass("loading");
             ReactDOM.render(<GridDisplay {...req} />, document.getElementById('content'));
             
             return;
         }
-
+        
         if (id.props.action == "ImportQb") {
-            $('#wait').show();
-            ReactDOM.render(<TransactionDisplay {...req} />, document.getElementById('content'));
+            switch (this.state.TranCode) {
+                case "PRODUCT":
+                    await this.setState({
+                        ConfirmText: "Do you want to import products from QB ?"
+                    });
+                    break;
+                case "CUSTOMER":
+                    await this.setState({
+                        ConfirmText: "Do you want to import customers from QB ?"
+                    });
+                    break;
+                case "QUICKBOOKS_INVOICE":
+                    await this.setState({
+                        ConfirmText: "Do you want to import invoices from QB ?"
+                    });
+                    break;
+            }
+            await this.setState({ TranCode: id.props.tranCode, Action: id.props.action, ConfirmShow: true });
             
             return;
         }
-        //this.setState({ loading: false })
+        
+    }
+
+
+    onYes = () => {
+        this.setState({ ConfirmShow: false });
+
+        let req: ITranRequest = new TranRequest();
+        req.ListTitle = "";
+        req.Action = this.state.Action;
+        req.TranCode = this.state.TranCode;
+        req.MsgExtension = { ["IMPORT_TYPE"]: '' };
+        req.ButtonList = [];
+        req.ListSelect = false;
+        
+
+        $('#wait').show();
+        ReactDOM.render(<TransactionDisplay {...req} />, document.getElementById('content'));
+
+    }
+    onNo = () => {
+
+        this.setState({ ConfirmShow: false, ButtonAction: "", ConfirmText: "" });
     }
     
 
     render() {
+        let dt: Date = new Date();
+
         return (
             
 
@@ -109,31 +141,35 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
                     <div className="row">
                         <div className="col-6">
                             <div className="plate">Orders
-                            <MenuItem imgName="order_new.png" action="New" tranCode="ORDER" eventHandler={this.handleClick}
-                                    caption="New order" itemType="button" msgExtension={{}}
+                                <MenuItem imgName="order_new.png" action="New" tranCode="ORDER" eventHandler={this.handleClick}
+                                caption="New order" itemType="button" msgExtension={{}} buttonList={[]} listSelect={false}
                                     height="70px" width="100%" />
-                                <MenuItem imgName="icon-order.png" action="List" tranCode="ORDER" eventHandler={this.handleClick}
-                                    caption="Orders" itemType="button" msgExtension={{ ['STATUS']: 'CR' }}
-                                    height="70px" width="100%" />
+                            <MenuItem imgName="icon-order.png" action="List" tranCode="ORDER" eventHandler={this.handleClick}
+                                caption="Orders" itemType="button" msgExtension={{ ['PERIOD']: 'Month' }} height="70px" width="100%"
+                                buttonList={["New", "Return", "Week", "Month", "Year" ]} listSelect={false}
+                                />
                             </div>
                             <br />
                             <div className="plate">Imports
-                            <MenuItem imgName="qb_customers.png" action="ImportQb" tranCode="CUSTOMER" eventHandler={this.handleClick}
-                                    caption="Import Customers" itemType="button" msgExtension={{ ["IMPORT_TYPE"]: '' }}
-                                    height="70px" width="100%" />
+                            <MenuItem imgName="qb_customers.png" action="ImportQb" tranCode="CUSTOMER"
+                                eventHandler={this.handleClick }
+                                caption="Import Customers" itemType="button" msgExtension={{ ["IMPORT_TYPE"]: '' }}
+                                buttonList={["Return"]} height="70px" width="100%" listSelect={false}/>
 
-                                <MenuItem imgName="qb_products.png" action="ImportQb" tranCode="PRODUCT" eventHandler={this.handleClick}
+                            <MenuItem imgName="qb_products.png" action="ImportQb" tranCode="PRODUCT"
+                                    eventHandler={ this.handleClick}
                                     caption="Import Products" itemType="button" msgExtension={{ ["IMPORT_TYPE"]: '' }}
-                                    height="70px" width="100%" />
-                                <MenuItem imgName="qb_invoices.png" action="ImportQb" tranCode="QUICKBOOKS_INVOICE" eventHandler={this.handleClick}
-                                    caption="Import Invoices" itemType="button" msgExtension={{ ["IMPORT_TYPE"]: '' }}
-                                    height="70px" width="100%" />
+                                buttonList={["Return"]} height="70px" width="100%" listSelect={false}/>
+                            <MenuItem imgName="qb_invoices.png" action="ImportQb" tranCode="QUICKBOOKS_INVOICE"
+                                eventHandler={this.handleClick}
+                                    caption="Import Invoices" itemType="button" msgExtension={{ ["IMPORT_TYPE"]: '' }} buttonList={["Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                             </div>
                             <br />
                             <div className="plate">Integration
-                            <MenuItem imgName="invoice_export.png" action="Export" tranCode="QUICKBOOKS_INVOICE" eventHandler={this.handleClick}
-                                    caption="Export Orders to Quickbooks" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                            <MenuItem imgName="invoice_export.png" action="List" tranCode="QUICKBOOKS_INVOICE" eventHandler={this.handleClick}
+                                caption="Export Orders to Quickbooks" itemType="button" msgExtension={{ ["IMPORT_TYPE"]: '' }} buttonList={["Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                             </div>
                         </div>
 
@@ -141,25 +177,30 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
                             <div className="plate">Definitions
                                
                             <MenuItem imgName="cake.png" action="List" tranCode="PRODUCT" eventHandler={this.handleClick}
-                                    caption="Products" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                                caption="Products" itemType="button" msgExtension={{}} buttonList={["Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                                 <MenuItem imgName="clients.png" action="List" tranCode="CUSTOMER" eventHandler={this.handleClick}
-                                    caption="Customers" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                                    caption="Customers" itemType="button" msgExtension={{}} buttonList={["Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                                 <MenuItem imgName="measure.png" action="List" tranCode="UNIT" eventHandler={this.handleClick}
-                                    caption="Units" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                                    caption="Units" itemType="button" msgExtension={{}} buttonList={["New","Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                                 <MenuItem imgName="units.png" action="List" tranCode="UNIT_TYPE" eventHandler={this.handleClick}
-                                    caption="Unit Types" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                                    caption="Unit Types" itemType="button" msgExtension={{}} buttonList={["New", "Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                                 <MenuItem imgName="map.png" action="List" tranCode="REGION" eventHandler={this.handleClick}
-                                    caption="Regions" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                                    caption="Regions" itemType="button" msgExtension={{}} buttonList={["New", "Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                                 <MenuItem imgName="cup.png" action="List" tranCode="CUSTOMER_PRODUCT_UNIT" eventHandler={this.handleClick}
-                                    caption="Customer Product Units" itemType="button" msgExtension={{}}
-                                    height="70px" width="100%" />
+                                    caption="Customer Product Units" itemType="button" msgExtension={{}} buttonList={["New", "Return"]}
+                                height="70px" width="100%" listSelect={false}/>
                                 <MenuItem imgName="cup.png" action="List" tranCode="QUICKBOOKS_INVOICE" eventHandler={this.handleClick}
-                                    caption="Invoices Logs" itemType="button" msgExtension={{}}
+                                    caption="Invoices Logs" itemType="button" buttonList={["Return"]} listSelect={false}
+                                    msgExtension={{
+                                    ['BEGIN_DATE']: new Date(dt.getFullYear(), dt.getMonth(), 1).toUTCString(),
+                                        ['END_DATE']: dt.toUTCString()
+
+                                }}
                                     height="70px" width="100%" />
                             </div>
                         </div>
@@ -181,7 +222,25 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
                     </Alert>
                     <Alert variant="success" dismissible show={this.state == null ? false : this.state.ShowSuccess} data-dismiss="alert">
                         <p id="mmSuccess">{this.state == null ? "" : this.state.SuccessMessage}</p>
-                    </Alert>
+                </Alert>
+                <Modal
+                    size="sm"
+                    centered
+                    show={this.state.ConfirmShow}
+                    aria-labelledby="example-modal-sizes-title-sm"
+                    dialogClassName="modal-300p"
+                >
+                    <Modal.Header><Modal.Title ></Modal.Title></Modal.Header>
+                    <Modal.Body>
+                        <Row><Col>{this.state.ConfirmText}</Col></Row>
+
+                        <Row style={{ marginTop: "20px" }}>
+                            <Col><Button variant="primary" id="btnYes" onClick={this.onYes} >Yes</Button></Col>
+                            <Col><Button style={{ float: "right" }} variant="primary" id="btnNo" onClick={this.onNo}>No</Button></Col>
+                        </Row>
+                    </Modal.Body>
+                </Modal>
+
                     <ModalContainer  {
                         ...{
                             TranCode: (this.state == null ? "" : this.state.TranCode),

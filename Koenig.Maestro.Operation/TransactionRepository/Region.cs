@@ -7,13 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Transactions;
-
+using Newtonsoft.Json.Linq;
 
 namespace Koenig.Maestro.Operation.TransactionRepository
 {
     internal sealed class Region : TransactionBase
     {
-        public Region(TransactionContext context) : base("REGION", context) { }
+        public Region(TransactionContext context) : base("REGION", context) {
+            this.MainEntitySample = new MaestroRegion();
+        }
 
         protected override void Delete()
         {
@@ -41,6 +43,22 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         protected override void ExportQb()
         {
             throw new NotImplementedException();
+        }
+
+        public override void Deserialize(JToken token)
+        {
+            MaestroRegion resultObj = new MaestroRegion();
+
+            JObject entityObj = JObject.Parse(token.ToString());
+
+            resultObj.Id = entityObj["Id"].ToObject<long>();
+            resultObj.Name = entityObj["Name"].ToString();
+
+            resultObj.PostalCode = entityObj["PostalCode"].ToString();
+            resultObj.Description = entityObj["Description"].ToString();
+
+
+            Context.TransactionObject = resultObj;
         }
 
         protected override void Get()
