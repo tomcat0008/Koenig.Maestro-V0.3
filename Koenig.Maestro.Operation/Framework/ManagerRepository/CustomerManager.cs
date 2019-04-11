@@ -48,6 +48,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetVarchar("@QB_COMPANY", customer.Name);
             call.SetBigInt("@REGION_ID", customer.Region.Id);
             call.SetVarchar("@DEFAULT_PAYMENT_TYPE", customer.DefaultPaymentType);
+            call.SetVarchar("@CUSTOMER_GROUP", customer.CustomerGroup);
+            call.SetVarchar("@REPORT_GROUP", customer.ReportGroup);
+            
             call.SetDateTime("@UPDATE_DATE", DateTime.Now);
             call.SetVarchar("@UPDATE_USER", context.UserName);
             db.ExecuteNonQuery(call);
@@ -78,10 +81,65 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 dr["UPDATE_DATE"] = cus.UpdateDate;
                 dr["UPDATE_USER"] = cus.UpdatedUser;
                 dr["RECORD_STATUS"] = "A";
+                dr["CUSTOMER_GROUP"] = cus.CustomerGroup;
+                dr["REPORT_GROUP"] = cus.ReportGroup;
+                
                 dt.Rows.Add(dr);
             });
             dt.TableName = "DAT.CUSTOMER";
             return dt;
+        }
+
+        public MaestroCustomer GetUnknownItem()
+        {
+            MaestroCustomer unknowCustomer = CustomerCache.Instance.GetByName(MaestroApplication.Instance.UNKNOWN_ITEM_NAME);
+
+            if (unknowCustomer == null)
+            {
+                unknowCustomer = new MaestroCustomer()
+                {
+                    Address = string.Empty,
+                    DefaultPaymentType = string.Empty,
+                    Email    = string.Empty,
+                    Phone = string.Empty,
+                    QuickBooksId     = string.Empty,
+                    QuickBoosCompany     = string.Empty,
+                    Region = new RegionManager(context).GetUnknownItem(),
+                    Title = string.Empty,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    CreatedUser = "MAESTRO",
+                    UpdatedUser = "MAESTRO",
+                    RecordStatus = "A",
+                    CustomerGroup = string.Empty,
+                    ReportGroup = string.Empty
+
+                };
+                InsertNewItem(unknowCustomer);
+                CustomerCache.Instance.Reload(true);
+            }
+
+            return unknowCustomer;
+        }
+
+        public void InsertNewItem(MaestroCustomer customer)
+        {
+            SpCall call = new SpCall("DAT.CUSTOMER_INSERT");
+            call.SetVarchar("@CUSTOMER_NAME", customer.Name);
+            call.SetVarchar("@CUSTOMER_TITLE", customer.Title);
+            call.SetVarchar("@CUSTOMER_ADDRESS", customer.Address);
+            call.SetVarchar("@CUSTOMER_PHONE", customer.Phone);
+            call.SetVarchar("@CUSTOMER_EMAIL", customer.Email);
+            call.SetVarchar("@QB_CUSTOMER_ID", customer.QuickBooksId);
+            call.SetVarchar("@QB_COMPANY", customer.QuickBoosCompany);
+            call.SetBigInt("@REGION_ID", customer.Region.Id);
+            call.SetVarchar("@DEFAULT_PAYMENT_TYPE", customer.DefaultPaymentType);
+            call.SetVarchar("@CUSTOMER_GROUP", customer.CustomerGroup);
+            call.SetVarchar("@REPORT_GROUP", customer.ReportGroup);
+            call.SetDateTime("@CREATE_DATE", DateTime.Now);
+            call.SetVarchar("@CREATE_USER", context.UserName);
+            customer.Id = db.ExecuteScalar<long>(call);
+            
         }
 
     }

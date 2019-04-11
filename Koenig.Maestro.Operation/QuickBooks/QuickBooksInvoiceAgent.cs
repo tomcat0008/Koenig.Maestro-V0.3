@@ -4,17 +4,22 @@ using Koenig.Maestro.Entity;
 using Koenig.Maestro.Operation.Framework;
 using Interop.QBFC13;
 using System.Linq;
+using Koenig.Maestro.Entity.Enums;
+using Koenig.Maestro.Operation.Framework.ManagerRepository;
+using Koenig.Maestro.Operation.Cache.CacheRepository;
 
 namespace Koenig.Maestro.Operation.QuickBooks
 {
     internal class QuickBooksInvoiceAgent : QuickBooksAgent
     {
 
-        //OrderManager orderManager = null;
-        
+        OrderManager orderManager = null;
+        QuickBooksInvoiceManager invoiceManager = null;
+
         public QuickBooksInvoiceAgent(TransactionContext context) : base(context)
         {
-            //orderManager = new OrderManager(context);
+            orderManager = new OrderManager(context);
+            invoiceManager = new QuickBooksInvoiceManager(context);
         }
 
         public override void Export()
@@ -23,6 +28,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             OrderMaster om = (OrderMaster)context.TransactionObject;
             long orderId = om.Id;
 
+            
             StartSession();
 
             IMsgSetRequest request = GetLatestMsgSetRequest();
@@ -32,18 +38,28 @@ namespace Koenig.Maestro.Operation.QuickBooks
             IResponse responseMsgSet = GetResponse(request);
             if (responseMsgSet.StatusCode != 0)
                 throw new Exception(string.Format("Exception occured while requesting export operation on Quickbooks:{0}{1} (StatusCode:{2})", Environment.NewLine, responseMsgSet.StatusMessage, responseMsgSet.StatusCode));
-            IInvoiceRet qbIvoice = responseMsgSet.Detail as IInvoiceRet;
-            Tuple<string, string> result = new Tuple<string, string>(qbIvoice.RefNumber.GetValue(), qbIvoice.TxnID.GetValue());
-            context.TransactionObject = result;
+            IInvoiceRet qbInvoice = responseMsgSet.Detail as IInvoiceRet;
+
+            if (context.Bag.ContainsKey("REF_NUMBER"))
+                context.Bag["REF_NUMBER"] = qbInvoice.RefNumber.GetValue();
+            else
+                context.Bag.Add("REF_NUMBER", qbInvoice.RefNumber.GetValue());
+
+            if (context.Bag.ContainsKey("TXN_ID"))
+                context.Bag["TXN_ID"] = qbInvoice.TxnID.GetValue();
+            else
+                context.Bag.Add("TXN_ID", qbInvoice.TxnID.GetValue());
+
             
         }
+
+        
 
 
         IInvoiceAdd BuildInvoice(IMsgSetRequest request, OrderMaster om)
         {
             IInvoiceAdd invoice = request.AppendInvoiceAddRq();
             invoice.CustomerRef.ListID.SetValue(om.Customer.QuickBooksId);
-
 
             foreach (OrderItem oi in om.OrderItems)
             {
@@ -204,28 +220,32 @@ namespace Koenig.Maestro.Operation.QuickBooks
             IMsgSetRequest request = GetLatestMsgSetRequest();
             IInvoiceQuery query = request.AppendInvoiceQueryRq();
             query.IncludeLineItems.SetValue(true);
-            query.ORInvoiceQuery.InvoiceFilter.MaxReturned.SetValue(1);
-            query.ORInvoiceQuery.InvoiceFilter.ORRefNumberFilter.RefNumberFilter.MatchCriterion.SetValue(ENMatchCriterion.mcContains);
-            query.ORInvoiceQuery.InvoiceFilter.ORRefNumberFilter.RefNumberFilter.RefNumber.SetValue("89315");
+            query.ORInvoiceQuery.InvoiceFilter.MaxReturned.SetValue(1000);
+            //query.ORInvoiceQuery.InvoiceFilter.ORRefNumberFilter.RefNumberFilter.MatchCriterion.SetValue(ENMatchCriterion.mcContains);
+            //query.ORInvoiceQuery.InvoiceFilter.ORRefNumberFilter.RefNumberFilter.RefNumber.SetValue("89315");
 
-            //query.ORInvoiceQuery.InvoiceFilter.ORDateRangeFilter.TxnDateRangeFilter.ORTxnDateRangeFilter.TxnDateFilter.FromTxnDate.SetValue(new DateTime(2019,1,3));
-
-            /*
-            if (importRequestType == ImportRequestType.Single)
-            {
-            
-            }
-            */
+            query.ORInvoiceQuery.InvoiceFilter.ORDateRangeFilter.TxnDateRangeFilter.ORTxnDateRangeFilter.TxnDateFilter.FromTxnDate.SetValue((DateTime)context.Bag[MessageDataExtensionKeys.BEGIN_DATE]);
+            query.ORInvoiceQuery.InvoiceFilter.ORDateRangeFilter.TxnDateRangeFilter.ORTxnDateRangeFilter.TxnDateFilter.ToTxnDate.SetValue((DateTime)context.Bag[MessageDataExtensionKeys.END_DATE]);
 
             IResponse res = GetResponse(request);
             IInvoiceRetList invoiceRetList = (IInvoiceRetList)res.Detail;
 
             for(int i=0;i<invoiceRetList.Count;i++)
             {
-                logger.Debug(string.Format("************ ORDER {0} ****************", i));
                 IInvoiceRet invoice = invoiceRetList.GetAt(i);
-                //Console.WriteLine(string.Format("Invoice {0}:{1}", i, invoiceRetList.GetAt(i).RefNumber.GetValue()));
-                WalkInvoiceRet(invoice);
+                string txnID = invoice.TxnID.GetValue();
+                QuickBooksInvoiceLog log = invoiceManager.GetInvoiceLog(txnID);
+                if (log != null)
+                {
+
+                    UpdateOrder(invoice, log);
+                    
+                    //context.Warnings.Add(string.Format("Skipping txnId:{0}, order {1} already exists", txnID, log.OrderId));
+                }
+                else
+                    GetOrder(invoice);
+
+                //WalkInvoiceRet(invoice);
 
             }
 
@@ -233,6 +253,151 @@ namespace Koenig.Maestro.Operation.QuickBooks
             return result;
             
         }
+
+        void UpdateOrder(IInvoiceRet qbInvoice, QuickBooksInvoiceLog log)
+        {
+            OrderMaster om = orderManager.GetOrder(log.OrderId);
+
+
+            for (int i = 0; i < qbInvoice.ORInvoiceLineRetList.Count; i++)
+            {
+                IORInvoiceLineRet line = qbInvoice.ORInvoiceLineRetList.GetAt(i);
+
+                double quantity = line.InvoiceLineRet.Quantity != null ? line.InvoiceLineRet.Quantity.GetValue() : 0;
+                if (quantity > 0)
+                {
+                    string productRefID = line.InvoiceLineRet.ItemRef.ListID.GetValue();
+                    QuickBooksProductMapDef map = QuickBooksProductMapCache.Instance.GetByQbId(productRefID);
+                    OrderItem item = om.OrderItems.Find(oi => oi.MapId == map.Id);
+                    decimal amount = line.InvoiceLineRet.Amount != null ? Convert.ToDecimal(line.InvoiceLineRet.Amount.GetValue()) : 0;
+                    DateTime orderDate = qbInvoice.TimeCreated.GetValue();
+                    if (item == null)
+                    {
+                        item = new OrderItem();
+                        item.OrderId = om.Id;
+                        item.CreateDate = orderDate;
+                        item.CreatedUser = "IMPORT";
+
+                        item.Amount = amount;
+                        
+                        item.Product = map.Product;
+                        item.Price = map.Price;
+                        item.QbProductMap = map;
+
+                        item.Unit = map.Unit;
+                        item.UpdateDate = DateTime.Now;
+                        item.UpdatedUser = context.UserName;
+
+                        orderManager.InsertOrderItem(item);
+                    }
+                    else
+                    {
+                        if (item.Quantity != quantity || item.Amount != amount)
+                        {
+                            item.Quantity = Convert.ToInt32(quantity);
+                            item.Amount = amount;
+                            orderManager.UpdateOrderItem(item);
+                        }
+                        
+                    }
+
+                }
+            }
+
+
+        }
+
+        void GetOrder(IInvoiceRet qbInvoice)
+        {
+            string txnID = qbInvoice.TxnID.GetValue(); //log txn
+            string qbInvoiceNo = qbInvoice.RefNumber.GetValue();
+
+            if (!context.Bag.ContainsKey("QB_INVOICE_ID"))
+                context.Bag.Add("QB_INVOICE_ID", qbInvoiceNo);
+            else
+                context.Bag["QB_INVOICE_ID"] = qbInvoiceNo;
+
+
+            if (!context.Bag.ContainsKey("QB_TXN_ID"))
+                context.Bag.Add("QB_TXN_ID", txnID);
+            else
+                context.Bag["QB_TXN_ID"] = txnID;
+
+            string customerRef = qbInvoice.CustomerRef.ListID.GetValue(); //customer id
+            
+            DateTime orderDate = qbInvoice.TimeCreated.GetValue();
+            DateTime shipDate = orderDate;
+            if (qbInvoice.ShipDate != null)
+                shipDate = qbInvoice.ShipDate.GetValue();
+
+            MaestroCustomer customer = CustomerCache.Instance.GetByQbId(customerRef);
+            if (customer == null)
+                customer = new CustomerManager(context).GetUnknownItem();
+
+            long orderId = orderManager.GetNewOrderId();
+
+            OrderMaster order = new OrderMaster()
+            {
+                Id = orderId,
+                CreateDate = DateTime.Now,
+                CreatedUser = "IMPORT",
+                Customer = customer,
+                Notes = "Order imported from Quickbooks",
+                PaymentType = string.Empty,
+                UpdateDate = DateTime.Now,
+                UpdatedUser = "IMPORT",
+                OrderStatus = OrderStatus.IMPORTED,
+                RecordStatus = "A",
+                OrderDate = orderDate,
+                DeliveryDate = orderDate
+               
+            };
+
+            order.OrderItems = ExtractOrderItems(qbInvoice, orderId);
+            orderManager.InsertOrder(order);
+
+            QuickBooksInvoiceLog log = invoiceManager.CreateInvoiceLog(order, QbIntegrationLogStatus.OK);
+            invoiceManager.InsertIntegrationLog(log);
+
+        }
+
+
+        List<OrderItem> ExtractOrderItems(IInvoiceRet qbInvoice, long orderId)
+        {
+            List<OrderItem> orderItems = new List<OrderItem>();
+            
+            DateTime orderDate = qbInvoice.TimeCreated.GetValue();
+
+            for (int i=0;i< qbInvoice.ORInvoiceLineRetList.Count;i++)
+            {
+                IORInvoiceLineRet line = qbInvoice.ORInvoiceLineRetList.GetAt(i);
+                
+                double quantity = line.InvoiceLineRet.Quantity != null ? line.InvoiceLineRet.Quantity.GetValue() : 0;
+                if (quantity > 0)
+                {
+                    string productRefID = line.InvoiceLineRet.ItemRef.ListID.GetValue();
+                    QuickBooksProductMapDef map = QuickBooksProductMapCache.Instance.GetByQbId(productRefID);
+
+                    OrderItem item = new OrderItem();
+                    item.OrderId = orderId;
+                    item.CreateDate = orderDate;
+                    item.Amount = line.InvoiceLineRet.Amount != null ? Convert.ToDecimal(line.InvoiceLineRet.Amount.GetValue()) : 0;
+                    item.CreatedUser = "IMPORT";
+                    item.Product = map.Product;
+                    item.Price = map.Price;
+                    item.QbProductMap = map;
+                    item.Quantity = Convert.ToInt32(quantity);
+                    item.Unit = map.Unit;
+                    item.UpdateDate = orderDate;
+                    item.UpdatedUser = context.UserName;
+                    orderItems.Add(item);
+                }
+            }
+
+            return orderItems;
+        }
+
+
 
         void WalkInvoiceRet(IInvoiceRet InvoiceRet)
         {

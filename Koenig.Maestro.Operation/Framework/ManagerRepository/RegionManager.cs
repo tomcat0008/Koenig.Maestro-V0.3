@@ -28,6 +28,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 region = new MaestroRegion()
                 {
                     PostalCode = "",
+                    GreaterRegion = string.Empty,
                     Name = MaestroApplication.Instance.UNKNOWN_ITEM_NAME,
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
@@ -41,6 +42,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 call.SetVarchar("@POSTAL_CODE", region.PostalCode);
                 call.SetVarchar("@REGION_NAME", region.Name);
                 call.SetVarchar("@REGION_DESCRIPTION", region.Description);
+                call.SetVarchar("@GREATER_REGION", region.GreaterRegion); 
                 call.SetDateTime("@CREATE_DATE", region.CreateDate);
                 call.SetVarchar("@CREATE_USER", "MAESTRO");
                 region.Id = db.ExecuteScalar<long>(call);

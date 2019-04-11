@@ -15,7 +15,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
         protected TransactionContext context;
         protected QBSessionManager sessionManager;
         protected Database db;
-        bool sessionOpen = false;
+        protected bool sessionOpen = false;
         bool connectionOpen = false;
         protected Dictionary<string, string> extendedData;
         protected static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -33,8 +33,9 @@ namespace Koenig.Maestro.Operation.QuickBooks
             {
                 if (sessionManager == null)
                     sessionManager = new QBSessionManager();
-
-                sessionManager.OpenConnection(MaestroApplication.Instance.QuickBooksAppId, MaestroApplication.Instance.QuickBooksAppName);
+                
+                if(!connectionOpen)
+                    sessionManager.OpenConnection(MaestroApplication.Instance.QuickBooksAppId, MaestroApplication.Instance.QuickBooksAppName);
                 connectionOpen = true;
             }
             catch(Exception ex)
@@ -44,7 +45,8 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
             try
             {
-                sessionManager.BeginSession(MaestroApplication.Instance.QuickBooksAppPath, ENOpenMode.omDontCare);
+                if(!sessionOpen)
+                    sessionManager.BeginSession(MaestroApplication.Instance.QuickBooksAppPath, ENOpenMode.omDontCare);
                 sessionOpen = true;
             }
             catch (Exception ex)

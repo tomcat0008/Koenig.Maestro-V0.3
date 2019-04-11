@@ -13,27 +13,43 @@ namespace Koenig.Maestro.Operation.Messaging
 {
     public sealed class MessageBroker
     {
+
+        public event TransactionProgressEventHandler TransactionProgress;
+
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         TransactionBase tranBase;
-        
+        TransactionContext context;
+
+        public void OnTransactionProgress(TransactionProgressEventArgs e)
+        {
+            if (TransactionProgress != null)
+                this.TransactionProgress(this, e);
+        }
+
+
         public ResponseMessage Execute(RequestMessage message)
         {
             DateTime start = DateTime.Now;
 
-            TransactionContext context = TransactionManager.CreateContext(message.MessageHeader.UserName, message);
+            context = TransactionManager.CreateContext(message.MessageHeader.UserName, message);
             
             ResponseMessage response = null;
             ActionType at = ActionType.Undefined;
             string tranCode = string.Empty;
             try
             {
-                if(at != ActionType.Get && at != ActionType.List && at != ActionType.Undefined)
+                at = message.MessageHeader.ActionType;
+
+                if (at != ActionType.Get && at != ActionType.List && at != ActionType.Undefined)
                     context.Database.BeginTransaction();
 
                 tranCode = message.MessageHeader.TransactionCode;
-                at = message.MessageHeader.ActionType;
-                tranBase = new TransactionManager(context).GetTransaction(tranCode);
                 
+                tranBase = new TransactionManager(context).GetTransaction(tranCode);
+
+                if(tranBase.IsProgressing)
+                    tranBase.TransactionProgress += TranBase_TransactionProgress;
+
                 response = tranBase.Execute(message);
                 
                 if(context.Database.InTransaction)
@@ -83,9 +99,16 @@ namespace Koenig.Maestro.Operation.Messaging
                 }
                 if(tranBase != null)
                     TransactionManager.DisposeTransaction(tranBase);
+
+                tranBase.TransactionProgress -= TranBase_TransactionProgress;
             }
             return response;
 
+        }
+
+        private void TranBase_TransactionProgress(object sender, TransactionProgressEventArgs e)
+        {
+            this.OnTransactionProgress(e);
         }
 
         ErrorInfo PrepareErrorMessage(RequestMessage request, Exception ex)

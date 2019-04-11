@@ -85,8 +85,11 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             spCall.SetDateTime("@DELIVERY_DATE", orderMaster.DeliveryDate);
             spCall.SetVarchar("@PAYMENT_TYPE", orderMaster.PaymentType);
             spCall.SetVarchar("@NOTES", orderMaster.Notes);
+            spCall.SetVarchar("@ORDER_STATUS", orderMaster.OrderStatus);
             spCall.SetDateTime("@CREATE_DATE", orderMaster.CreateDate);
             spCall.SetVarchar("@CREATE_USER", orderMaster.CreatedUser);
+            spCall.SetBigInt("@SHIP_ADDRESS", orderMaster.ShippingAddressId);
+            
             orderMaster.UpdatedUser = orderMaster.CreatedUser;
             orderMaster.UpdateDate = orderMaster.CreateDate;
             db.ExecuteNonQuery(spCall);
@@ -111,6 +114,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             spCall.SetDateTime("@UPDATE_DATE", orderMaster.UpdateDate);
             spCall.SetVarchar("@UPDATE_USER", orderMaster.UpdatedUser);
             spCall.SetBit("@CLEAN_ORDERITEMS", cleanItems);
+            spCall.SetBigInt("@SHIP_ADDRESS", orderMaster.ShippingAddressId);
             db.ExecuteNonQuery(spCall);
 
             if(cleanItems)
@@ -153,7 +157,13 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             if (newItems.Count > 0)
             {
                 if (newItems.Count == 1)
+                {
+                    newItems[0].CreateDate = DateTime.Now;
+                    newItems[0].UpdateDate = DateTime.Now;
+                    newItems[0].CreatedUser = "TESTER";
+                    newItems[0].UpdatedUser = "TESTER";
                     InsertOrderItem(newItems[0]);
+                }
                 else
                 {
                     DataTable dt = PrepareOrderItemsTable(newItems);
@@ -174,7 +184,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             db.ExecuteNonQuery(spCall);
         }
 
-        void UpdateOrderItem(OrderItem item)
+        public void UpdateOrderItem(OrderItem item)
         {
             item.UpdateDate = DateTime.Now;
             item.UpdatedUser = context.UserName;
@@ -193,12 +203,13 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             db.ExecuteNonQuery(spCall);
         }
 
-        void InsertOrderItem(OrderItem item)
+        public void InsertOrderItem(OrderItem item)
         {
+            /*
             item.CreateDate = DateTime.Now;
             item.UpdateDate = item.CreateDate;
             item.CreatedUser = context.UserName;
-            item.UpdatedUser = context.UserName;
+            item.UpdatedUser = context.UserName;*/
 
             SpCall spCall = new SpCall("DAT.ORDER_ITEM_INSERT");
             spCall.SetBigInt("@ORDER_ID", item.OrderId);
@@ -290,6 +301,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 Notes = row.Field<string>("NOTES"),
                 OrderDate = row.Field<DateTime>("ORDER_DATE"),
                 OrderStatus = row.Field<string>("ORDER_STATUS"),
+                ShippingAddressId = row.Field<long>("SHIP_ADDRESS"),
                 //IntegrationStatus = row.Field<string>("INTEGRATION_STATUS"),
                 PaymentType = row.Field<string>("PAYMENT_TYPE"),
                 RecordStatus = row.Field<string>("RECORD_STATUS"),

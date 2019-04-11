@@ -1,0 +1,17 @@
+2019-04-04 14:04:01.8210    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain key ID
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 197
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 51
+2019-04-04 14:08:46.0431   20 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception while retrieving response from QuickBooks ---> System.Runtime.InteropServices.COMException: TxnDel
+TxnID: required field is missing
+End of TxnDel
+
+   at Interop.QBFC13.IQBSessionManager.DoRequests(IMsgSetRequest request)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.GetResponse(IMsgSetRequest request) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 90
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.GetResponse(IMsgSetRequest request) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 96
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Cancel() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 205
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.CancelInvoice(QuickBooksInvoiceLog log) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 225
+   at Koenig.Maestro.Operation.TransactionRepository.Order.Delete() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 56
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 100
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 51

@@ -15,6 +15,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
     {
         public Transaction(TransactionContext context) : base("TRAN_DEFINITION", context)
         {
+            this.IsProgressing = false;
             this.MainEntitySample = new TransactionDefinition();
         }
 

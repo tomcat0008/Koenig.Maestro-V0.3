@@ -31,7 +31,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
         {
             TransactionContext context = new TransactionContext()
             {
-                UserName = userName
+                UserName = userName,
+                Bag = new Dictionary<string, object>()
+                
             };
             return context;
         }
@@ -45,7 +47,8 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 TransactionId = ticket,
                 UserName = userName,
                 RequestMessage = message,
-                Warnings = new List<string>()
+                Warnings = new List<string>(),
+                Bag = new Dictionary<string, object>()
             };
             contextCache.Add(ticket, context);
 

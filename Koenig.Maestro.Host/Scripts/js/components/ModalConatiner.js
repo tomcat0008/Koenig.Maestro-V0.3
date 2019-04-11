@@ -21,7 +21,7 @@ export default class ModalContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: "",
+            ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: "", selected: [],
             ShowSuccess: false, SuccessMessage: "", Action: "", Init: true, Entity: null,
             ShowModal: false, ModalContent: null, ModalCaption: "", ConfirmText: "", ConfirmShow: false,
             MsgDataExtension: {}, ButtonAction: "", ResponseMessage: new ResponseMessage()
@@ -34,18 +34,31 @@ export default class ModalContainer extends React.Component {
                 document.getElementById('btnSave').disabled = true;
                 /*(document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;*/
                 let response = yield this.tranComponent.Save();
+                if (response.TransactionStatus == "ERROR")
+                    throw response.ErrorInfo;
                 document.getElementById('btnSave').disabled = false;
                 this.setState({ ShowSuccess: true, ShowError: false, SuccessMessage: response.ResultMessage });
             }
             catch (error) {
-                console.error(error);
+                //console.error(error);
                 if (error.DisableAction == false)
                     document.getElementById('btnSave').disabled = false;
                 this.setState({ ErrorInfo: error, ShowError: true, Init: false });
             }
         });
         this.cancelFct = () => __awaiter(this, void 0, void 0, function* () {
-            alert('Cancelled');
+            document.getElementById('btnCancel').disabled = true;
+            try {
+                let response = yield this.tranComponent.Cancel();
+                if (response.TransactionStatus == "ERROR")
+                    throw response.ErrorInfo;
+                this.setState({ ShowSuccess: true, ShowError: false, SuccessMessage: response.ResultMessage });
+            }
+            catch (error) {
+                if (error.DisableAction == false)
+                    document.getElementById('btnCancel').disabled = false;
+                this.setState({ ErrorInfo: error, ShowError: true, Init: false });
+            }
         });
         this.createInvoice = () => __awaiter(this, void 0, void 0, function* () {
             try {
@@ -65,7 +78,7 @@ export default class ModalContainer extends React.Component {
                 this.setState({ ShowSuccess: true, ShowError: false, SuccessMessage: successMsg });
             }
             catch (error) {
-                console.error(error);
+                //console.error(error);
                 if (error.DisableAction == false)
                     document.getElementById('btnIntegrate').disabled = false;
                 document.getElementById('btnCancel').disabled = false;
@@ -104,7 +117,7 @@ export default class ModalContainer extends React.Component {
             ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: this.props.TranCode,
             ShowSuccess: false, SuccessMessage: "", Action: this.props.Action, Init: true, Entity: this.props.Entity,
             ShowModal: this.props.Show, ModalContent: contentComponent, ModalCaption: "",
-            ConfirmText: "", ConfirmShow: false, ButtonAction: "", MsgDataExtension: {},
+            ConfirmText: "", ConfirmShow: false, ButtonAction: "", MsgDataExtension: {}, selected: [],
             ResponseMessage: new ResponseMessage()
         };
     }

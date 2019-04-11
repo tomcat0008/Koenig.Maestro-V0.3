@@ -51,7 +51,8 @@ namespace Koenig.Maestro.Operation.Cache.CacheRepository
                 RecordStatus = reader.GetString("RECORD_STATUS"),
                 UpdateDate = reader.GetDateTime("UPDATE_DATE"),
                 UpdatedUser = reader.GetString("UPDATE_USER"),
-                CreatedUser = reader.GetString("CREATE_USER")
+                CreatedUser = reader.GetString("CREATE_USER"),
+                Label = reader.GetString("REPORT_LABEL")
             };
 
             return new Tuple<long, QuickBooksProductMapDef>(t.Id, t);

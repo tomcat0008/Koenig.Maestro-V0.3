@@ -25,6 +25,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         public Order(TransactionContext context) : base("ORDER", context)
         {
+            this.IsProgressing = true;
             this.MainEntitySample = new OrderMaster();
             qim = new QuickBooksInvoiceManager(Context);
             orderMan = new OrderManager(Context);
@@ -67,50 +68,15 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void List()
         {
-            /*DateTime endDate = DateTime.Now.AddDays(1);
-            DateTime beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);*/
-            DateTime endDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1).AddDays(-1);
-            DateTime beginDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            ExtractTransactionCriteria();
 
-            long customerId = -1;
-            string status = string.Empty;
-            string dateField = OrderRequestType.ListByOrderDate.ToString();
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.PERIOD))
-            {
-                DatePeriod period = EnumUtils.GetEnum<DatePeriod>(extendedData[MessageDataExtensionKeys.PERIOD]);
-                switch(period)
-                {
-                    case DatePeriod.Today:
-                        beginDate = DateTime.Today;
-                        endDate = DateTime.Now.AddDays(1);
-                        break;
-                    case DatePeriod.Week:
-                        beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-                        endDate = DateTime.Now.AddDays(1);
-                        break;
-                    case DatePeriod.Month:
-                        beginDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                        endDate = beginDate.AddMonths(1);
-                        break;
-                    case DatePeriod.Year:
-                        beginDate = new DateTime(DateTime.Now.Year, 1, 1);
-                        endDate = beginDate.AddYears(1);
-                        break;
-                }
+            DateTime endDate = (DateTime)Context.Bag[MessageDataExtensionKeys.END_DATE];
+            DateTime beginDate = (DateTime)Context.Bag[MessageDataExtensionKeys.BEGIN_DATE];
 
-            }
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE))
-                DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], out beginDate);
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE))
-                DateTime.TryParse(extendedData[MessageDataExtensionKeys.END_DATE], out endDate);
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID))
-                long.TryParse(extendedData[MessageDataExtensionKeys.CUSTOMER_ID], out customerId);
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
-                status = extendedData[MessageDataExtensionKeys.STATUS];
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.REQUEST_TYPE))
-                dateField = extendedData[MessageDataExtensionKeys.REQUEST_TYPE];
+            long customerId = (long)Context.Bag[MessageDataExtensionKeys.CUSTOMER_ID];
+            string status = Context.Bag[MessageDataExtensionKeys.STATUS].ToString();
+            string dateField = Context.Bag[MessageDataExtensionKeys.REQUEST_TYPE].ToString();
 
-            
             List<OrderMaster> result = orderMan.List(beginDate, endDate, customerId, status, dateField);
             this.response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
 
@@ -121,9 +87,9 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             if (requestType == OrderRequestType.InsertNewOrder)
             {
                 OrderMaster om = (OrderMaster)request.TransactionEntityList[0];
+                om.OrderStatus = OrderStatus.CREATED;
                 om.CreatedUser = Context.UserName;
                 orderMan.InsertOrder(om);
-                //Context.TransactionObject = om;
 
 
                 if (request.MessageDataExtension.ContainsKey(MessageDataExtensionKeys.CREATE_INVOICE))
@@ -250,7 +216,21 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 case ActionType.Update:
                 case ActionType.ExportQb:
                     break;
+                case ActionType.Report:
+                    if (!extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.PERIOD))
+                        throw new Exception("MessageDataExtension does not contain any of order reporting keys");
+                    break;
             }
+        }
+
+
+        protected override void Report()
+        {
+            ExtractTransactionCriteria();
+            new ReportManager(Context).RunReport();
         }
 
         public override void Deserialize(JToken token)
@@ -265,6 +245,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 PaymentType = entityObj["PaymentType"].ToObject<string>(),
                 Notes = entityObj["Notes"].ToObject<string>(),
                 OrderStatus = entityObj.ContainsKey("OrderStatus") ? token["OrderStatus"].ToObject<string>() : string.Empty,
+                ShippingAddressId = entityObj["ShippingAddressId"].ToObject<long>(),
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
                 RecordStatus = "A",

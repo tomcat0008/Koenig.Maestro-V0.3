@@ -18,6 +18,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         ProductGroupManager pm;
         public ProductGroup(TransactionContext context) : base("PRODUCT_GROUP", context)
         {
+            this.IsProgressing = false;
             this.MainEntitySample = new MaestroProductGroup();
             pm = new ProductGroupManager(context);
         }

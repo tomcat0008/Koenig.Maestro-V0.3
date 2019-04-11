@@ -18,6 +18,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         ProductManager pm;
         public Product(TransactionContext context) :base("PRODUCT", context)
         {
+            this.IsProgressing = false;
             this.MainEntitySample = new MaestroProduct();
             pm = new ProductManager(context);
         }

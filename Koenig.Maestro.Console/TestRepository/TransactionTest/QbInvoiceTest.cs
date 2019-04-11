@@ -56,7 +56,8 @@ namespace Koenig.Maestro.Console.TestRepository.TransactionTest
         ResponseMessage Import()
         {
             RequestMessage request = MessagePrepareAgent.GetRequest(action, tranCode, null, null);
-            request.MessageDataExtension.Add("IMPORT_TYPE", "Full");
+            request.MessageDataExtension.Add("BEGIN_DATE", new DateTime(2018,12, 1).ToString());
+            request.MessageDataExtension.Add("END_DATE", new DateTime(2018, 12, 3).ToString());
             return new MessageBroker().Execute(request);
         }
     }

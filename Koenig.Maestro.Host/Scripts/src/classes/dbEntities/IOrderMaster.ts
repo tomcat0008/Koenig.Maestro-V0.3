@@ -13,6 +13,7 @@ export interface IOrderMaster extends DbEntityBase {
     IntegrationStatus: string;
     CustomerName: string;
     CreateInvoiceOnQb: boolean;
+    ShippingAddressId: number;
 }
 
 export default class OrderMaster implements IOrderMaster {
@@ -44,6 +45,6 @@ export default class OrderMaster implements IOrderMaster {
     TypeName: string;
     CreateInvoiceOnQb: boolean;
     Actions: string[];
-
+    ShippingAddressId: number;
     
 }

@@ -48,6 +48,8 @@ namespace Koenig.Maestro.Entity
             }
         }
 
+        public long ShippingAddressId { get; set; }
+
         public QuickBooksInvoiceLog InvoiceLog { get; set; }
 
         public override string ToString()

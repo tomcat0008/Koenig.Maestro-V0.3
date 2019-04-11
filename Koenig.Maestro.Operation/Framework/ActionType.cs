@@ -18,6 +18,7 @@ namespace Koenig.Maestro.Operation.Framework
         Undefined,
         Undelete,
         Erase,
-        Backup
+        Backup,
+        Report
     }
 }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes.cs" />
+    <Compile Include="DbEntities\CustomerAddress.cs" />
     <Compile Include="DbEntities\CustomerProductUnit.cs" />
     <Compile Include="DbEntities\MaestroCustomer.cs" />
     <Compile Include="DbEntities\MaestroProduct.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="DbEntities\OrderMaster.cs" />
     <Compile Include="DbEntities\QuickBooksInvoiceLog.cs" />
     <Compile Include="DbEntities\QuickBooksProductMap.cs" />
+    <Compile Include="DbEntities\ReportDefinition.cs" />
     <Compile Include="DbEntities\TransactionDefinition.cs" />
     <Compile Include="DbEntities\TransactionLog.cs" />
     <Compile Include="DbEntityBase.cs" />

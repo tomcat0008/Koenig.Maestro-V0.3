@@ -14,5 +14,6 @@ namespace Koenig.Maestro.Entity.Enums
         public const string CANCELLED = "CC"; //cancelled
         public const string DELIVERED = "DL";
         public const string DELETED = "DE";
+        public const string IMPORTED = "IM";
     }
 }

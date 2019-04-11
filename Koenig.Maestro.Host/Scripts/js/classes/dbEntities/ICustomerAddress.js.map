@@ -1,0 +1,1 @@
+{"version":3,"file":"ICustomerAddress.js","sourceRoot":"","sources":["../../../src/classes/dbEntities/ICustomerAddress.ts"],"names":[],"mappings":"AAmBA,MAAM,CAAC,OAAO,OAAO,eAAe;IAIhC,YAAY,EAAU;QAClB,IAAI,CAAC,EAAE,GAAG,EAAE,CAAC;QACb,IAAI,CAAC,KAAK,GAAG,EAAE,IAAI,CAAC,CAAC;IACzB,CAAC;CAyBJ"}

@@ -96,7 +96,7 @@ export default class MainMenu extends React.Component {
         this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), Action: "", TranCode: "",
             ShowSuccess: false, SuccessMessage: "", Init: true, Entity: null,
-            ShowModal: false, ModalContent: null, ModalCaption: "",
+            ShowModal: false, ModalContent: null, ModalCaption: "", selected: [],
             ResponseMessage: new ResponseMessage(), ConfirmText: "", ConfirmShow: false, ButtonAction: "",
             MsgDataExtension: {}
         };
@@ -110,7 +110,7 @@ export default class MainMenu extends React.Component {
                     React.createElement("div", { className: "plate" },
                         "Orders",
                         React.createElement(MenuItem, { imgName: "order_new.png", action: "New", tranCode: "ORDER", eventHandler: this.handleClick, caption: "New order", itemType: "button", msgExtension: {}, buttonList: [], listSelect: false, height: "70px", width: "100%" }),
-                        React.createElement(MenuItem, { imgName: "icon-order.png", action: "List", tranCode: "ORDER", eventHandler: this.handleClick, caption: "Orders", itemType: "button", msgExtension: { ['PERIOD']: 'MONTH' }, height: "70px", width: "100%", buttonList: ["New", "Return", "Week", "Month", "Year"], listSelect: false })),
+                        React.createElement(MenuItem, { imgName: "icon-order.png", action: "List", tranCode: "ORDER", eventHandler: this.handleClick, caption: "Orders", itemType: "button", msgExtension: { ['PERIOD']: 'Month' }, height: "70px", width: "100%", buttonList: ["New", "Return", "Today", "Week", "Month", "Year", "All"], listSelect: false })),
                     React.createElement("br", null),
                     React.createElement("div", { className: "plate" },
                         "Imports",
@@ -120,7 +120,7 @@ export default class MainMenu extends React.Component {
                     React.createElement("br", null),
                     React.createElement("div", { className: "plate" },
                         "Integration",
-                        React.createElement(MenuItem, { imgName: "invoice_export.png", action: "List", tranCode: "QUICKBOOKS_INVOICE", eventHandler: this.handleClick, caption: "Export Orders to Quickbooks", itemType: "button", msgExtension: { ["IMPORT_TYPE"]: '' }, buttonList: ["Return"], height: "70px", width: "100%", listSelect: false }))),
+                        React.createElement(MenuItem, { imgName: "invoice_export.png", action: "List", tranCode: "QUICKBOOKS_INVOICE", eventHandler: this.handleClick, caption: "Export Orders to Quickbooks", itemType: "button", msgExtension: { ["NOT_INTEGRATED"]: 'True' }, buttonList: ["Return", "Today", "Week", "Month", "Year", "All", "QB"], height: "70px", width: "100%", listSelect: true }))),
                 React.createElement("div", { className: "col-6" },
                     React.createElement("div", { className: "plate" },
                         "Definitions",

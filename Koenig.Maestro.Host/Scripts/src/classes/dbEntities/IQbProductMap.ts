@@ -14,6 +14,7 @@ export interface IQbProductMap extends DbEntityBase {
     UnitTypeCanHaveUnits: boolean;
     ProductGroupId: number;
     QuickBooksCode: string;
+    ReportLabel: string;
 }
 
 export class QbProductMap implements IQbProductMap {
@@ -25,7 +26,7 @@ export class QbProductMap implements IQbProductMap {
     RecordStatus: string;
     TypeName: string;
     IsNew: boolean;
-
+    ReportLabel: string;
     ProductId: number;
     ProductName: string;
     Price: number;

@@ -9,6 +9,7 @@ namespace Koenig.Maestro.Entity.Enums
     [Serializable]
     public enum DatePeriod
     {
+        All,
         Today,
         Week,
         Month,

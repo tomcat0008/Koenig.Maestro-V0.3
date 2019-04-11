@@ -20,6 +20,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         CustomerManager cm = null;
         public Customer(TransactionContext context) : base("CUSTOMER", context)
         {
+            this.IsProgressing = false;
             this.MainEntitySample = new MaestroCustomer();
             cm = new CustomerManager(context);
         }
@@ -44,6 +45,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             resultObj.Title = entityObj["Title"].ToString();
             resultObj.QuickBooksId = entityObj["QuickBooksId"].ToString();
             resultObj.QuickBoosCompany = entityObj["QuickBoosCompany"].ToString();
+            resultObj.CustomerGroup = entityObj["CustomerGroup"].ToString();
+            resultObj.ReportGroup = entityObj["ReportGroup"].ToString();
             MaestroRegion region = null;
             if(entityObj.ContainsKey("MaestroRegion"))
             {
@@ -84,23 +87,10 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         protected override void New()
         {
             MaestroCustomer customer = (MaestroCustomer)request.TransactionEntityList[0];
-
-            SpCall call = new SpCall("DAT.CUSTOMER_INSERT");
-            call.SetVarchar("@CUSTOMER_NAME", customer.Name);
-            call.SetVarchar("@CUSTOMER_TITLE", customer.Title);
-            call.SetVarchar("@CUSTOMER_ADDRESS", customer.Address);
-            call.SetVarchar("@CUSTOMER_PHONE", customer.Phone);
-            call.SetVarchar("@CUSTOMER_EMAIL", customer.Email);
-            call.SetVarchar("@QB_CUSTOMER_ID", customer.QuickBooksId);
-            call.SetVarchar("@QB_COMPANY", customer.QuickBoosCompany);
-            call.SetBigInt("@REGION_ID", customer.Region.Id);
-            call.SetVarchar("@DEFAULT_PAYMENT_TYPE", customer.DefaultPaymentType);
-            call.SetDateTime("@CREATE_DATE", DateTime.Now);
-            call.SetVarchar("@CREATE_USER", Context.UserName);
-            customer.Id = db.ExecuteScalar<long>(call);
+            cm.InsertNewItem(customer);
             response.TransactionResult = customer;
             //Context.TransactionObject = customer;
-            
+
         }
 
         protected override void Update()

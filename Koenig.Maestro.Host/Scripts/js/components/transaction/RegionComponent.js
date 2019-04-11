@@ -43,11 +43,11 @@ export default class RegionComponent extends React.Component {
             region.Name = document.getElementById("regionNameId").value;
             region.Description = document.getElementById("regionDescId").value;
             region.PostalCode = document.getElementById("regionPKId").value;
+            region.GreaterRegion = document.getElementById("greaterRegionId").value;
             let result = yield ea.SaveRegion(region);
             if (result.ErrorInfo != null) {
                 this.DisableEnable(false);
                 throw result.ErrorInfo;
-                //this.props.ExceptionMethod(result.ErrorInfo);
             }
             else {
                 if (region.Id <= 0) {
@@ -63,6 +63,7 @@ export default class RegionComponent extends React.Component {
         document.getElementById("regionNameId").disabled = disable;
         document.getElementById("regionPKId").disabled = disable;
         document.getElementById("regionDescId").disabled = disable;
+        document.getElementById("greaterRegionId").disabled = disable;
     }
     render() {
         let region = this.state.Region;
@@ -86,7 +87,11 @@ export default class RegionComponent extends React.Component {
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Region Description"),
                     React.createElement(Col, { style: { paddingTop: "5px" } },
-                        React.createElement(Form.Control, { id: "regionDescId", type: "input", defaultValue: region.Description })))));
+                        React.createElement(Form.Control, { id: "regionDescId", type: "input", defaultValue: region.Description }))),
+                React.createElement(Row, null,
+                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Greater Region"),
+                    React.createElement(Col, { style: { paddingTop: "5px" } },
+                        React.createElement(Form.Control, { id: "greaterRegionId", type: "input", defaultValue: region.GreaterRegion })))));
         }
     }
 }

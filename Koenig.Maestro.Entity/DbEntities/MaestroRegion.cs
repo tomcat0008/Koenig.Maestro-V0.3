@@ -15,6 +15,9 @@ namespace Koenig.Maestro.Entity
         public string Description { get; set; }
         [DisplayProperty(Text = "Postal Code", DataField = "PostalCode",Sort = true, DisplayOrder = 2)]
         public string PostalCode { get; set; }
+        
+        [DisplayProperty(Text = "Greater Region", DataField = "GreaterRegion", Sort = true, DisplayOrder = 3)]
+        public string GreaterRegion { get; set; }
 
         public override string ToString()
         {

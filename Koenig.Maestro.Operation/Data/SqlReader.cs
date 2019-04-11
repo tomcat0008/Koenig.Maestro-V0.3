@@ -83,6 +83,21 @@ namespace Koenig.Maestro.Operation.Data
             }
         }
 
+        public virtual byte GetByte(string column)
+        {
+            return ContainedReader.IsDBNull(GetOrdinal(column))
+                       ? (byte)0
+                       : ((IConvertible)ContainedReader[column]).ToByte(null);
+        }
+
+        public virtual byte[] GetByteArray(string column)
+        {
+            return ContainedReader.IsDBNull(GetOrdinal(column))
+                       ? null
+                       : ((byte[])ContainedReader[column]);
+        }
+
+
         public object GetObject(int ordinal)
         {
             return ContainedReader[ordinal];

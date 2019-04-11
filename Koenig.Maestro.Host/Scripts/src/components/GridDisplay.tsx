@@ -23,7 +23,7 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
     ShowSuccess: false, SuccessMessage: "",
         ResponseMessage: new ResponseMessage(), TranCode: "", ConfirmText:"", ConfirmShow:false,
         Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
-        MsgDataExtension: {}
+        MsgDataExtension: {}, selected:[]
     
     };
 
@@ -32,6 +32,8 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
         this.renderList = this.renderList.bind(this);
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.loadGridData = this.loadGridData.bind(this);
+        this.startIntegration = this.startIntegration.bind(this);
+        
         let errorInfo: IErrorInfo = new ErrorInfo();
         errorInfo.StackTrace = "";
         errorInfo.UserFriendlyMessage = "";
@@ -40,7 +42,7 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
             ShowSuccess:false, SuccessMessage:"",
             ResponseMessage: new ResponseMessage(), TranCode: props.TranCode, ConfirmText:"", ConfirmShow:false,
             Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
-            MsgDataExtension:props.MsgExtension
+            MsgDataExtension: props.MsgExtension, selected: []
         };
         //this.saveFct = this.saveFct.bind(this);
         this.handleNew = this.handleNew.bind(this);
@@ -94,13 +96,57 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
         await this.loadGridData();
     }
 
+    async startIntegration() {
+
+        let ea: EntityAgent = new EntityAgent();
+        try
+        {
+            $("body").addClass("loading");
+            let result: IResponseMessage = await ea.CreateInvoices(this.state.selected);
+            if (result.TransactionStatus == "ERROR") {
+                throw result.ErrorInfo;
+            }
+
+            $("body").removeClass("loading");
+            this.setState({ ShowSuccess: true, SuccessMessage: result.ResultMessage });
+            await this.loadGridData();
+        }
+        catch(error)
+        {
+            $("body").removeClass("loading");
+            this.setState({ ErrorInfo: error, ShowError: true });
+
+        }
+    }
+
+    handleGridSelect = async (row, isSelect) => {
+        let selection: any[] = this.state.selected;
+        if (isSelect) {
+            selection.push(row.Id);
+        } else {
+            selection = selection.filter(s => s != row.Id);
+        }
+
+        await this.setState({ selected: selection });
+
+        let btn:HTMLButtonElement = (document.getElementById("cmdQb") as HTMLButtonElement);
+        btn.disabled = selection.length == 0;
+
+        if (selection.length > 0) {
+            btn.onclick = this.startIntegration;
+        }
+
+        return isSelect;
+    }
+
     renderList() {
 
 
         const selectRow = {
             mode: 'checkbox',
             clickToSelect: true,
-            onSelect: (row, isSelect, rowIndex, e) => {  },
+            selected: this.state.selected,
+            onSelect: this.handleGridSelect,
             style: (row, rowIndex) => {
                 const backgroundColor = '#dce4ed';
                 return { backgroundColor };
@@ -206,13 +252,21 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
                         props => (
                             <div>
                                 <div style={{ textAlign: "left" }}>
-                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Return")>-1 ? "" : "none"  }} href="/MainPage/Index" >Return</Button>
-                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }} onClick={this.handleNew} >New</Button>
-                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Today"); }} >Today</Button>
+                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }} href="/MainPage/Index" >Return</Button>
+                                    <span>  </span>
+                                    <Button key="add" variant="primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }} onClick={this.handleNew} >New</Button>
+                                    <span>  </span>
+                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Today") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Today"); }} >Today</Button>
                                     <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Week"); }} >Week</Button>
                                     <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Month") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Month"); }} >Month</Button>
                                     <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("Year"); }} >Year</Button>
+                                    <Button key="add" variant="outline-primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }} onClick={() => { this.handleDateSelect("All"); }} >All</Button>
+                                    <span>  </span>
+                                    <Button key="add" id="cmdQb" disabled variant="primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("QB") > -1 ? "" : "none" }} onClick={() => { this.startIntegration(); }} >Send to QB</Button>
+                                    <span>  </span>
                                     <MyExportCSV {...props.csvProps}>Export CSV!!</MyExportCSV>
+
+
                                 </div>
                                 <BootstrapTable {...props.baseProps}
                                     pagination={paginationFactory(pageOpts)}
@@ -240,6 +294,7 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
         if (!this.state.Init) {
             return (
                     <div>
+                    
                     <Row><Col >
                     <Alert id="gridErrorAlertId" dismissible show={this.state == null ? false : this.state.ShowError} variant="danger" data-dismiss="alert" >
                         <Alert.Heading id="gridAlertHeadingId">Exception occured</Alert.Heading>

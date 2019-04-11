@@ -6,12 +6,31 @@
     @RenderSection("head", required: false)
     @System.Web.Optimization.Styles.Render("~/Content/dist")
     @System.Web.Optimization.Styles.Render("~/Content/react-bootstrap-table2.min.css")
-    
+    <script src="~/Scripts/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript">
+        /*
+        $(document).ready(function () {
+            var serverSentEvents = new window.EventSource('/MainPage/Message');
+
+            serverSentEvents.onmessage = function (e) {
+
+                console.log(e);
+            };
+                //$("#updt").text(e.data);
+            
+            
+            serverSentEvents.onerror = function (e) {
+                console.error(e);
+            };
+        });*/
+    </script>
 
 </head>
 <body>
     <div>
-        <div id="headerSect" style="background-color:black; height:100px"></div>
+        <div id="headerSect" style="background-color:black; height:100px">
+            <div style="color:white" id="updt"></div>
+        </div>
         <div style="padding:10px;">
             @RenderBody()
         </div>

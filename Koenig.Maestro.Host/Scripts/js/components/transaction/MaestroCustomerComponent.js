@@ -55,6 +55,8 @@ export default class MaestroCustomerComponent extends React.Component {
             cust.DefaultPaymentType = this.state.Customer.DefaultPaymentType == null ? "" : this.state.Customer.DefaultPaymentType;
             cust.MaestroRegion = new MaestroRegion(parseInt(document.getElementById("customerRegionId").value));
             cust.DefaultPaymentType = document.getElementById("defaultPaymentId").checked ? "COD" : "";
+            cust.CustomerGroup = document.getElementById("customerGroupId").value;
+            cust.ReportGroup = document.getElementById("reportGroupId").value;
             let result = yield ea.SaveCustomer(cust);
             this.DisableEnable(true);
             if (result.ErrorInfo != null) {
@@ -84,6 +86,8 @@ export default class MaestroCustomerComponent extends React.Component {
         document.getElementById("customerEmailId").disabled = disable;
         document.getElementById("customerPhoneId").disabled = disable;
         document.getElementById("defaultPaymentId").disabled = disable;
+        document.getElementById("customerGroupId").disabled = disable;
+        document.getElementById("reportGroupId").disabled = disable;
     }
     render() {
         let cus = this.state.Customer;
@@ -115,6 +119,13 @@ export default class MaestroCustomerComponent extends React.Component {
                     React.createElement(Form.Group, { as: Col, controlId: "customerTitle" },
                         React.createElement(Form.Label, null, "Title"),
                         React.createElement(Form.Control, { id: "customerTitleId", type: "input", defaultValue: cus.Title }))),
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "customerGroup" },
+                        React.createElement(Form.Label, null, "Customer Group"),
+                        React.createElement(Form.Control, { id: "customerGroupId", type: "input", defaultValue: cus.CustomerGroup })),
+                    React.createElement(Form.Group, { as: Col, controlId: "customerReport" },
+                        React.createElement(Form.Label, null, "Report Group"),
+                        React.createElement(Form.Control, { id: "reportGroupId", type: "input", defaultValue: cus.ReportGroup }))),
                 React.createElement(Form.Row, null,
                     React.createElement(Form.Group, { as: Col, controlId: "customerEmail" },
                         React.createElement(Form.Label, null, "Email"),

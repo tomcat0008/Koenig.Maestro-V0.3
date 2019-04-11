@@ -10,6 +10,8 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 {
     internal abstract class ManagerBase
     {
+        public event TransactionProgressEventHandler TransactionProgress;
+
         protected Database db;
         protected TransactionContext context;
         protected static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -36,6 +38,14 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             }
         }
 
+        protected void OnTransactionProgress(TransactionProgressEventArgs e)
+        {
+            if (TransactionProgress != null)
+                this.TransactionProgress(this, e);
+        }
+
+
+
         public void BulkInsert(List<ITransactionEntity> itemList)
         {
             
@@ -46,5 +56,6 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
         {
             return null;
         }
+
     }
 }

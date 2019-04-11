@@ -61,7 +61,7 @@ namespace Koenig.Maestro.Console.TestRepository.TransactionTest
                 MinimumOrderQuantity = minimumOrder,
                 Price = price,
                 QuickBooksProductId = string.Empty,
-                GroupId = groupId,
+                //GroupId = groupId,
                 UnitType = new MaestroUnitType() { Id = unitTypeId }
             };
 
@@ -80,7 +80,7 @@ namespace Koenig.Maestro.Console.TestRepository.TransactionTest
                 MinimumOrderQuantity = minimumOrder,
                 Price = price,
                 QuickBooksProductId = string.Empty,
-                GroupId = groupId,
+                //GroupId = groupId,
                 UnitType = new MaestroUnitType() { Id = unitTypeId}
             };
 

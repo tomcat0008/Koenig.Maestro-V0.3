@@ -19,10 +19,17 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         public QuickbooksInvoice(TransactionContext context) : base("QUICKBOOKS_INVOICE", context)
         {
+            this.IsProgressing = true;
             this.MainEntitySample = new QuickBooksInvoiceLog();
             invMan = new QuickBooksInvoiceManager(Context);
+            invMan.TransactionProgress += InvMan_TransactionProgress;
         }
-        
+
+        private void InvMan_TransactionProgress(object sender, TransactionProgressEventArgs e)
+        {
+            OnTransactionProgress(e);
+        }
+
         protected override void Delete()
         {
             
@@ -30,26 +37,40 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void ExportQb()
         {
-            List<QuickBooksInvoiceLog> list = request.TransactionEntityList.Cast<QuickBooksInvoiceLog>().ToList() ;
 
-            List<OrderMaster> orders = new OrderManager(Context).GetOrders(list.Select(l => l.OrderId).ToList());
+            string invoiceIdString = request.MessageDataExtension["INVOICE_LIST"];
+            string[] invoiceIdListStr = invoiceIdString.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<long> invoiceIdList = invoiceIdListStr.Select(i => long.Parse(i)).ToList();
+
+            OrderManager orderMan = new OrderManager(Context);
+
+            List<QuickBooksInvoiceLog> list = invMan.List(invoiceIdList);
+
+            List<OrderMaster> orders = orderMan.GetOrders(list.Select(l => l.OrderId).ToList());
 
             orders = orders.Where(om => om.IntegrationStatus == QbIntegrationLogStatus.WAITING || om.IntegrationStatus == QbIntegrationLogStatus.ERROR).ToList();
-
+            long counter = 0;
             long batchId = CreateBatch(orders.Select(o => o.Id).ToList());
             string batchStatus = QbIntegrationLogStatus.OK;
             using (qbAgent = new QuickBooksInvoiceAgent(Context))
             {
+                counter++;
                 foreach (OrderMaster orderMaster in orders)
                 {
                     Context.TransactionObject = orderMaster;
                     orderMaster.InvoiceLog.BatchId = batchId;
+                    string eventMessage = string.Empty;
                     try
                     {
                         qbAgent.Export();
-                        orderMaster.InvoiceLog.IntegrationStatus = QbIntegrationLogStatus.OK;
+                        orderMaster.InvoiceLog.IntegrationStatus = orderMaster.InvoiceLog.IntegrationStatus == QbIntegrationLogStatus.ERROR ? QbIntegrationLogStatus.REVOKED : QbIntegrationLogStatus.OK;
                         orderMaster.InvoiceLog.ErrorLog = string.Empty;
-                        invMan.UpdateInvoiceLog(orderMaster.InvoiceLog);
+                        orderMaster.InvoiceLog.QuickBooksTxnId = Context.Bag["TXN_ID"].ToString();
+                        orderMaster.InvoiceLog.QuickBooksInvoiceId = Context.Bag["REF_NUMBER"].ToString();
+                        orderMaster.OrderStatus = OrderStatus.INTEGRATED;
+                        eventMessage = string.Format("Invoice nr {0} created for order {1}", orderMaster.InvoiceLog.QuickBooksInvoiceId, orderMaster.Id);
+                        
                     }
                     catch(Exception ex)
                     {
@@ -58,11 +79,22 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                         warnings.Add(msg);
                         orderMaster.InvoiceLog.ErrorLog = ex.ToString();
                         orderMaster.InvoiceLog.IntegrationStatus = QbIntegrationLogStatus.ERROR;
-                        invMan.UpdateInvoiceLog(orderMaster.InvoiceLog);
+                        orderMaster.OrderStatus = OrderStatus.ERROR;
                         batchStatus = QbIntegrationLogStatus.ERROR;
+                        eventMessage = msg;
+                        
                     }
+                    finally
+                    {
+                        invMan.UpdateInvoiceLog(orderMaster.InvoiceLog);
+                        orderMan.UpdateOrder(orderMaster, false);
+                    }
+                    responseMessage += eventMessage + Environment.NewLine;
+                    
+                    OnTransactionProgress(new TransactionProgressEventArgs(orders.Count, counter, eventMessage));
                 }
             }
+            
             invMan.UpdateBatch(batchId, batchStatus);
         }
 
@@ -80,32 +112,37 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void ImportQb()
         {
+            DateTime dt = DateTime.MinValue;
+            if (!DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], out dt))
+                throw new Exception(string.Format("Invalid begin date criteria `{0}`", extendedData[MessageDataExtensionKeys.BEGIN_DATE]));
+            Context.Bag.Add(MessageDataExtensionKeys.BEGIN_DATE, dt);
+
+            if (!DateTime.TryParse(extendedData[MessageDataExtensionKeys.END_DATE], out dt))
+                throw new Exception(string.Format("Invalid end date criteria `{0}`", extendedData[MessageDataExtensionKeys.END_DATE]));
+
+            
+            Context.Bag.Add(MessageDataExtensionKeys.END_DATE, dt);
+            
             using (qbAgent = new QuickBooksInvoiceAgent(Context))
             {
+                
                 qbAgent.Import();
             }
         }
 
         protected override void List()
         {
-            DateTime endDate = DateTime.Now.AddDays(1);
-            DateTime beginDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-            long customerId = -1, batchID = 0;
-            string status = string.Empty;
+            ExtractTransactionCriteria();
 
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE))
-                DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], out beginDate);
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE))
-                DateTime.TryParse(extendedData[MessageDataExtensionKeys.END_DATE], out endDate);
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID))
-                long.TryParse(extendedData[MessageDataExtensionKeys.CUSTOMER_ID], out customerId);
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
-                status = extendedData[MessageDataExtensionKeys.STATUS];
-            if (extendedData.ContainsKey(MessageDataExtensionKeys.BATCH_ID))
-                long.TryParse(extendedData[MessageDataExtensionKeys.BATCH_ID], out batchID);
+            DateTime endDate = (DateTime)Context.Bag[MessageDataExtensionKeys.END_DATE];
+            DateTime beginDate = (DateTime)Context.Bag[MessageDataExtensionKeys.BEGIN_DATE];
 
+            long customerId = (long)Context.Bag[MessageDataExtensionKeys.CUSTOMER_ID];
+            string status = Context.Bag[MessageDataExtensionKeys.STATUS].ToString();
+            long batchID = (long)Context.Bag[MessageDataExtensionKeys.BATCH_ID];
+            bool notIntegrated = (bool)Context.Bag[MessageDataExtensionKeys.NOT_INTEGRATED];
 
-            List<QuickBooksInvoiceLog> result = invMan.List(beginDate, endDate, customerId, status, batchID);
+            List<QuickBooksInvoiceLog> result = invMan.List(beginDate, endDate, customerId, status, batchID, notIntegrated);
             this.response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
 
         }
@@ -136,7 +173,10 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                     if (!extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID)
-                        && !extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.STATUS)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.PERIOD)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.NOT_INTEGRATED)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.BATCH_ID))
                         throw new Exception("MessageDataExtension does not contain any of order listing keys");
 
                     break;
@@ -144,7 +184,20 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 case ActionType.Update:
                 case ActionType.ExportQb:
                     break;
+                case ActionType.ImportQb:
+                    if (!extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE))
+                        throw new Exception("MessageDataExtension does not contain BEGIN_DATE and END_DATE keys");
+                    break;
+
+
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            invMan.TransactionProgress -= InvMan_TransactionProgress;
         }
 
     }

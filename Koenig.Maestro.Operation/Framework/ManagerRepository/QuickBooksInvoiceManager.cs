@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 {
+
     internal class QuickBooksInvoiceManager : ManagerBase
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
@@ -34,6 +35,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             return result;
         }
 
+
+
+
         public void IntegrateOrderToQuickBooks(List<OrderMaster> omList)
         {
 
@@ -43,11 +47,12 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 bool.TryParse(context.RequestMessage.MessageDataExtension[MessageDataExtensionKeys.SEND_TO_QB], out sendToQb);
 
             List<QuickBooksInvoiceLog> logs = new List<QuickBooksInvoiceLog>();
-
+            long cnt = 0;
             using (QuickBooksInvoiceAgent agent = new QuickBooksInvoiceAgent(context))
             {
                 foreach (OrderMaster om in omList)
                 {
+                    cnt++;
                     string status = sendToQb ? (string.IsNullOrWhiteSpace(om.IntegrationStatus) ? QbIntegrationLogStatus.OK : QbIntegrationLogStatus.REVOKED ) : QbIntegrationLogStatus.WAITING;
 
                     QuickBooksInvoiceLog log = CreateInvoiceLog(om, status);
@@ -82,6 +87,10 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                     InsertIntegrationLog(log);
 
                     logs.Add(log);
+
+                    string eventMessage = string.Format("Order `{0}` integration complete. Status:{1}, QB Invoice Id:{2}", log.OrderId, log.IntegrationStatus, log.QuickBooksInvoiceId);
+
+                    this.OnTransactionProgress(new TransactionProgressEventArgs(omList.Count, cnt, eventMessage));
                 }
 
             }
@@ -99,6 +108,8 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 CreateDate = DateTime.Now,
                 CreatedUser = context.UserName,
                 Customer = om.Customer,
+                QuickBooksInvoiceId = context.Bag.ContainsKey("QB_INVOICE_ID") ? context.Bag["QB_INVOICE_ID"].ToString() : string.Empty,
+                QuickBooksTxnId = context.Bag.ContainsKey("QB_TXN_ID") ? context.Bag["QB_TXN_ID"].ToString() : string.Empty,
                 QuickBooksCustomerId = om.Customer.QuickBooksId,
                 ErrorLog = string.Empty,
                 IntegrationDate = DateTime.Now,
@@ -120,6 +131,25 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             }
         }
 
+        public QuickBooksInvoiceLog GetInvoiceLog(string txnId)
+        {
+            SpCall spCall = new SpCall("DAT.QB_INVOICE_LOG_SELECT_BY_TXN_ID");
+            spCall.SetVarchar("@TXN_ID", txnId);
+
+            QuickBooksInvoiceLog result = null;
+
+            using (SqlReader reader = db.ExecuteReader(spCall))
+            {
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    result = GetLogFromReader(reader);
+                }
+                reader.Close();
+            }
+            return result;
+        }
+
         public QuickBooksInvoiceLog GetInvoiceLog(long orderId)
         {
             SpCall spCall = new SpCall("DAT.QB_INVOICE_LOG_SELECT_BY_ORDER_ID");
@@ -132,26 +162,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 if (reader.HasRows)
                 {
                     reader.Read();
-
-
-                    result = new QuickBooksInvoiceLog()
-                    {
-                        Id = reader.GetInt64("ID"),
-                        BatchId = reader.GetInt64("BATCH_ID"),
-                        CreateDate = reader.GetDateTime("CREATE_DATE"),
-                        CreatedUser = reader.GetString("CREATE_USER"),
-                        Customer = CustomerCache.Instance[reader.GetInt64("MAESTRO_CUSTOMER_ID")],
-                        ErrorLog = reader.GetString("ERROR_LOG"),
-                        IntegrationDate = reader.GetDateTime("INTEGRATION_DATE"),
-                        IntegrationStatus = reader.GetString("INTEGRATION_STATUS"),
-                        OrderId = reader.GetInt64("ORDER_ID"),
-                        QuickBooksCustomerId = reader.GetString("QB_CUSTOMER_ID"),
-                        QuickBooksInvoiceId = reader.GetString("QB_INVOICE_NO"),
-                        QuickBooksTxnId = reader.GetString("QB_TXN_ID"),
-                        RecordStatus = reader.GetString("RECORD_STATUS"),
-                        UpdateDate = reader.GetDateTime("UPDATE_DATE"),
-                        UpdatedUser = reader.GetString("UPDATE_USER")
-                    };
+                    result = GetLogFromReader(reader);
                 }
                 else
                     throw new Exception(string.Format("Integration log for order {0} could not be found.", orderId));
@@ -159,6 +170,29 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             }
             return result;
 
+        }
+
+        QuickBooksInvoiceLog GetLogFromReader(SqlReader reader)
+        {
+            QuickBooksInvoiceLog result = new QuickBooksInvoiceLog()
+            {
+                Id = reader.GetInt64("ID"),
+                BatchId = reader.GetInt64("BATCH_ID"),
+                CreateDate = reader.GetDateTime("CREATE_DATE"),
+                CreatedUser = reader.GetString("CREATE_USER"),
+                Customer = CustomerCache.Instance[reader.GetInt64("MAESTRO_CUSTOMER_ID")],
+                ErrorLog = reader.GetString("ERROR_LOG"),
+                IntegrationDate = reader.GetDateTime("INTEGRATION_DATE"),
+                IntegrationStatus = reader.GetString("INTEGRATION_STATUS"),
+                OrderId = reader.GetInt64("ORDER_ID"),
+                QuickBooksCustomerId = reader.GetString("QB_CUSTOMER_ID"),
+                QuickBooksInvoiceId = reader.GetString("QB_INVOICE_NO"),
+                QuickBooksTxnId = reader.GetString("QB_TXN_ID"),
+                RecordStatus = reader.GetString("RECORD_STATUS"),
+                UpdateDate = reader.GetDateTime("UPDATE_DATE"),
+                UpdatedUser = reader.GetString("UPDATE_USER")
+            };
+            return result;
         }
 
         public void InsertIntegrationLog(QuickBooksInvoiceLog log)
@@ -251,7 +285,23 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
         }
 
 
-        public List<QuickBooksInvoiceLog> List(DateTime begin, DateTime end, long customerId, string status, long batchId)
+        public List<QuickBooksInvoiceLog> List(List<long> idList )
+        {
+            List<QuickBooksInvoiceLog> result = new List<QuickBooksInvoiceLog>();
+
+            SpCall spCall = new SpCall("DAT.QB_INVOICE_LOG_SELECT_MULTI_BY_ID");
+            spCall.SetStructured<long>("@ID_LIST", "COR.ID_LIST", "ID", idList);
+
+            DataSet ds = db.ExecuteDataSet(spCall);
+
+            ds.Tables[0].AsEnumerable().ToList().ForEach(logRow => { result.Add(InitLog(logRow)); });
+
+            return result;
+
+        }
+
+
+        public List<QuickBooksInvoiceLog> List(DateTime begin, DateTime end, long customerId, string status, long batchId, bool notIntegrated)
         {
             List<QuickBooksInvoiceLog> result = new List<QuickBooksInvoiceLog>();
 
@@ -261,6 +311,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             spCall.SetDateTime("@INTEGRATION_DATE_END", end);
             spCall.SetBigInt("@BATCH_ID", batchId);
             spCall.SetBigInt("@CUSTOMER_ID", customerId);
+            spCall.SetBit("@NOT_INTEGRATED", notIntegrated);
 
             DataSet ds = db.ExecuteDataSet(spCall);
 

@@ -20,7 +20,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
     tranComponent: ICrudComponent;
 
     state = {
-            ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: "",
+            ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: "",selected:[],
             ShowSuccess: false, SuccessMessage: "", Action: "", Init: true, Entity: null,
         ShowModal: false, ModalContent: null, ModalCaption: "", ConfirmText: "", ConfirmShow: false,
         MsgDataExtension: {}, ButtonAction:"",ResponseMessage: new ResponseMessage()};
@@ -36,7 +36,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
             ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: this.props.TranCode,
             ShowSuccess: false, SuccessMessage: "", Action: this.props.Action, Init: true, Entity: this.props.Entity,
             ShowModal: this.props.Show, ModalContent: contentComponent, ModalCaption: "",
-            ConfirmText: "", ConfirmShow: false, ButtonAction: "", MsgDataExtension: {},
+            ConfirmText: "", ConfirmShow: false, ButtonAction: "", MsgDataExtension: {}, selected: [],
             ResponseMessage: new ResponseMessage()
         };
     }
@@ -91,6 +91,8 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
             (document.getElementById('btnSave') as HTMLButtonElement).disabled = true;
             /*(document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;*/         
             let response: IResponseMessage = await this.tranComponent.Save();
+            if (response.TransactionStatus == "ERROR")
+                throw response.ErrorInfo;
             (document.getElementById('btnSave') as HTMLButtonElement).disabled = false;
             this.setState({ ShowSuccess: true, ShowError:false, SuccessMessage: response.ResultMessage });
         }
@@ -105,7 +107,21 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
     }
 
     cancelFct = async () => {
-        alert('Cancelled');
+        (document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;
+        try {
+            let response: IResponseMessage = await this.tranComponent.Cancel();
+            if (response.TransactionStatus == "ERROR")
+                throw response.ErrorInfo;
+            this.setState({ ShowSuccess: true, ShowError: false, SuccessMessage: response.ResultMessage });
+        }
+        catch(error)
+        {
+            if (error.DisableAction == false)
+                (document.getElementById('btnCancel') as HTMLButtonElement).disabled = false;
+
+            this.setState({ ErrorInfo: error, ShowError: true, Init: false });
+        }
+
     }
 
     createInvoice = async () => {

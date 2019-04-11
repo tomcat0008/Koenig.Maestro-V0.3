@@ -25,15 +25,32 @@ export default class GridDisplay extends React.Component {
             ShowSuccess: false, SuccessMessage: "",
             ResponseMessage: new ResponseMessage(), TranCode: "", ConfirmText: "", ConfirmShow: false,
             Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
-            MsgDataExtension: {}
+            MsgDataExtension: {}, selected: []
         };
         this.handleModalClose = () => __awaiter(this, void 0, void 0, function* () {
             this.setState({ ShowModal: false });
             yield this.loadGridData();
         });
+        this.handleGridSelect = (row, isSelect) => __awaiter(this, void 0, void 0, function* () {
+            let selection = this.state.selected;
+            if (isSelect) {
+                selection.push(row.Id);
+            }
+            else {
+                selection = selection.filter(s => s != row.Id);
+            }
+            yield this.setState({ selected: selection });
+            let btn = document.getElementById("cmdQb");
+            btn.disabled = selection.length == 0;
+            if (selection.length > 0) {
+                btn.onclick = this.startIntegration;
+            }
+            return isSelect;
+        });
         this.renderList = this.renderList.bind(this);
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.loadGridData = this.loadGridData.bind(this);
+        this.startIntegration = this.startIntegration.bind(this);
         let errorInfo = new ErrorInfo();
         errorInfo.StackTrace = "";
         errorInfo.UserFriendlyMessage = "";
@@ -42,7 +59,7 @@ export default class GridDisplay extends React.Component {
             ShowSuccess: false, SuccessMessage: "",
             ResponseMessage: new ResponseMessage(), TranCode: props.TranCode, ConfirmText: "", ConfirmShow: false,
             Init: true, ShowModal: false, ModalContent: null, ModalCaption: "", Action: "", ButtonAction: "",
-            MsgDataExtension: props.MsgExtension
+            MsgDataExtension: props.MsgExtension, selected: []
         };
         //this.saveFct = this.saveFct.bind(this);
         this.handleNew = this.handleNew.bind(this);
@@ -59,12 +76,12 @@ export default class GridDisplay extends React.Component {
             }
             catch (error) {
                 this.setState({ ErrorInfo: error, ShowError: true });
-                console.error(error);
+                //console.error(error);
             }
             const dummyCol = {
                 filter: textFilter()
             };
-            console.debug(dummyCol);
+            //console.debug(dummyCol);
             $("body").removeClass("loading");
             //$('#wait').hide();
         });
@@ -84,13 +101,34 @@ export default class GridDisplay extends React.Component {
         return __awaiter(this, void 0, void 0, function* () {
             let dataExt = { ['PERIOD']: period };
             yield this.setState({ MsgDataExtension: dataExt });
+            yield this.loadGridData();
+        });
+    }
+    startIntegration() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let ea = new EntityAgent();
+            try {
+                $("body").addClass("loading");
+                let result = yield ea.CreateInvoices(this.state.selected);
+                if (result.TransactionStatus == "ERROR") {
+                    throw result.ErrorInfo;
+                }
+                $("body").removeClass("loading");
+                this.setState({ ShowSuccess: true, SuccessMessage: result.ResultMessage });
+                yield this.loadGridData();
+            }
+            catch (error) {
+                $("body").removeClass("loading");
+                this.setState({ ErrorInfo: error, ShowError: true });
+            }
         });
     }
     renderList() {
         const selectRow = {
             mode: 'checkbox',
             clickToSelect: true,
-            onSelect: (row, isSelect, rowIndex, e) => { },
+            selected: this.state.selected,
+            onSelect: this.handleGridSelect,
             style: (row, rowIndex) => {
                 const backgroundColor = '#dce4ed';
                 return { backgroundColor };
@@ -172,13 +210,19 @@ export default class GridDisplay extends React.Component {
                 } }, props => (React.createElement("div", null,
                 React.createElement("div", { style: { textAlign: "left" } },
                     React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }, href: "/MainPage/Index" }, "Return"),
-                    React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }, onClick: this.handleNew }, "New"),
-                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Today"); } }, "Today"),
-                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Week"); } }, "Week"),
-                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Month") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Month"); } }, "Month"),
-                    React.createElement(Button, { key: "add", variant: "outline-dark", style: { width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Year"); } }, "Year"),
+                    React.createElement("span", null, "  "),
+                    React.createElement(Button, { key: "add", variant: "primary", style: { width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }, onClick: this.handleNew }, "New"),
+                    React.createElement("span", null, "  "),
+                    React.createElement(Button, { key: "add", variant: "outline-primary", style: { width: "120px", display: this.props.ButtonList.indexOf("Today") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Today"); } }, "Today"),
+                    React.createElement(Button, { key: "add", variant: "outline-primary", style: { width: "120px", display: this.props.ButtonList.indexOf("Week") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Week"); } }, "Week"),
+                    React.createElement(Button, { key: "add", variant: "outline-primary", style: { width: "120px", display: this.props.ButtonList.indexOf("Month") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Month"); } }, "Month"),
+                    React.createElement(Button, { key: "add", variant: "outline-primary", style: { width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("Year"); } }, "Year"),
+                    React.createElement(Button, { key: "add", variant: "outline-primary", style: { width: "120px", display: this.props.ButtonList.indexOf("Year") > -1 ? "" : "none" }, onClick: () => { this.handleDateSelect("All"); } }, "All"),
+                    React.createElement("span", null, "  "),
+                    React.createElement(Button, { key: "add", id: "cmdQb", disabled: true, variant: "primary", style: { width: "120px", display: this.props.ButtonList.indexOf("QB") > -1 ? "" : "none" }, onClick: () => { this.startIntegration(); } }, "Send to QB"),
+                    React.createElement("span", null, "  "),
                     React.createElement(MyExportCSV, Object.assign({}, props.csvProps), "Export CSV!!")),
-                React.createElement(BootstrapTable, Object.assign({}, props.baseProps, { pagination: paginationFactory(pageOpts), condensed: true, hover: true, bootstrap4: true, rowEvents: { onDoubleClick: this.onDoubleClick }, headerClasses: "grid-header-style", selectRow: this.props.ListSelect ? selectRow : hideSelect, noDataIndication: "No data found" })))))));
+                React.createElement(BootstrapTable, Object.assign({}, props.baseProps, { pagination: paginationFactory(pageOpts), condensed: true, hover: true, bootstrap4: true, filter: filterFactory(), rowEvents: { onDoubleClick: this.onDoubleClick }, headerClasses: "grid-header-style", selectRow: this.props.ListSelect ? selectRow : hideSelect, noDataIndication: "No data found" })))))));
     }
     render() {
         if (!this.state.Init) {

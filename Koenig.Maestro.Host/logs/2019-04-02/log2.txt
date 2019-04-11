@@ -43,3 +43,22 @@
    at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 140
    at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 81
    at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 19:57:46.0880    5 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 135
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 82
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 19:58:36.4427    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 96
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 92
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 20:02:01.3791   22 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 96
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 92
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37
+2019-04-02 20:02:43.7600    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction QUICKBOOKS_INVOICE System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Koenig.Maestro.Operation.TransactionRepository.QuickbooksInvoice.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\QuickbooksInvoice.cs:line 96
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 92
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 37

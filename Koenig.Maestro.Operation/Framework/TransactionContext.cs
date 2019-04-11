@@ -18,5 +18,8 @@ namespace Koenig.Maestro.Operation.Framework
         public string TransactionCode { get; set; }
         public RequestMessage RequestMessage {get;set;}
         public List<string> Warnings { get; set; }
+
+        public Dictionary<string, object> Bag { get; set; }
+
     }
 }

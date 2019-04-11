@@ -27,9 +27,9 @@ namespace Koenig.Maestro.Console
             //TestCustomerProductUnit();
             //TestOrder();
 
-            //MessagingTest.Customers.Import();
+            MessagingTest.Customers.Import();
             //MessagingTest.Customers.List();
-            MessagingTest.Products.Import();
+            //MessagingTest.Products.Import();
             //MessagingTest.Products.List();
 
             //OrderAdd();

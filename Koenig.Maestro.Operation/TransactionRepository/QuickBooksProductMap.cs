@@ -18,6 +18,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         QuickBooksProductMapManager qm;
         public QuickBooksProductMap(TransactionContext context) : base("QB_PRODUCT_MAP", context)
         {
+            this.IsProgressing = false;
             this.MainEntitySample = new QuickBooksProductMapDef();
             qm = new QuickBooksProductMapManager(context);
         }
@@ -61,7 +62,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             call.SetDecimal("@PRICE", map.Price);
             call.SetDateTime("@CREATE_DATE", DateTime.Now);
             call.SetVarchar("@CREATE_USER", Context.UserName);
-
+            call.SetVarchar("@REPORT_LABEL", map.Label);
             map.Id = db.ExecuteScalar<long>(call);
             response.TransactionResult = map;
 

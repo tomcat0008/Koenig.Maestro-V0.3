@@ -41,13 +41,14 @@ export default class RegionComponent extends React.Component<ITranComponentProp,
         region.Name = (document.getElementById("regionNameId") as HTMLInputElement).value;
         region.Description = (document.getElementById("regionDescId") as HTMLInputElement).value;
         region.PostalCode = (document.getElementById("regionPKId") as HTMLInputElement).value
-
+        region.GreaterRegion = (document.getElementById("greaterRegionId") as HTMLInputElement).value
+        
         let result: IResponseMessage = await ea.SaveRegion(region);
 
         if (result.ErrorInfo != null) {
             this.DisableEnable(false);
             throw result.ErrorInfo;
-            //this.props.ExceptionMethod(result.ErrorInfo);
+
         }
         else {
             if (region.Id <= 0) {
@@ -67,6 +68,8 @@ export default class RegionComponent extends React.Component<ITranComponentProp,
         (document.getElementById("regionNameId") as HTMLInputElement).disabled = disable;
         (document.getElementById("regionPKId") as HTMLInputElement).disabled = disable;
         (document.getElementById("regionDescId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("greaterRegionId") as HTMLInputElement).disabled = disable;
+        
     }
 
     render() {
@@ -103,7 +106,12 @@ export default class RegionComponent extends React.Component<ITranComponentProp,
                             <Form.Control id="regionDescId" type="input" defaultValue={region.Description} />
                         </Col>
                     </Row>
-
+                    <Row>
+                        <Col style={{ paddingTop: "5px" }} sm={2}>Greater Region</Col>
+                        <Col style={{ paddingTop: "5px" }}>
+                            <Form.Control id="greaterRegionId" type="input" defaultValue={region.GreaterRegion} />
+                        </Col>
+                    </Row>
                 </div>
             );
         }

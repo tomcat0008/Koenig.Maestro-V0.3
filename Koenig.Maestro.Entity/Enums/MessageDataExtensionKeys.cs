@@ -20,5 +20,8 @@ namespace Koenig.Maestro.Entity.Enums
         public static readonly string SEND_TO_QB = "SEND_TO_QB";
         public static readonly string CREATE_INVOICE = "CREATE_INVOICE";
         public static readonly string BATCH_ID = "BATCH_ID";
+        public static readonly string NOT_INTEGRATED = "NOT_INTEGRATED";
+        public static readonly string SAVE_FILE = "SAVE_FILE";
+        public static readonly string REPORT_CODE = "REPORT_CODE";
     }
 }

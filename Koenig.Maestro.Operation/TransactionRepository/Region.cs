@@ -15,6 +15,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
     {
         public Region(TransactionContext context) : base("REGION", context) {
             this.MainEntitySample = new MaestroRegion();
+            this.IsProgressing = false;
         }
 
         protected override void Delete()
@@ -56,7 +57,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
             resultObj.PostalCode = entityObj["PostalCode"].ToString();
             resultObj.Description = entityObj["Description"].ToString();
-
+            resultObj.GreaterRegion = entityObj["GreaterRegion"].ToString();
+                
 
             Context.TransactionObject = resultObj;
         }
@@ -85,6 +87,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             call.SetVarchar("@POSTAL_CODE", region.PostalCode);
             call.SetVarchar("@REGION_NAME", region.Name);
             call.SetVarchar("@REGION_DESCRIPTION", region.Description);
+            call.SetVarchar("@GREATER_REGION", region.GreaterRegion);
             call.SetDateTime("@CREATE_DATE", DateTime.Now);
             call.SetVarchar("@CREATE_USER", Context.UserName);
             region.Id = db.ExecuteScalar<long>(call);
@@ -101,6 +104,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             call.SetVarchar("@POSTAL_CODE", region.PostalCode);
             call.SetVarchar("@REGION_NAME", region.Name);
             call.SetVarchar("@REGION_DESCRIPTION", region.Description);
+            call.SetVarchar("@GREATER_REGION", region.GreaterRegion);
             call.SetDateTime("@UPDATE_DATE", DateTime.Now);
             call.SetVarchar("@UPDATE_USER", Context.UserName);
             db.ExecuteNonQuery(call);

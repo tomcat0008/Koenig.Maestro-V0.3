@@ -47,22 +47,24 @@ namespace Koenig.Maestro.Console.TestRepository
                 json = json.Replace(json.Substring(idx1 + 6, idx2 - idx1 - 6), orderId);
 
             }
-
-            ResponseMessage result = MaestroReceiver.ProcessRequest(json);
+            MaestroReceiver reciever = new MaestroReceiver();
+            ResponseMessage result = reciever.ProcessRequest(json, "localhost");
             return result;
         }
 
         ResponseMessage DoImportCustomer(Dictionary<string, object> testData)
         {
             string json = testData["JSON"].ToString();
-            ResponseMessage result = MaestroReceiver.ProcessRequest(json);
+            MaestroReceiver reciever = new MaestroReceiver();
+            ResponseMessage result = reciever.ProcessRequest(json, "localhost");
             return result;
         }
 
         ResponseMessage DoImportProduct(Dictionary<string, object> testData)
         {
             string json = testData["JSON"].ToString();
-            ResponseMessage result = MaestroReceiver.ProcessRequest(json);
+            MaestroReceiver reciever = new MaestroReceiver();
+            ResponseMessage result = reciever.ProcessRequest(json, "localhost");
             return result;
         }
 

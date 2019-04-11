@@ -22,6 +22,7 @@ import { ICustomerProductUnit } from '../../classes/dbEntities/ICustomerProductU
 
 
 import Draggable from 'react-draggable';
+import { ICustomerAddress } from '../../classes/dbEntities/ICustomerAddress';
 
 
 export default class OrderComponent extends React.Component<ITranComponentProp, IOrderDisplay> implements ICrudComponent {
@@ -52,7 +53,8 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
         (document.getElementById("orderDateId") as HTMLInputElement).disabled = disable;
         (document.getElementById("deliveryDateId") as HTMLInputElement).disabled = disable;
         (document.getElementById("notesId") as HTMLTextAreaElement).disabled = disable;
-
+        (document.getElementById("shippingAddressId") as HTMLSelectElement).disabled = disable;
+        
         let maps: IQbProductMap[] = this.state.ProductMaps as IQbProductMap[];
         for (let map of maps) {
             let bt: HTMLButtonElement = document.getElementById("mapName_" + map.Id) as HTMLButtonElement;
@@ -72,7 +74,14 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
     OnCustomerChange = (evt) => {
         let order: IOrderMaster = this.state.Entity;
         order.CustomerId = parseInt(evt.target.value);
+        order.ShippingAddressId = 0;
         this.setState({Entity : order});
+    }
+
+    OnShippingAddressChange = (evt) => {
+        let order: IOrderMaster = this.state.Entity;
+        order.ShippingAddressId = parseInt(evt.target.value);
+        this.setState({ Entity: order });
     }
 
     UpdateSummary = (order: IOrderMaster) => {
@@ -138,7 +147,17 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
     }
 
     async Cancel(): Promise<IResponseMessage> {
-        return null;
+        $("body").addClass("loading");
+        let ea: EntityAgent = new EntityAgent();
+        let order: OrderMaster = this.state.Entity;
+        let result: IResponseMessage = await ea.CancelOrder(order);
+        if (result.TransactionStatus == "ERROR") {
+            $("body").removeClass("loading");
+            throw result.ErrorInfo;
+        }
+
+        $("body").removeClass("loading");
+        return result;
     }
 
     async Integrate(): Promise<IResponseMessage> {
@@ -170,6 +189,7 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
             result.DisableAction = false;
             return result;
         };
+        let customers: IMaestroCustomer[] = this.state.Customers;
 
         if (order.CustomerId == undefined || order.CustomerId <= 0) {
             //alert("Please select customer");
@@ -185,6 +205,9 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
             //alert(msg);
             throw getError(msg);
             //return;
+        } else if (customers.find(c => c.Id == order.CustomerId).AddressList.length > 0 && (order.ShippingAddressId <= 0 || order.ShippingAddressId == undefined)) {
+            $("body").removeClass("loading");
+            throw getError("Please select shipping address");
         }
 
         //order.CustomerId = parseInt((document.getElementById("orderCustomerId") as HTMLSelectElement).value);
@@ -192,6 +215,14 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
         order.OrderDate = this.state.OrderDate;
         order.Notes = (document.getElementById("notesId") as HTMLInputElement).value;
         order.PaymentType = "";
+        if ((document.getElementById("shippingAddressId") as HTMLInputElement).value == undefined
+            ||
+            (document.getElementById("shippingAddressId") as HTMLInputElement).value == null
+        )
+            order.ShippingAddressId = 0;
+        else
+            order.ShippingAddressId = parseInt((document.getElementById("shippingAddressId") as HTMLInputElement).value);
+
         order.CreateInvoiceOnQb = (document.getElementById("chkInvoiceCreate") as HTMLInputElement).checked;
         let ea: EntityAgent = new EntityAgent();
         this.DisableEnable(true);
@@ -351,17 +382,24 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
         if (!this.state.Init) {
             
             let customers: IMaestroCustomer[] = this.state.Customers;
+            
+            customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
+
             if (customers.find(c => c.Id == -1) == undefined)
                 customers.unshift(EntityAgent.GetFirstSelecItem("CUSTOMER") as IMaestroCustomer);
 
-            customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
+            let shipAddressList: ICustomerAddress[] = null;
 
             let order: IOrderMaster = this.state.Entity;
 
-
-
-
-
+            if (order.CustomerId > 0) {
+                let c: IMaestroCustomer = customers.find(c => c.Id == order.CustomerId);
+                if (c.AddressList != null && c.AddressList != undefined) {
+                    shipAddressList = c.AddressList.filter(a => a.AddressType == "S");
+                    shipAddressList.unshift(EntityAgent.GetFirstSelecItem("ADDRESS") as ICustomerAddress);
+                    shipAddressList.sort((a, b) => { return a.AddressCode.localeCompare(b.AddressCode); });
+                }
+            }
             this.props.ButtonSetMethod(order.Actions);
             return (
                 <div className="container">
@@ -414,6 +452,18 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                                 selected={this.state.DeliveryDate}
                                 onChange={(dt) => { this.setState({ DeliveryDate: dt }) }} />
 
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col style={{ paddingTop: "5px" }} sm={2}>Shipping Address</Col>
+                        <Col style={{ paddingTop: "5px" }} sm={6}>
+                            <Form.Control as="select" id="shippingAddressId" onChange={this.OnShippingAddressChange} >
+                                {
+                                    shipAddressList == null ? null : shipAddressList.map(a => <option selected={a.Id == order.ShippingAddressId} value={a.Id}>{a.AddressCode}</option>)
+                                }
+
+                            </Form.Control>
                         </Col>
                     </Row>
                     <Row>

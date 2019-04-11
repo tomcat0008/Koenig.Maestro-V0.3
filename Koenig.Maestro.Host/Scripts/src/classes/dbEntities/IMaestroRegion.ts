@@ -4,6 +4,7 @@ export interface IMaestroRegion extends DbEntityBase {
     Name: string;
     Description: string;
     PostalCode: string;
+    GreaterRegion: string;
 }
 
 export default class MaestroRegion implements IMaestroRegion {
@@ -27,7 +28,7 @@ export default class MaestroRegion implements IMaestroRegion {
     Name: string;
     Description: string;
     PostalCode: string;
-
+    GreaterRegion: string;
     Actions: string[];
 
 }

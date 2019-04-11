@@ -16,6 +16,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
     {
         public UnitType(TransactionContext context) : base("UNIT_TYPE", context) {
             this.MainEntitySample = new MaestroUnitType();
+            this.IsProgressing = false;
         }
 
         protected override void Delete()

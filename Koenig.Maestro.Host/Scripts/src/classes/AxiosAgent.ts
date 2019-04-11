@@ -74,6 +74,30 @@ export default class AxiosAgent {
         return result;
     }
 
+    public async cancelItem(tranCode: string, item:DbEntityBase) {
+        let url: string = "/MainPage/DeleteItem";
+        let mde: { [key: string]: string } = { ["ID"]: item.Id.toString() };
+        let itemList = [item];
+        let msgJson = this.getMessage(mde, "Delete", tranCode, "", itemList);
+        let result: IResponseMessage = await this.sendRequest(url, msgJson);
+        return result;
+    }
+
+    public async createInvoice(invoiceList: number[]) {
+        let url: string = "/MainPage/CreateInvoice";
+
+        let idList: string = "";
+        invoiceList.forEach(i => idList += i + ",");
+
+        let mde: { [key: string]: string } = {
+            ["INVOICE_LIST"]: idList
+        };
+
+        let msgJson = this.getMessage(mde, "ExportQb", "QUICKBOOKS_INVOICE", "", null);
+        let result: IResponseMessage = await this.sendRequest(url, msgJson);
+        return result;
+    }
+
 
     private async sendRequest(url:string, message:string): Promise<IResponseMessage> {
 

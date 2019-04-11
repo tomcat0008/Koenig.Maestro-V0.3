@@ -54,6 +54,8 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
         cust.DefaultPaymentType = this.state.Customer.DefaultPaymentType == null ? "" : this.state.Customer.DefaultPaymentType;
         cust.MaestroRegion = new MaestroRegion(parseInt((document.getElementById("customerRegionId") as HTMLInputElement).value));
         cust.DefaultPaymentType = (document.getElementById("defaultPaymentId") as HTMLInputElement).checked ? "COD" : "";
+        cust.CustomerGroup = (document.getElementById("customerGroupId") as HTMLInputElement).value;
+        cust.ReportGroup = (document.getElementById("reportGroupId") as HTMLInputElement).value;
         let result: IResponseMessage = await ea.SaveCustomer(cust);
         this.DisableEnable(true);
         if (result.ErrorInfo != null) {
@@ -85,7 +87,9 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
         (document.getElementById("customerEmailId") as HTMLInputElement).disabled = disable;
         (document.getElementById("customerPhoneId") as HTMLInputElement).disabled = disable;
         (document.getElementById("defaultPaymentId") as HTMLInputElement).disabled = disable;
-
+        (document.getElementById("customerGroupId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("reportGroupId") as HTMLInputElement).disabled = disable;
+        
     }
 
     render() {
@@ -128,8 +132,19 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
                             <Form.Label>Title</Form.Label>
                             <Form.Control id="customerTitleId" type="input" defaultValue={cus.Title} />
                         </Form.Group>
-                    </Form.Row>
 
+                        
+                    </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="customerGroup">
+                            <Form.Label>Customer Group</Form.Label>
+                            <Form.Control id="customerGroupId" type="input" defaultValue={cus.CustomerGroup} />
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="customerReport">
+                            <Form.Label>Report Group</Form.Label>
+                            <Form.Control id="reportGroupId" type="input" defaultValue={cus.ReportGroup} />
+                        </Form.Group>
+                    </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} controlId="customerEmail">
                             <Form.Label>Email</Form.Label>

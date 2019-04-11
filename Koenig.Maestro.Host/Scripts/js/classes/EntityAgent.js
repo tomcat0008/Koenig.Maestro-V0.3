@@ -17,6 +17,7 @@ import MaestroUnit from './dbEntities/IMaestroUnit';
 import MaestroProductGroup from './dbEntities/IProductGroup';
 import MaestroUnitType from './dbEntities/IMaestroUnitType';
 import QbInvoiceLog from './dbEntities/IQbInvoiceLog';
+import CustomerAddress from './dbEntities/ICustomerAddress';
 export default class EntityAgent {
     static GetFirstSelecItem(tranCode) {
         let result;
@@ -51,6 +52,11 @@ export default class EntityAgent {
                 let unitType = new MaestroUnitType(-1);
                 unitType.Name = selectText;
                 result = unitType;
+                break;
+            case "ADDRESS":
+                let address = new CustomerAddress(-1);
+                address.AddressCode = selectText;
+                result = address;
                 break;
         }
         return result;
@@ -132,6 +138,20 @@ export default class EntityAgent {
         return __awaiter(this, void 0, void 0, function* () {
             let ax = new AxiosAgent();
             let result = yield ax.exportItemQb("ORDER", [item]);
+            return result;
+        });
+    }
+    CancelOrder(order) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let ax = new AxiosAgent();
+            let result = yield ax.cancelItem("ORDER", order);
+            return result;
+        });
+    }
+    CreateInvoices(invoiceList) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let ax = new AxiosAgent();
+            let result = yield ax.createInvoice(invoiceList);
             return result;
         });
     }

@@ -12,6 +12,7 @@ import MaestroUnit, { IMaestroUnit } from './dbEntities/IMaestroUnit';
 import MaestroProductGroup, { IMaestroProductGroup } from './dbEntities/IProductGroup';
 import MaestroUnitType, { IMaestroUnitType } from './dbEntities/IMaestroUnitType';
 import QbInvoiceLog, { IQbInvoiceLog } from './dbEntities/IQbInvoiceLog';
+import CustomerAddress from './dbEntities/ICustomerAddress';
 
 interface IDisplayBase {
     Init: boolean;
@@ -102,6 +103,12 @@ export default class EntityAgent {
                 unitType.Name = selectText;
                 result = unitType;
                 break;
+            case "ADDRESS":
+                let address: CustomerAddress = new CustomerAddress(-1);
+                address.AddressCode = selectText;
+                result = address;
+                break;
+
 
         }
         return result;
@@ -189,6 +196,19 @@ export default class EntityAgent {
         let result: IResponseMessage = await ax.exportItemQb("ORDER", [item]);
         return result;
 
+    }
+
+    async CancelOrder(order: IOrderMaster): Promise<IResponseMessage> {
+        let ax: AxiosAgent = new AxiosAgent();
+        let result: IResponseMessage = await ax.cancelItem("ORDER", order);
+        return result;
+    }
+
+    async CreateInvoices(invoiceList:number[]): Promise<IResponseMessage> {
+        let ax: AxiosAgent = new AxiosAgent();
+
+        let result: IResponseMessage = await ax.createInvoice(invoiceList);
+        return result;
     }
 
 
@@ -436,39 +456,5 @@ export default class EntityAgent {
         let result: ICustomerDisplay = { ErrorInfo:response.ErrorInfo, Customer:cust, Regions:regionList, Init:false };
         return result;
     }
-    /*
-    async GetOrderEntryObjects(id:number, executeGet:boolean): Promise<IOrderDisplay> {
-
-        let response: IResponseMessage;
-
-        let cusList: IMaestroCustomer[];
-        let prodList: IQbProductMap[];
-        
-
-
-        let ax: AxiosAgent = new AxiosAgent();
-        response = await ax.getList("CUSTOMER", {});
-        cusList = response.TransactionResult;
-        response = await ax.getList("QB_PRODUCT_MAP", {});
-        prodList = response.TransactionResult;
-
-        if (executeGet) {
-            response = await ax.getItem(id, "ORDER");
-            order = response.TransactionResult;
-        }
-        else {
-            order = new OrderMaster(id);
-        }
-
-        let result: IOrderDisplay = { Customers:cusList, Products:prodList, Order:order };
-
-        return result;
-
-
-    }
-    */
-    
-
-
 
 }

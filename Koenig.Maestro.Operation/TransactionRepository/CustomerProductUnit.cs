@@ -18,6 +18,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         public CustomerProductUnit(TransactionContext context) : base("CUSTOMER_PRODUCT_UNIT", context)
         {
+            this.IsProgressing = false;
             this.MainEntitySample = new e.CustomerProductUnit();
             cm = new CustomerProductUnitManager(context);
         }

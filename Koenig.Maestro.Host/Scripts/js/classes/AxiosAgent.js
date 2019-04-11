@@ -79,6 +79,29 @@ export default class AxiosAgent {
             return result;
         });
     }
+    cancelItem(tranCode, item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = "/MainPage/DeleteItem";
+            let mde = { ["ID"]: item.Id.toString() };
+            let itemList = [item];
+            let msgJson = this.getMessage(mde, "Delete", tranCode, "", itemList);
+            let result = yield this.sendRequest(url, msgJson);
+            return result;
+        });
+    }
+    createInvoice(invoiceList) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = "/MainPage/CreateInvoice";
+            let idList = "";
+            invoiceList.forEach(i => idList += i + ",");
+            let mde = {
+                ["INVOICE_LIST"]: idList
+            };
+            let msgJson = this.getMessage(mde, "ExportQb", "QUICKBOOKS_INVOICE", "", null);
+            let result = yield this.sendRequest(url, msgJson);
+            return result;
+        });
+    }
     sendRequest(url, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let result;

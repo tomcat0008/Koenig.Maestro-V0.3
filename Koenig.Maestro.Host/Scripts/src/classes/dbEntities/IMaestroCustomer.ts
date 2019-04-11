@@ -1,5 +1,6 @@
 ﻿import { IMaestroRegion } from "./IMaestroRegion";
 import { DbEntityBase } from "./DbEntityBase";
+import { ICustomerAddress } from "./ICustomerAddress";
 
 export interface IMaestroCustomer extends DbEntityBase {
     Name: string;
@@ -12,7 +13,10 @@ export interface IMaestroCustomer extends DbEntityBase {
     MaestroRegion: IMaestroRegion;
     RegionId: number;
     DefaultPaymentType: string;
+    CustomerGroup: string;
+    ReportGroup: string;
     Actions: string[];
+    AddressList: ICustomerAddress[];
 }
 
 export default class MaestroCustomer implements IMaestroCustomer {
@@ -36,6 +40,8 @@ export default class MaestroCustomer implements IMaestroCustomer {
     MaestroRegion: IMaestroRegion;
     RegionId: number;
     DefaultPaymentType: string;
+    CustomerGroup: string;
+    ReportGroup: string;
     Id: number;
     CreatedUser: string;
     UpdatedUser: string;
@@ -44,4 +50,5 @@ export default class MaestroCustomer implements IMaestroCustomer {
     RecordStatus: string;
     TypeName: string;
     Actions: string[];
+    AddressList: ICustomerAddress[];
 }

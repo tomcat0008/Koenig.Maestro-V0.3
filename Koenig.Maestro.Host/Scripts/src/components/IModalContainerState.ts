@@ -18,5 +18,6 @@ export interface IModalContainerState {
     ConfirmText: string,
     ConfirmShow: boolean,
     ButtonAction: string,
-    MsgDataExtension: { [key: string]: string }
+    MsgDataExtension: { [key: string]: string },
+    selected: Array<any>
 }

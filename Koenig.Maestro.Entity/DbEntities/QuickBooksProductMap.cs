@@ -23,6 +23,8 @@ namespace Koenig.Maestro.Entity
         [JsonConverter(typeof(EntityJsonConverter))]
         public MaestroUnit Unit { get; set; }
 
+        public string Label { get; set; }
+
         public bool UnitTypeCanHaveUnits { get { return this.Product == null ? false : this.Product.UnitTypeCanHaveUnits; } }
         public long ProductGroupId { get { return this.Product == null ? 0 : this.Product.GroupId; } }
         [DisplayProperty(Text = "Quickbooks full name", DataField = "FullName", Sort = true, DisplayOrder = 10)]

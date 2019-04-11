@@ -38,6 +38,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 row["UPDATE_DATE"] = m.UpdateDate;
                 row["UPDATE_USER"] = m.UpdatedUser;
                 row["RECORD_STATUS"] = "A";
+                row["REPORT_LABEL"] = m.Label;
                 dt.Rows.Add(row);
             });
 
@@ -70,6 +71,8 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetDecimal("@PRICE", map.Price);
             call.SetDateTime("@UPDATE_DATE", DateTime.Now);
             call.SetVarchar("@UPDATE_USER", context.UserName);
+            call.SetVarchar("@REPORT_LABEL", map.Label);
+            
             db.ExecuteNonQuery(call);
         }
 

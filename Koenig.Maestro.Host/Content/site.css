@@ -14,7 +14,7 @@ img.disabled {
 .loadingModal {
     display: none;
     position: fixed;
-    z-index: 300000;
+    z-index: 300;
     top: 0;
     left: 0;
     height: 100%;
@@ -25,7 +25,7 @@ img.disabled {
 body.loading .loadingModal {
     overflow: hidden;
     display: block;
-    z-index:-100;
+    z-index:300;
 }
 
 

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.QBFC13, Version=13.0.0.23, Culture=neutral, PublicKeyToken=31d8aec643e18259">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -69,12 +72,14 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.2\lib\netstandard2.0\System.Memory.dll</HintPath>
@@ -87,6 +92,7 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0-preview.19073.11\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
@@ -101,11 +107,13 @@
     <Compile Include="Cache\CacheInfo.cs" />
     <Compile Include="Cache\CacheRegistry.cs" />
     <Compile Include="Cache\CacheRegistryInfo.cs" />
+    <Compile Include="Cache\CacheRepository\AddressCache.cs" />
     <Compile Include="Cache\CacheRepository\CustomerCache.cs" />
     <Compile Include="Cache\CacheRepository\CustomerProductUnitCache.cs" />
     <Compile Include="Cache\CacheRepository\ProductCache.cs" />
     <Compile Include="Cache\CacheRepository\QuickBooksProductMapCache.cs" />
     <Compile Include="Cache\CacheRepository\RegionCache.cs" />
+    <Compile Include="Cache\CacheRepository\ReportDefinitionCache.cs" />
     <Compile Include="Cache\CacheRepository\TransactionCache.cs" />
     <Compile Include="Cache\CacheRepository\UnitCache.cs" />
     <Compile Include="Cache\CacheRepository\UnitTypeCache.cs" />
@@ -127,6 +135,7 @@
     <Compile Include="Framework\ManagerRepository\ProductManager.cs" />
     <Compile Include="Framework\ManagerRepository\QuickBooksProductMapManager.cs" />
     <Compile Include="Framework\ManagerRepository\RegionManager.cs" />
+    <Compile Include="Framework\ManagerRepository\ReportManager.cs" />
     <Compile Include="Framework\ManagerRepository\TranLogManager.cs" />
     <Compile Include="Framework\ManagerRepository\TransactionManager.cs" />
     <Compile Include="Framework\ManagerRepository\UnitTypeManager.cs" />
@@ -134,6 +143,7 @@
     <Compile Include="Framework\ManagerRepository\QuickBooksInvoiceManager.cs" />
     <Compile Include="Framework\TransactionBase.cs" />
     <Compile Include="Framework\ManagerRepository\UnitManager.cs" />
+    <Compile Include="Framework\TransactionProgressEventArgs.cs" />
     <Compile Include="MaestroApplication.cs" />
     <Compile Include="Messaging\ErrorInfo.cs" />
     <Compile Include="Messaging\MessageBroker.cs" />
@@ -147,6 +157,9 @@
     <Compile Include="QuickBooks\QuickBooksInvoiceAgent.cs" />
     <Compile Include="QuickBooks\QuickBooksProductAgent.cs" />
     <Compile Include="Framework\TransactionContext.cs" />
+    <Compile Include="Reporting\CsvReport.cs" />
+    <Compile Include="Reporting\ExcelReport.cs" />
+    <Compile Include="Reporting\ReportBase.cs" />
     <Compile Include="TransactionRepository\Customer.cs" />
     <Compile Include="TransactionRepository\CustomerProductUnit.cs" />
     <Compile Include="TransactionRepository\Order.cs" />
@@ -173,6 +186,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Reporting\ReportRepository\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

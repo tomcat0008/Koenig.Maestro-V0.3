@@ -30,6 +30,7 @@ export default class OrderComponent extends React.Component {
             document.getElementById("orderDateId").disabled = disable;
             document.getElementById("deliveryDateId").disabled = disable;
             document.getElementById("notesId").disabled = disable;
+            document.getElementById("shippingAddressId").disabled = disable;
             let maps = this.state.ProductMaps;
             for (let map of maps) {
                 let bt = document.getElementById("mapName_" + map.Id);
@@ -46,6 +47,12 @@ export default class OrderComponent extends React.Component {
         this.OnCustomerChange = (evt) => {
             let order = this.state.Entity;
             order.CustomerId = parseInt(evt.target.value);
+            order.ShippingAddressId = 0;
+            this.setState({ Entity: order });
+        };
+        this.OnShippingAddressChange = (evt) => {
+            let order = this.state.Entity;
+            order.ShippingAddressId = parseInt(evt.target.value);
             this.setState({ Entity: order });
         };
         this.UpdateSummary = (order) => {
@@ -116,7 +123,16 @@ export default class OrderComponent extends React.Component {
     }
     Cancel() {
         return __awaiter(this, void 0, void 0, function* () {
-            return null;
+            $("body").addClass("loading");
+            let ea = new EntityAgent();
+            let order = this.state.Entity;
+            let result = yield ea.CancelOrder(order);
+            if (result.TransactionStatus == "ERROR") {
+                $("body").removeClass("loading");
+                throw result.ErrorInfo;
+            }
+            $("body").removeClass("loading");
+            return result;
         });
     }
     Integrate() {
@@ -147,6 +163,7 @@ export default class OrderComponent extends React.Component {
                 result.DisableAction = false;
                 return result;
             };
+            let customers = this.state.Customers;
             if (order.CustomerId == undefined || order.CustomerId <= 0) {
                 //alert("Please select customer");
                 $("body").removeClass("loading");
@@ -164,11 +181,21 @@ export default class OrderComponent extends React.Component {
                 throw getError(msg);
                 //return;
             }
+            else if (customers.find(c => c.Id == order.CustomerId).AddressList.length > 0 && (order.ShippingAddressId <= 0 || order.ShippingAddressId == undefined)) {
+                $("body").removeClass("loading");
+                throw getError("Please select shipping address");
+            }
             //order.CustomerId = parseInt((document.getElementById("orderCustomerId") as HTMLSelectElement).value);
             order.DeliveryDate = this.state.DeliveryDate;
             order.OrderDate = this.state.OrderDate;
             order.Notes = document.getElementById("notesId").value;
             order.PaymentType = "";
+            if (document.getElementById("shippingAddressId").value == undefined
+                ||
+                    document.getElementById("shippingAddressId").value == null)
+                order.ShippingAddressId = 0;
+            else
+                order.ShippingAddressId = parseInt(document.getElementById("shippingAddressId").value);
             order.CreateInvoiceOnQb = document.getElementById("chkInvoiceCreate").checked;
             let ea = new EntityAgent();
             this.DisableEnable(true);
@@ -271,10 +298,19 @@ export default class OrderComponent extends React.Component {
     render() {
         if (!this.state.Init) {
             let customers = this.state.Customers;
+            customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
             if (customers.find(c => c.Id == -1) == undefined)
                 customers.unshift(EntityAgent.GetFirstSelecItem("CUSTOMER"));
-            customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
+            let shipAddressList = null;
             let order = this.state.Entity;
+            if (order.CustomerId > 0) {
+                let c = customers.find(c => c.Id == order.CustomerId);
+                if (c.AddressList != null && c.AddressList != undefined) {
+                    shipAddressList = c.AddressList.filter(a => a.AddressType == "S");
+                    shipAddressList.unshift(EntityAgent.GetFirstSelecItem("ADDRESS"));
+                    shipAddressList.sort((a, b) => { return a.AddressCode.localeCompare(b.AddressCode); });
+                }
+            }
             this.props.ButtonSetMethod(order.Actions);
             return (React.createElement("div", { className: "container" },
                 React.createElement(Row, null,
@@ -303,6 +339,10 @@ export default class OrderComponent extends React.Component {
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Delivery Date"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
                         React.createElement(Form.Control, { as: DatePicker, id: "deliveryDateId", selected: this.state.DeliveryDate, onChange: (dt) => { this.setState({ DeliveryDate: dt }); } }))),
+                React.createElement(Row, null,
+                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Shipping Address"),
+                    React.createElement(Col, { style: { paddingTop: "5px" }, sm: 6 },
+                        React.createElement(Form.Control, { as: "select", id: "shippingAddressId", onChange: this.OnShippingAddressChange }, shipAddressList == null ? null : shipAddressList.map(a => React.createElement("option", { selected: a.Id == order.ShippingAddressId, value: a.Id }, a.AddressCode))))),
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Notes"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 6 },
