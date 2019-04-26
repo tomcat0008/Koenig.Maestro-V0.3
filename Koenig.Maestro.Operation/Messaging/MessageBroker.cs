@@ -40,7 +40,7 @@ namespace Koenig.Maestro.Operation.Messaging
             {
                 at = message.MessageHeader.ActionType;
 
-                if (at != ActionType.Get && at != ActionType.List && at != ActionType.Undefined)
+                if (at != ActionType.Get && at != ActionType.List && at != ActionType.Undefined && at != ActionType.Report)
                     context.Database.BeginTransaction();
 
                 tranCode = message.MessageHeader.TransactionCode;

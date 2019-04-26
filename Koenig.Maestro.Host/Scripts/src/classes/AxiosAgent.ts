@@ -10,6 +10,14 @@ export default class AxiosAgent {
 
     private actionType: string;
 
+    public async runReport(tranCode: string, reportCode: string, msgExtension: { [key: string]: string }): Promise<IResponseMessage> {
+
+        let url: string = "/MainPage/RunReport";
+        let msgJson = this.getMessage(msgExtension, "Report", tranCode, "", null);
+        let result: IResponseMessage = await this.sendRequest(url, msgJson);
+        return result;
+    }
+
     public async getList(tranCode: string, msgExtension: { [key: string]: string } ): Promise<IResponseMessage> {
 
         let mde: { [key: string]: string } = {};

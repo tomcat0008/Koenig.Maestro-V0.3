@@ -357,10 +357,10 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                                 <Container className="tabRegion">
                                     {
 
-                                        maps.filter(m=>m.UnitTypeCanHaveUnits && m.ProductGroupId == pg.Id && m.QuickBooksParentCode=="")
+                                        maps.filter(m=>(m.UnitTypeCanHaveUnits || m.UnitTypeName=='Each' ) && m.ProductGroupId == pg.Id && m.QuickBooksParentCode=="")
                                             .concat(
-                                                maps.filter(m => !m.UnitTypeCanHaveUnits && pg.Id == m.ProductGroupId && m.QuickBooksParentCode != "")
-                                        ).sort((a, b) => a.QuickBooksDescription.localeCompare(b.QuickBooksDescription))
+                                        maps.filter(m => !m.UnitTypeCanHaveUnits && pg.Id == m.ProductGroupId && m.QuickBooksParentCode != "")
+                                        ).sort((a, b) => a.QuickBooksCode.localeCompare(b.QuickBooksCode))
                                             .map(m => this.renderMaps(
                                                 m.Id,
                                                 m.ProductId,
@@ -443,12 +443,14 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                         <Col style={{ paddingTop: "5px" }} sm={2}>Order Date</Col>
                         <Col style={{ paddingTop: "5px" }} sm={2}>
                             <Form.Control as={DatePicker} id="orderDateId"
+                                dateFormat="dd/MM/yyyy"
                                 selected={this.state.OrderDate}
                                 onChange={(dt) => { this.setState({ OrderDate: dt }) }} />
                         </Col>
                         <Col style={{ paddingTop: "5px" }} sm={2}>Delivery Date</Col>
                         <Col style={{ paddingTop: "5px" }} sm={2}>
                             <Form.Control as={DatePicker} id="deliveryDateId"
+                                dateFormat="dd/MM/yyyy"
                                 selected={this.state.DeliveryDate}
                                 onChange={(dt) => { this.setState({ DeliveryDate: dt }) }} />
 

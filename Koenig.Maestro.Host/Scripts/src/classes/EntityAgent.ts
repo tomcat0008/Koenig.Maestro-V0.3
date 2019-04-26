@@ -13,6 +13,7 @@ import MaestroProductGroup, { IMaestroProductGroup } from './dbEntities/IProduct
 import MaestroUnitType, { IMaestroUnitType } from './dbEntities/IMaestroUnitType';
 import QbInvoiceLog, { IQbInvoiceLog } from './dbEntities/IQbInvoiceLog';
 import CustomerAddress from './dbEntities/ICustomerAddress';
+import { IMaestroReportDefinition, MaestroReportDefinition } from './dbEntities/IReportDefinition';
 
 interface IDisplayBase {
     Init: boolean;
@@ -41,6 +42,15 @@ export interface IUnitDisplay extends IDisplayBase {
 export interface IUnitTypeDisplay extends IDisplayBase {
     UnitType: IMaestroUnitType;
 }
+
+export interface IReportFilterDisplay extends IDisplayBase {
+
+    ReportCode: string;
+    StartDate: Date;
+    EndDate: Date;
+    ReportDefinitions:IMaestroReportDefinition[];
+}
+
 
 export interface IOrderDisplay extends IDisplayBase {
     Customers: IMaestroCustomer[];
@@ -109,7 +119,12 @@ export default class EntityAgent {
                 result = address;
                 break;
 
-
+            case "REPORT":
+                let reportDef: MaestroReportDefinition = new MaestroReportDefinition(-1);
+                reportDef.Description = selectText;
+                reportDef.ReportCode = "";
+                result = reportDef;
+                break;
         }
         return result;
     }
@@ -256,6 +271,29 @@ export default class EntityAgent {
         else
             result = await this.CreateItem("CUSTOMER", item);
         return result;
+    }
+
+
+    async GetReportFilterDisplay(): Promise<IReportFilterDisplay> {
+        let reportDefs: IMaestroReportDefinition[];
+
+        let ax: AxiosAgent = new AxiosAgent();
+        let response: IResponseMessage = await ax.getList("REPORT_DEFINITION", {});
+        if (response.TransactionStatus != "ERROR")
+            reportDefs = response.TransactionResult as IMaestroReportDefinition[];
+
+        let result: IReportFilterDisplay = {
+            Init: true,
+            ErrorInfo: response.ErrorInfo,
+            StartDate: new Date(),
+            EndDate: new Date(),
+            ReportCode: "",
+            ReportDefinitions: reportDefs
+
+        };
+        return result;
+
+
     }
 
     async GetCustomerProductUnitDisplay(): Promise<ICustomerProductUnitDisplay> {

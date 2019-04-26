@@ -11,6 +11,14 @@ import MessageHeader from "./MessageHeader";
 import axios from 'axios';
 import ErrorInfo from "./ErrorInfo";
 export default class AxiosAgent {
+    runReport(tranCode, reportCode, msgExtension) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = "/MainPage/RunReport";
+            let msgJson = this.getMessage(msgExtension, "Report", tranCode, "", null);
+            let result = yield this.sendRequest(url, msgJson);
+            return result;
+        });
+    }
     getList(tranCode, msgExtension) {
         return __awaiter(this, void 0, void 0, function* () {
             let mde = {};

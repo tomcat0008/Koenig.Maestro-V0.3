@@ -18,6 +18,7 @@ import MaestroProductGroup from './dbEntities/IProductGroup';
 import MaestroUnitType from './dbEntities/IMaestroUnitType';
 import QbInvoiceLog from './dbEntities/IQbInvoiceLog';
 import CustomerAddress from './dbEntities/ICustomerAddress';
+import { MaestroReportDefinition } from './dbEntities/IReportDefinition';
 export default class EntityAgent {
     static GetFirstSelecItem(tranCode) {
         let result;
@@ -57,6 +58,12 @@ export default class EntityAgent {
                 let address = new CustomerAddress(-1);
                 address.AddressCode = selectText;
                 result = address;
+                break;
+            case "REPORT":
+                let reportDef = new MaestroReportDefinition(-1);
+                reportDef.Description = selectText;
+                reportDef.ReportCode = "";
+                result = reportDef;
                 break;
         }
         return result;
@@ -202,6 +209,24 @@ export default class EntityAgent {
                 result = yield this.UpdateItem("CUSTOMER", item);
             else
                 result = yield this.CreateItem("CUSTOMER", item);
+            return result;
+        });
+    }
+    GetReportFilterDisplay() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let reportDefs;
+            let ax = new AxiosAgent();
+            let response = yield ax.getList("REPORT_DEFINITION", {});
+            if (response.TransactionStatus != "ERROR")
+                reportDefs = response.TransactionResult;
+            let result = {
+                Init: true,
+                ErrorInfo: response.ErrorInfo,
+                StartDate: new Date(),
+                EndDate: new Date(),
+                ReportCode: "",
+                ReportDefinitions: reportDefs
+            };
             return result;
         });
     }

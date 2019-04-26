@@ -96,8 +96,10 @@
     <Compile Include="MessagingTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportingTest.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="TestRepository\IntegrityTest.cs" />
+    <Compile Include="TestRepository\ReportTest.cs" />
     <Compile Include="TestRepository\SerializationTest.cs" />
     <Compile Include="SerializeTest.cs" />
     <Compile Include="TestingFramework\IMaestroTester.cs" />

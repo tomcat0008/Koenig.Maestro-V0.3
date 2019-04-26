@@ -20,36 +20,17 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
         {
             string reportCode = context.Bag[MessageDataExtensionKeys.REPORT_CODE].ToString();
 
-            ReportDefinition reportDef = ReportDefinitionCache.Instance.GetByReportCode(reportCode);
+            MaestroReportDefinition reportDef = ReportDefinitionCache.Instance.GetByReportCode(reportCode);
 
-            DataSet reportData = LoadReportData(reportDef);
+            context.Bag.Add("REPORT_DEF", reportDef);
 
-            ReportBase report = null;
+            Type type = Type.GetType(reportDef.CodeBase);
+            if (type == null)
+                throw new Exception(string.Format("Codebase `{0}` of report definition `{1}` could not be found", reportDef.CodeBase, reportCode));
 
-            switch (reportDef.ReportType)
-            {
-                case "XLS":
-                    report = new ExcelReport(reportDef, reportData);
-                    break;
-                case "CSV":
-                    report = new CsvReport(reportDef, reportData);
-                    break;
-                case "CUSTOM":
-
-                    break;
-            }
-
-            
+            ReportBase report = (ReportBase)Activator.CreateInstance(type, new object[] { context });
 
             report.Render();
-
-        }
-
-        DataSet LoadReportData(ReportDefinition reportDef)
-        {
-            SpCall call = new SpCall(reportDef.ProcedureName);
-
-            return context.Database.ExecuteDataSet(call);
 
         }
 

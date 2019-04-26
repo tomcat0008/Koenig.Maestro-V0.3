@@ -81,6 +81,11 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
             
             return;
         }
+
+        if (id.props.action == "Report") {
+            await this.setState({ TranCode: id.props.tranCode, Action: id.props.action, ConfirmShow: false, ShowModal: true });
+            return;
+        }
         
         if (id.props.action == "ImportQb") {
             switch (this.state.TranCode) {
@@ -204,6 +209,15 @@ export default class MainMenu extends React.Component<any, IModalContainerState>
                                 }}
                                     height="70px" width="100%" />
                             </div>
+                            <br/>
+                            <div className="plate">Reports
+                                <MenuItem imgName="report.png" action="Report" tranCode="REPORT" eventHandler={this.handleClick}
+                                    caption="Reports" itemType="button" msgExtension={{ ["NOT_INTEGRATED"]: 'True' }}
+                                    buttonList={["Return"]}
+                                    height="70px" width="100%" listSelect={true} />
+                            </div>
+                        
+
                         </div>
 
                     </div>

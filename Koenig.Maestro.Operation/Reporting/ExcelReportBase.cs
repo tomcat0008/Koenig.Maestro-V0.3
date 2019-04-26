@@ -6,14 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Koenig.Maestro.Entity;
+using Koenig.Maestro.Operation.Framework;
 using OfficeOpenXml;
 
 namespace Koenig.Maestro.Operation.Reporting
 {
-    internal class ExcelReport:ReportBase
+    public abstract class ExcelReportBase:ReportBase
     {
 
-        public ExcelReport(ReportDefinition reportDefinition, DataSet reportData) : base(reportDefinition, reportData) { }
+        protected ExcelWorkbook workbook;
+
+        protected ExcelReportBase(TransactionContext context) : base(context) { }
 
         public override object Clone()
         {
@@ -38,11 +41,19 @@ namespace Koenig.Maestro.Operation.Reporting
             }
         }
 
-        public override void Render()
+        protected virtual void RenderWithoutTemplate()
         {
 
+        }
+
+        public override void Render()
+        {
+            LoadData();
             if (reportDefinition.Template != null)
                 RenderWithTemplate();
+            else
+                RenderWithoutTemplate();
+
 
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Koenig.Maestro.Entity
 {
     [Serializable]
-    public class ReportDefinition : DbEntityBase, ITransactionEntity
+    public class MaestroReportDefinition : DbEntityBase, ITransactionEntity
     {
         [JsonConversionTarget]
         [DisplayProperty(Text = "Report Code", DataField = "ReportCode", Sort = true, DisplayOrder = 10)]
@@ -16,6 +16,9 @@ namespace Koenig.Maestro.Entity
 
         [DisplayProperty(Text = "Procedure", DataField = "ProcedureName", Sort = true, DisplayOrder = 20)]
         public string ProcedureName { get; set; }
+
+        [DisplayProperty(Text = "Transaction", DataField = "TransactionCode", Sort = true, DisplayOrder = 50)]
+        public string TransactionCode { get; set; }
 
         public byte[] Template { get; set; }
 
@@ -33,6 +36,8 @@ namespace Koenig.Maestro.Entity
         [DisplayProperty(Text = "Report Type", DataField = "ReportType", Sort = true, DisplayOrder = 40)]
         public string ReportType { get; set; }
         
+
+        public string CodeBase { get; set; }
 
         public override object Clone()
         {

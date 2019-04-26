@@ -15,7 +15,11 @@ namespace Koenig.Maestro.Operation.Framework
 
         public ResponseMessage ProcessRequest(string message, string hostName)
         {
-            RequestMessage request = JsonConvert.DeserializeObject<RequestMessage>(message, new MessageJsonConverter());
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.DateParseHandling = DateParseHandling.None;
+            settings.Converters.Add(new MessageJsonConverter());
+            
+            RequestMessage request = JsonConvert.DeserializeObject<RequestMessage>(message, settings );
             request.MessageHeader.HostName = string.IsNullOrEmpty( hostName) ? string.Empty : hostName;
             MessageBroker broker = new MessageBroker();
             broker.TransactionProgress += Broker_TransactionProgress;

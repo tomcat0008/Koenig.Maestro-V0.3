@@ -57,8 +57,19 @@ namespace Koenig.Maestro.Host.Controllers
         {
             return ExecuteMessage(requestMessage);
         }
+        /*
+        public FileContentResult RunReport(string requestMessage)
+        {
+            MaestroReceiver receiver = new MaestroReceiver();
+            ResponseMessage result = receiver.ProcessRequest(requestMessage, HttpContext.ApplicationInstance.Context.Request.UserHostName);
+            return File((byte[])result.TransactionResult, "application/zip", "report.zip");
 
-        
+        }*/
+        public JsonResult RunReport(string requestMessage)
+        {
+            return ExecuteMessage(requestMessage);
+        }
+
         private void Receiver_TransactionProgress(object sender, TransactionProgressEventArgs e)
         {
             this.e = e;

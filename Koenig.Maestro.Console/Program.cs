@@ -27,7 +27,9 @@ namespace Koenig.Maestro.Console
             //TestCustomerProductUnit();
             //TestOrder();
 
-            MessagingTest.Customers.Import();
+            ReportingTest.OrderSummary.GenerateReport(new DateTime(2019, 1, 1), new DateTime(2019, 12, 31));
+
+            //MessagingTest.Customers.Import();
             //MessagingTest.Customers.List();
             //MessagingTest.Products.Import();
             //MessagingTest.Products.List();

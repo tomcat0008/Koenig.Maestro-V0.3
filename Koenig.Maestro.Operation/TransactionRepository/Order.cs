@@ -231,6 +231,9 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         {
             ExtractTransactionCriteria();
             new ReportManager(Context).RunReport();
+
+            response.TransactionResult = Context.TransactionObject;
+
         }
 
         public override void Deserialize(JToken token)

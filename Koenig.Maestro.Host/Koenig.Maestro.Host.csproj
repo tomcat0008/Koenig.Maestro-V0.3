@@ -215,6 +215,7 @@
     <Content Include="img\qb_customers.png" />
     <Content Include="img\qb_invoices.png" />
     <Content Include="img\qb_products.png" />
+    <Content Include="img\report.png" />
     <Content Include="img\save.png" />
     <Content Include="img\units.png" />
     <Content Include="readme.txt" />
@@ -329,6 +330,7 @@
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IQbInvoiceLog.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IQbProductMap.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroUnitType.ts" />
+    <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IReportDefinition.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\EntityAgent.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\ErrorInfo.ts" />
     <TypeScriptCompile Include="Scripts\src\classes\dbEntities\IMaestroCustomer.ts" />
@@ -343,6 +345,7 @@
     <TypeScriptCompile Include="Scripts\src\components\ICrudComponent.ts" />
     <TypeScriptCompile Include="Scripts\src\components\IModalContainerState.ts" />
     <TypeScriptCompile Include="Scripts\src\components\IModalContent.ts" />
+    <TypeScriptCompile Include="Scripts\src\components\IReportComponent.ts" />
     <TypeScriptCompile Include="Scripts\src\components\ModalConatiner.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\CustomerProductUnitsComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\OrderProductItem.tsx" />
@@ -352,6 +355,7 @@
     <TypeScriptCompile Include="Scripts\src\components\transaction\OrderComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\QbInvoiceLogComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\RegionComponent.tsx" />
+    <TypeScriptCompile Include="Scripts\src\components\transaction\ReportFilterComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\UnitComponent.tsx" />
     <TypeScriptCompile Include="Scripts\src\components\transaction\UnitTypeComponent.tsx" />
   </ItemGroup>

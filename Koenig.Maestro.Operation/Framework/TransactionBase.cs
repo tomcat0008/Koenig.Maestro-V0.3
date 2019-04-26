@@ -130,7 +130,7 @@ namespace Koenig.Maestro.Operation.Framework
                     BackUp();
                     break;
                 case ActionType.Report:
-
+                    Report();
                     break;
             }
             response.ResultMessage = responseMessage;
@@ -275,9 +275,11 @@ namespace Koenig.Maestro.Operation.Framework
             else
             {
                 if (extendedData.ContainsKey(MessageDataExtensionKeys.BEGIN_DATE))
-                    DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], out beginDate);
+                    DateTime.TryParse(extendedData[MessageDataExtensionKeys.BEGIN_DATE], null, System.Globalization.DateTimeStyles.RoundtripKind, out beginDate);
+                    //DateTime.TryParseExact(extendedData[MessageDataExtensionKeys.BEGIN_DATE], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out beginDate);
                 if (extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE))
-                    DateTime.TryParse(extendedData[MessageDataExtensionKeys.END_DATE], out endDate);
+                    DateTime.TryParse(extendedData[MessageDataExtensionKeys.END_DATE], null, System.Globalization.DateTimeStyles.RoundtripKind, out endDate);
+                //DateTime.TryParseExact(extendedData[MessageDataExtensionKeys.END_DATE], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out endDate);
             }
 
             this.Context.Bag.Add(MessageDataExtensionKeys.BEGIN_DATE, beginDate);

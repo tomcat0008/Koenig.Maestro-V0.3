@@ -158,8 +158,9 @@
     <Compile Include="QuickBooks\QuickBooksProductAgent.cs" />
     <Compile Include="Framework\TransactionContext.cs" />
     <Compile Include="Reporting\CsvReport.cs" />
-    <Compile Include="Reporting\ExcelReport.cs" />
+    <Compile Include="Reporting\ExcelReportBase.cs" />
     <Compile Include="Reporting\ReportBase.cs" />
+    <Compile Include="Reporting\ReportRepository\OrderSummaryReport.cs" />
     <Compile Include="TransactionRepository\Customer.cs" />
     <Compile Include="TransactionRepository\CustomerProductUnit.cs" />
     <Compile Include="TransactionRepository\Order.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="TransactionRepository\QuickbooksInvoice.cs" />
     <Compile Include="TransactionRepository\QuickBooksProductMap.cs" />
     <Compile Include="TransactionRepository\Region.cs" />
+    <Compile Include="TransactionRepository\ReportDefinition.cs" />
     <Compile Include="TransactionRepository\Transaction.cs" />
     <Compile Include="TransactionRepository\Unit.cs" />
     <Compile Include="TransactionRepository\UnitType.cs" />
@@ -187,8 +189,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Reporting\ReportRepository\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -121,13 +121,13 @@ export default class OrderProductItem extends React.Component<IOrderProductItemP
                                         (this.props.Units != null ?
                                             //this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).filter(u=>this.props.ProductMaps.find(m=>m.UnitId==u.Id)!=undefined).map(u => <option value={u.Id}>{u.Name}</option>)
                                             this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).map(u =>
-                                                <option selected={ this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id ) } value={u.Id}>{u.Name}</option>)
+                                                <option selected={ (this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id )) || (this.props.Units.length == 2 && u.Id >=0 ) } value={u.Id}>{u.Name}</option>)
                                             : null)
                                     }
 
                                 </Form.Control>
                             </Col>
-                            <Col style={{ textAlign: "left", paddingTop: "6px" }}><Form.Label id="unitNameId" style={{ width: "50px" }}>{ this.props.UnitTypeLabel}</Form.Label></Col>
+                            <Col style={{ textAlign: "left", paddingTop: "6px" }}><Form.Label tabIndex={-1} id="unitNameId" style={{ width: "50px" }}>{ this.props.UnitTypeLabel}</Form.Label></Col>
                             <Col style={{ textAlign: "left" }}>
                                 <Form.Control id={"quantity_"+this.props.MapId}
                                     onChange={this.onChangeQuantity}
@@ -135,19 +135,19 @@ export default class OrderProductItem extends React.Component<IOrderProductItemP
                                     style={{ width: "80px", backgroundColor: this.state.Quantity == 0 ? "#ffffff" : "#fcea85" }} />
                             </Col>
                             <Col style={{ textAlign: "left" }}>
-                                <Button variant="secondary" id={"btnIncrease_"+this.props.MapId}
+                                <Button tabIndex={-1} variant="secondary" id={"btnIncrease_"+this.props.MapId}
                                     onClick={this.increase} style={{ width: "40px" }}>+</Button>
                                 
 
                             </Col>
                             <Col style={{ textAlign: "left" }}>
-                                <Button disabled={this.state.Quantity == 0} variant="secondary" id={"btnDecrease_" + this.props.MapId}
+                                <Button tabIndex={-1} disabled={this.state.Quantity == 0} variant="secondary" id={"btnDecrease_" + this.props.MapId}
                                     onClick={this.decrease} style={{ width: "40px" }}>-</Button>
 
                             </Col>
 
                             <Col style={{ textAlign: "left" }}>
-                                <Button disabled={this.state.Quantity == 0} variant="danger" id={"btnDisable" + this.props.MapId}
+                                <Button tabIndex={-1} disabled={this.state.Quantity == 0} variant="danger" id={"btnDisable" + this.props.MapId}
                                     onClick={this.reset} style={{ width: "40px" }}>X</Button>
 
                             </Col>

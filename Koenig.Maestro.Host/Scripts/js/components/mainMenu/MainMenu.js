@@ -56,6 +56,10 @@ export default class MainMenu extends React.Component {
                 ReactDOM.render(React.createElement(GridDisplay, Object.assign({}, req)), document.getElementById('content'));
                 return;
             }
+            if (id.props.action == "Report") {
+                yield this.setState({ TranCode: id.props.tranCode, Action: id.props.action, ConfirmShow: false, ShowModal: true });
+                return;
+            }
             if (id.props.action == "ImportQb") {
                 switch (this.state.TranCode) {
                     case "PRODUCT":
@@ -133,7 +137,11 @@ export default class MainMenu extends React.Component {
                         React.createElement(MenuItem, { imgName: "cup.png", action: "List", tranCode: "QUICKBOOKS_INVOICE", eventHandler: this.handleClick, caption: "Invoices Logs", itemType: "button", buttonList: ["Return"], listSelect: false, msgExtension: {
                                 ['BEGIN_DATE']: new Date(dt.getFullYear(), dt.getMonth(), 1).toUTCString(),
                                 ['END_DATE']: dt.toUTCString()
-                            }, height: "70px", width: "100%" })))),
+                            }, height: "70px", width: "100%" })),
+                    React.createElement("br", null),
+                    React.createElement("div", { className: "plate" },
+                        "Reports",
+                        React.createElement(MenuItem, { imgName: "report.png", action: "Report", tranCode: "REPORT", eventHandler: this.handleClick, caption: "Reports", itemType: "button", msgExtension: { ["NOT_INTEGRATED"]: 'True' }, buttonList: ["Return"], height: "70px", width: "100%", listSelect: true })))),
             React.createElement(Alert, { id: "mmAlertId", dismissible: true, show: this.state == null ? false : this.state.ShowError, variant: "danger", "data-dismiss": "alert" },
                 React.createElement(Alert.Heading, { id: "mmAlertHeadingId" }, "Exception occured"),
                 React.createElement("div", { className: "errorStackTrace" },

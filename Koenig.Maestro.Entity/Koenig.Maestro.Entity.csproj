@@ -58,7 +58,7 @@
     <Compile Include="DbEntities\OrderMaster.cs" />
     <Compile Include="DbEntities\QuickBooksInvoiceLog.cs" />
     <Compile Include="DbEntities\QuickBooksProductMap.cs" />
-    <Compile Include="DbEntities\ReportDefinition.cs" />
+    <Compile Include="DbEntities\MaestroReportDefinition.cs" />
     <Compile Include="DbEntities\TransactionDefinition.cs" />
     <Compile Include="DbEntities\TransactionLog.cs" />
     <Compile Include="DbEntityBase.cs" />

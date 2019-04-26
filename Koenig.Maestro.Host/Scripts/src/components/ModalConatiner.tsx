@@ -14,10 +14,13 @@ import UnitComponent from './transaction/UnitComponent';
 import UnitTypeComponent from './transaction/UnitTypeComponent';
 import RegionComponent from './transaction/RegionComponent';
 import QbInvoiceLogComponent from './transaction/QbInvoiceLogComponent';
+import ReportFilterComponent from './transaction/ReportFilterComponent';
+import { IReportComponent } from './IReportComponent';
 
 export default class ModalContainer extends React.Component<IModalContent, IModalContainerState> {
 
     tranComponent: ICrudComponent;
+    reportComponent: IReportComponent;
 
     state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: "",selected:[],
@@ -62,11 +65,16 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
             ButtonSetMethod: this.buttonSetFct
 
         };
-        
-        if (tranCode == "CUSTOMER")
-            return <MaestroCustomerComponent ref={(comp) => this.tranComponent = comp} { ...componentProp } />
-        else if (tranCode == "ORDER")
+
+
+        if (tranCode == "REPORT") {
+            return <ReportFilterComponent ref={ (comp) => this.reportComponent = comp } {...componentProp} />
+        }
+        else if (tranCode == "CUSTOMER")
+            return <MaestroCustomerComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
+        else if (tranCode == "ORDER") {
             return <OrderComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
+        }
         else if (tranCode == "CUSTOMER_PRODUCT_UNIT")
             return <CustomerProductUnitsComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
         else if (tranCode == "UNIT")
@@ -84,6 +92,18 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
     showException = (error: IErrorInfo) => {
         
         this.setState({ ErrorInfo: error, ShowError: true, Init:false });
+    }
+
+    runReportFct = async () => {
+        try {
+            this.reportComponent.Run();
+        }
+        catch (error) {
+            if (error.DisableAction == false)
+                (document.getElementById('btnRun') as HTMLButtonElement).disabled = false;
+
+            this.setState({ ErrorInfo: error, ShowError: true, Init: false });
+        }
     }
 
     saveFct = async () => {
@@ -252,7 +272,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
                         <Button variant="primary" id="btnCancel" onClick={() => this.toogleModal("Do you want to cancel the order ?",true,"CANCEL" ) } >Cancel Order</Button>
                         <Button variant="primary" id="btnSave" onClick={this.saveFct} >Save changes</Button>
                         <Button variant="primary" id="btnIntegrate" onClick={() => this.toogleModal("Do you want to create the invoice ?", true, "INTEGRATE")} >Create Qb Invoice</Button>
-
+                        <Button variant="primary" id="btnRun" onClick={this.runReportFct} >Run report</Button>
                 </Modal.Footer>
                 </Modal>
             </div>

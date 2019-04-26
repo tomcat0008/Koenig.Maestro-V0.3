@@ -291,8 +291,8 @@ export default class OrderComponent extends React.Component {
         let units = this.state.Units;
         return (React.createElement("div", { style: { padding: "8px", textAlign: "left", width: "900px" } },
             React.createElement(Tabs, { defaultActiveKey: "1", id: "uncontrolled-tab-example" }, productGroups.filter(pg => pg.Name != "UNKNOWN").map(pg => React.createElement(Tab, { id: pg.Name + "_tabId", eventKey: pg.Id, title: pg.Name },
-                React.createElement(Container, { className: "tabRegion" }, maps.filter(m => m.UnitTypeCanHaveUnits && m.ProductGroupId == pg.Id && m.QuickBooksParentCode == "")
-                    .concat(maps.filter(m => !m.UnitTypeCanHaveUnits && pg.Id == m.ProductGroupId && m.QuickBooksParentCode != "")).sort((a, b) => a.QuickBooksDescription.localeCompare(b.QuickBooksDescription))
+                React.createElement(Container, { className: "tabRegion" }, maps.filter(m => (m.UnitTypeCanHaveUnits || m.UnitTypeName == 'Each') && m.ProductGroupId == pg.Id && m.QuickBooksParentCode == "")
+                    .concat(maps.filter(m => !m.UnitTypeCanHaveUnits && pg.Id == m.ProductGroupId && m.QuickBooksParentCode != "")).sort((a, b) => a.QuickBooksCode.localeCompare(b.QuickBooksCode))
                     .map(m => this.renderMaps(m.Id, m.ProductId, m.QuickBooksDescription, m.UnitTypeName, m.UnitTypeCanHaveUnits ? units.filter(u => maps.filter(map => map.QuickBooksParentCode == m.QuickBooksCode).find(map => map.UnitId == u.Id)) : null))))))));
     }
     render() {
@@ -335,10 +335,10 @@ export default class OrderComponent extends React.Component {
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Order Date"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
-                        React.createElement(Form.Control, { as: DatePicker, id: "orderDateId", selected: this.state.OrderDate, onChange: (dt) => { this.setState({ OrderDate: dt }); } })),
+                        React.createElement(Form.Control, { as: DatePicker, id: "orderDateId", dateFormat: "dd/MM/yyyy", selected: this.state.OrderDate, onChange: (dt) => { this.setState({ OrderDate: dt }); } })),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Delivery Date"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
-                        React.createElement(Form.Control, { as: DatePicker, id: "deliveryDateId", selected: this.state.DeliveryDate, onChange: (dt) => { this.setState({ DeliveryDate: dt }); } }))),
+                        React.createElement(Form.Control, { as: DatePicker, id: "deliveryDateId", dateFormat: "dd/MM/yyyy", selected: this.state.DeliveryDate, onChange: (dt) => { this.setState({ DeliveryDate: dt }); } }))),
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Shipping Address"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 6 },

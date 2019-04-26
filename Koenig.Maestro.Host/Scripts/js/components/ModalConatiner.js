@@ -17,6 +17,7 @@ import UnitComponent from './transaction/UnitComponent';
 import UnitTypeComponent from './transaction/UnitTypeComponent';
 import RegionComponent from './transaction/RegionComponent';
 import QbInvoiceLogComponent from './transaction/QbInvoiceLogComponent';
+import ReportFilterComponent from './transaction/ReportFilterComponent';
 export default class ModalContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +30,16 @@ export default class ModalContainer extends React.Component {
         this.showException = (error) => {
             this.setState({ ErrorInfo: error, ShowError: true, Init: false });
         };
+        this.runReportFct = () => __awaiter(this, void 0, void 0, function* () {
+            try {
+                this.reportComponent.Run();
+            }
+            catch (error) {
+                if (error.DisableAction == false)
+                    document.getElementById('btnRun').disabled = false;
+                this.setState({ ErrorInfo: error, ShowError: true, Init: false });
+            }
+        });
         this.saveFct = () => __awaiter(this, void 0, void 0, function* () {
             try {
                 document.getElementById('btnSave').disabled = true;
@@ -140,10 +151,14 @@ export default class ModalContainer extends React.Component {
             Entity: item, ExceptionMethod: this.showException,
             ButtonSetMethod: this.buttonSetFct
         };
-        if (tranCode == "CUSTOMER")
+        if (tranCode == "REPORT") {
+            return React.createElement(ReportFilterComponent, Object.assign({ ref: (comp) => this.reportComponent = comp }, componentProp));
+        }
+        else if (tranCode == "CUSTOMER")
             return React.createElement(MaestroCustomerComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
-        else if (tranCode == "ORDER")
+        else if (tranCode == "ORDER") {
             return React.createElement(OrderComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
+        }
         else if (tranCode == "CUSTOMER_PRODUCT_UNIT")
             return React.createElement(CustomerProductUnitsComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
         else if (tranCode == "UNIT")
@@ -195,7 +210,8 @@ export default class ModalContainer extends React.Component {
                     React.createElement(Button, { variant: "secondary", onClick: this.props.Close }, "Close"),
                     React.createElement(Button, { variant: "primary", id: "btnCancel", onClick: () => this.toogleModal("Do you want to cancel the order ?", true, "CANCEL") }, "Cancel Order"),
                     React.createElement(Button, { variant: "primary", id: "btnSave", onClick: this.saveFct }, "Save changes"),
-                    React.createElement(Button, { variant: "primary", id: "btnIntegrate", onClick: () => this.toogleModal("Do you want to create the invoice ?", true, "INTEGRATE") }, "Create Qb Invoice")))));
+                    React.createElement(Button, { variant: "primary", id: "btnIntegrate", onClick: () => this.toogleModal("Do you want to create the invoice ?", true, "INTEGRATE") }, "Create Qb Invoice"),
+                    React.createElement(Button, { variant: "primary", id: "btnRun", onClick: this.runReportFct }, "Run report")))));
     }
 }
 //# sourceMappingURL=ModalConatiner.js.map

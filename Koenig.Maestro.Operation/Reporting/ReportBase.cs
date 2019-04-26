@@ -8,20 +8,22 @@ using OfficeOpenXml;
 using Koenig.Maestro.Operation.Cache.CacheRepository;
 using System.Data;
 using Koenig.Maestro.Operation.Data;
+using Koenig.Maestro.Operation.Framework;
 
 namespace Koenig.Maestro.Operation.Reporting
 {
-    internal abstract class ReportBase : DbEntityBase
+    public abstract class ReportBase : DbEntityBase
     {
-        protected ReportDefinition reportDefinition;
+        protected MaestroReportDefinition reportDefinition;
         protected DataSet reportData;
-
-        protected ReportBase(ReportDefinition reportDefinition, DataSet reportData)
+        protected TransactionContext context;
+        protected ReportBase(TransactionContext context)
         {
-            this.reportData = reportData;
-            this.reportDefinition = reportDefinition;
+            this.context = context;
+            reportDefinition = (MaestroReportDefinition)context.Bag["REPORT_DEF"];
         }
 
+        public abstract void LoadData();
         
 
         public abstract void Render();

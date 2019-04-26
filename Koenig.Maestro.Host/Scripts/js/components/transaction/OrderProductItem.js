@@ -60,18 +60,18 @@ export default class OrderProductItem extends React.Component {
                     React.createElement(Col, { style: { textAlign: "left" } },
                         React.createElement(Form.Control, { as: "select", id: "unitNr_" + this.props.MapId, disabled: this.props.Units == null, style: { width: "100px" }, onChange: this.onChangeUnit }, (this.props.Units != null ?
                             //this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).filter(u=>this.props.ProductMaps.find(m=>m.UnitId==u.Id)!=undefined).map(u => <option value={u.Id}>{u.Name}</option>)
-                            this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).map(u => React.createElement("option", { selected: this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id), value: u.Id }, u.Name))
+                            this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).map(u => React.createElement("option", { selected: (this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id)) || (this.props.Units.length == 2 && u.Id >= 0), value: u.Id }, u.Name))
                             : null))),
                     React.createElement(Col, { style: { textAlign: "left", paddingTop: "6px" } },
-                        React.createElement(Form.Label, { id: "unitNameId", style: { width: "50px" } }, this.props.UnitTypeLabel)),
+                        React.createElement(Form.Label, { tabIndex: -1, id: "unitNameId", style: { width: "50px" } }, this.props.UnitTypeLabel)),
                     React.createElement(Col, { style: { textAlign: "left" } },
                         React.createElement(Form.Control, { id: "quantity_" + this.props.MapId, onChange: this.onChangeQuantity, value: this.state.Quantity.toString(), type: "input", style: { width: "80px", backgroundColor: this.state.Quantity == 0 ? "#ffffff" : "#fcea85" } })),
                     React.createElement(Col, { style: { textAlign: "left" } },
-                        React.createElement(Button, { variant: "secondary", id: "btnIncrease_" + this.props.MapId, onClick: this.increase, style: { width: "40px" } }, "+")),
+                        React.createElement(Button, { tabIndex: -1, variant: "secondary", id: "btnIncrease_" + this.props.MapId, onClick: this.increase, style: { width: "40px" } }, "+")),
                     React.createElement(Col, { style: { textAlign: "left" } },
-                        React.createElement(Button, { disabled: this.state.Quantity == 0, variant: "secondary", id: "btnDecrease_" + this.props.MapId, onClick: this.decrease, style: { width: "40px" } }, "-")),
+                        React.createElement(Button, { tabIndex: -1, disabled: this.state.Quantity == 0, variant: "secondary", id: "btnDecrease_" + this.props.MapId, onClick: this.decrease, style: { width: "40px" } }, "-")),
                     React.createElement(Col, { style: { textAlign: "left" } },
-                        React.createElement(Button, { disabled: this.state.Quantity == 0, variant: "danger", id: "btnDisable" + this.props.MapId, onClick: this.reset, style: { width: "40px" } }, "X"))))));
+                        React.createElement(Button, { tabIndex: -1, disabled: this.state.Quantity == 0, variant: "danger", id: "btnDisable" + this.props.MapId, onClick: this.reset, style: { width: "40px" } }, "X"))))));
         /*
          *                                 <OverlayTrigger overlay={<Tooltip id="increaseQuantityToolTip">Increase Quantity</Tooltip>}>
                                             <Button variant="secondary"

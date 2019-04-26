@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Koenig.Maestro.Operation.Cache.CacheRepository
 {
-    internal class ReportDefinitionCache : DbLoadCache<long, ReportDefinition>
+    internal class ReportDefinitionCache : DbLoadCache<long, MaestroReportDefinition>
     {
         static ReportDefinitionCache instance = null;
 
@@ -26,16 +26,16 @@ namespace Koenig.Maestro.Operation.Cache.CacheRepository
             }
         }
 
-        public ReportDefinition GetByReportCode(string reportCode)
+        public MaestroReportDefinition GetByReportCode(string reportCode)
         {
-            ReportDefinition result = Values.ToList().Find(r => r.ReportCode.Equals(reportCode));
+            MaestroReportDefinition result = Values.ToList().Find(r => r.ReportCode.Equals(reportCode));
             return result;
         }
 
 
-        protected override Tuple<long, ReportDefinition> GetItem(SqlReader reader)
+        protected override Tuple<long, MaestroReportDefinition> GetItem(SqlReader reader)
         {
-            ReportDefinition t = new ReportDefinition();
+            MaestroReportDefinition t = new MaestroReportDefinition();
             t.Id = reader.GetInt64("ID");
 
 
@@ -46,14 +46,14 @@ namespace Koenig.Maestro.Operation.Cache.CacheRepository
             t.ProcedureName = reader.GetString("REPORT_PROCEDURE_NAME");
             t.Template = reader.GetByteArray("TEMPLATE");
             t.ReportType = reader.GetString("REPORT_TYPE");
-
+            t.CodeBase = reader.GetString("CODE_BASE"); 
             t.CreateDate = reader.GetDateTime("CREATE_DATE");
             t.RecordStatus = reader.GetString("RECORD_STATUS");
             t.UpdateDate = reader.GetDateTime("UPDATE_DATE");
             t.UpdatedUser = reader.GetString("UPDATE_USER");
             t.CreatedUser = reader.GetString("CREATE_USER");
-
-            return new Tuple<long, ReportDefinition>(t.Id, t);
+            t.TransactionCode = reader.GetString("TRAN_CODE");
+            return new Tuple<long, MaestroReportDefinition>(t.Id, t);
 
         }
     }

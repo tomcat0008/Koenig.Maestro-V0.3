@@ -1,4 +1,5 @@
 ﻿using Koenig.Maestro.Entity;
+using Koenig.Maestro.Operation.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +11,7 @@ namespace Koenig.Maestro.Operation.Reporting
 {
     internal class CsvReport : ReportBase
     {
-        public CsvReport(ReportDefinition reportDefinition, DataSet reportData) :base(reportDefinition, reportData) {  }
+        public CsvReport(TransactionContext context) :base(context) {  }
 
         public override object Clone()
         {
@@ -18,6 +19,11 @@ namespace Koenig.Maestro.Operation.Reporting
         }
 
         public override void Export()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LoadData()
         {
             throw new NotImplementedException();
         }
