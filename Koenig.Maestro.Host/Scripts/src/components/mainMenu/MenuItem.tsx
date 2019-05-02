@@ -26,7 +26,7 @@ export default class MenuItem extends React.Component<IMenuItemDef>
         var styleSet = { padding: '1px',  height: `${this.props.height}` } as React.CSSProperties;
         
         let itemBody = <div style={styleSet} > <a onClick={() => { this.props.eventHandler(this) } } data-toggle="modal" data-target="#myModal" title={this.props.caption} className="btn btn-lg btn-primary" style={{ width: '100%', height: '100%', }}>
-        <img src={"../../../img/" + this.props.imgName} alt={this.props.caption} />
+        <img src={"/Maestro/img/" + this.props.imgName} alt={this.props.caption} />
         {this.props.caption} </a></div>
 
 

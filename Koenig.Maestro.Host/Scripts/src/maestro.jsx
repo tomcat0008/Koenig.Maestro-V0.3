@@ -4,5 +4,6 @@ import Bootstrap from 'bootstrap/dist/js/bootstrap.bundle'
 import MainMenu from './components/mainMenu/MainMenu'
 import 'jquery/dist/jquery.min'
 import 'axios/dist/axios'
+var appName = "Maestro";
 ReactDOM.render(<MainMenu  />, document.getElementById('mainMenu'));
 

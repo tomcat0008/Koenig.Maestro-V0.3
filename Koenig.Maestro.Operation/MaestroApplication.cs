@@ -20,15 +20,18 @@ namespace Koenig.Maestro.Operation
         static short qbMajorVersion = 0;
         static short qbMinorVersion = 0;
         static string qbCountryCode = string.Empty;
-        
+        static string reportSavePath = string.Empty;
+
         public readonly string UNKNOWN_ITEM_NAME = "UNKNOWN";
 
-        
+        static bool saveReportsOnServer = false;
 
         MaestroApplication()
         {
             
         }
+
+
 
         public static IConfigurationRoot ConfigRoot
         {
@@ -41,14 +44,20 @@ namespace Koenig.Maestro.Operation
                 configRoot = value;
                 connectionString = configRoot.GetConnectionString("MaestroConnection");
                 int.TryParse(configRoot.GetSection("ApplicationSettings")["CacheExpire"], out cacheReloadSpan);
+                bool.TryParse(configRoot.GetSection("ApplicationSettings")["SaveReportsOnServer"].ToLower(), out saveReportsOnServer);
+                reportSavePath = configRoot.GetSection("ApplicationSettings")["ReportSavePath"];
+                
                 qbAppId = configRoot.GetSection("QuickBooks")["ApplicationID"];
                 qbAppName = configRoot.GetSection("QuickBooks")["ApplicationName"];
                 qbAppPath = configRoot.GetSection("QuickBooks")["FilePath"];
                 short.TryParse(configRoot.GetSection("QuickBooks")["MajorVersion"], out qbMajorVersion);
                 short.TryParse(configRoot.GetSection("QuickBooks")["MinorVersion"], out qbMinorVersion);
                 qbCountryCode = configRoot.GetSection("QuickBooks")["Country"];
+                
             }
         }
+
+        
 
         public static MaestroApplication Instance
         {
@@ -85,6 +94,8 @@ namespace Koenig.Maestro.Operation
         public string QuickBooksCountry { get { return qbCountryCode; } }
         public short QuickBooksMajorVersion { get { return qbMajorVersion; } }
         public short QuickBooksMinorVersion { get { return qbMinorVersion; } }
+        public bool SaveReportsOnServer { get { return saveReportsOnServer; } }
+        public string ReportSavePath { get { return reportSavePath; } }
     }
 
 

@@ -8,7 +8,7 @@ export default class MenuItem extends React.Component {
         let itemBody = React.createElement("div", { style: styleSet },
             " ",
             React.createElement("a", { onClick: () => { this.props.eventHandler(this); }, "data-toggle": "modal", "data-target": "#myModal", title: this.props.caption, className: "btn btn-lg btn-primary", style: { width: '100%', height: '100%', } },
-                React.createElement("img", { src: "../../../img/" + this.props.imgName, alt: this.props.caption }),
+                React.createElement("img", { src: "/Maestro/img/" + this.props.imgName, alt: this.props.caption }),
                 this.props.caption,
                 " "));
         return itemBody;

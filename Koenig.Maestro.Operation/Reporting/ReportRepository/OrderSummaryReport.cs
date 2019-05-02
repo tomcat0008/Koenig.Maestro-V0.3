@@ -54,18 +54,23 @@ namespace Koenig.Maestro.Operation.Reporting.ReportRepository
                 RenderTotalSheet();
                 RenderReportGroupSheets();
 
-                /*
-                string path = Path.Combine(@"D:\TEMP\REPORT", string.Format(reportDefinition.FileName, DateTime.Today.ToString("yyyyMMdd")));
+                string fileName = string.Format(reportDefinition.FileName, DateTime.Today.ToString("yyyyMMdd"));
+                string path = Path.Combine(MaestroApplication.Instance.ReportSavePath, fileName);
+                //string path = Path.Combine(@"D:\TEMP\REPORT", string.Format(reportDefinition.FileName, DateTime.Today.ToString("yyyyMMdd")));
                 int fileCnt = 1;
-                while(File.Exists(path))
+                while (File.Exists(path))
                 {
-                    string fileName = string.Format(reportDefinition.FileName, DateTime.Today.ToString("yyyyMMdd") + "_" + fileCnt.ToString("000"));
+                    fileName = string.Format(reportDefinition.FileName, DateTime.Today.ToString("yyyyMMdd") + "_" + fileCnt.ToString("000"));
                     fileCnt++;
-                    path = Path.Combine(@"D:\TEMP\REPORT", fileName);
+                    path = Path.Combine(MaestroApplication.Instance.ReportSavePath, fileName);
                 }
 
-                p.SaveAs(new FileInfo(path));
-                */
+
+                if (MaestroApplication.Instance.SaveReportsOnServer)
+                {
+                    p.SaveAs(new FileInfo(path));
+                }
+                
                 
                 using (MemoryStream fileStream = new MemoryStream())
                 {
@@ -82,7 +87,6 @@ namespace Koenig.Maestro.Operation.Reporting.ReportRepository
 
                         
                         context.TransactionObject = Convert.ToBase64String(compressedStream.ToArray());
-
                         //File.WriteAllBytes(@"D:\TEMP\REPORT\report.xlsx.zip", compressedStream.ToArray());
                     }
 
@@ -188,8 +192,10 @@ namespace Koenig.Maestro.Operation.Reporting.ReportRepository
         int InsertProductData(ExcelWorksheet sheet, List<DataRow> labelRows, Dictionary<string, int> companyAddress,  string product, string label, int rowNr )
         {
             int rowNow = rowNr;
+            string companyColumnName = "QB_COMPANY";
+            if (!string.IsNullOrWhiteSpace(labelRows.First().Field<string>("ADDRESS_CODE")))
+                companyColumnName = "ADDRESS_CODE";
 
-            
 
             if (!label.Equals(product))
             {
@@ -197,7 +203,7 @@ namespace Koenig.Maestro.Operation.Reporting.ReportRepository
 
                 foreach (KeyValuePair<string, int> kvp in companyAddress)
                 {
-                    int quantity = labelRows.Where(r=>r.Field<string>("QB_COMPANY").Equals(kvp.Key)).Select(r => r.Field<int>("QUANTITY")).Sum();
+                    int quantity = labelRows.Where(r=>r.Field<string>(companyColumnName).Equals(kvp.Key)).Select(r => r.Field<int>("QUANTITY")).Sum();
                     sheet.Cells[rowNow, kvp.Value].Value = quantity;
                 }
 
@@ -217,7 +223,7 @@ namespace Koenig.Maestro.Operation.Reporting.ReportRepository
 
                     foreach (KeyValuePair<string, int> kvp in companyAddress)
                     {
-                        int quantity = labelRows.Where(r => r.Field<string>("QB_COMPANY").Equals(kvp.Key) && r.Field<string>("UNIT_NAME").Equals(unit)).Select(r => r.Field<int>("QUANTITY")).Sum();
+                        int quantity = labelRows.Where(r => r.Field<string>(companyColumnName).Equals(kvp.Key) && r.Field<string>("UNIT_NAME").Equals(unit)).Select(r => r.Field<int>("QUANTITY")).Sum();
                         sheet.Cells[rowNow, kvp.Value].Value = quantity;
                     }
 
@@ -283,8 +289,12 @@ namespace Koenig.Maestro.Operation.Reporting.ReportRepository
             foreach (string customer in customers)
             {
 
+                List<DataRow> customerRows = grpData.Where(r => r.Field<string>("CUSTOMER_NAME").Equals(customer)).ToList();
+                string companyColumnName = customerRows.Select(r => r.Field<string>("ADDRESS_CODE")).Where(s => !string.IsNullOrWhiteSpace(s)).Count() > 0 ? "ADDRESS_CODE" : "QB_COMPANY";
+
+
                 //get companies of customer
-                List<string> companies = grpData.Where(r => r.Field<string>("CUSTOMER_NAME").Equals(customer)).Select(r => r.Field<string>("QB_COMPANY")).Distinct().OrderBy(c => c).ToList();
+                List<string> companies = customerRows.Select(r => r.Field<string>(companyColumnName)).Distinct().OrderBy(c => c).ToList();
 
                 if (companies.Count > 1)
                     sheet.Cells[pshStartRow, companyCol, pshStartRow, companyCol + companies.Count - 1].Merge = true;

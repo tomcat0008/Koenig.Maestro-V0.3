@@ -34,7 +34,6 @@ namespace Koenig.Maestro.Operation.Data
 
         protected virtual void SetConnection()
         {
-
             if (connection == null)
                 connection = new SqlConnection(MaestroApplication.Instance.ConnectionString);
 

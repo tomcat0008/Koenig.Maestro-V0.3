@@ -13,7 +13,7 @@ import ErrorInfo from "./ErrorInfo";
 export default class AxiosAgent {
     runReport(tranCode, reportCode, msgExtension) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = "/MainPage/RunReport";
+            let url = "/Maestro/MainPage/RunReport";
             let msgJson = this.getMessage(msgExtension, "Report", tranCode, "", null);
             let result = yield this.sendRequest(url, msgJson);
             return result;
@@ -22,7 +22,7 @@ export default class AxiosAgent {
     getList(tranCode, msgExtension) {
         return __awaiter(this, void 0, void 0, function* () {
             let mde = {};
-            let url = "/MainPage/List";
+            let url = "/Maestro/MainPage/List";
             let msgJson = this.getMessage(msgExtension, "List", tranCode, "", null);
             let result = yield this.sendRequest(url, msgJson);
             return result;
@@ -31,7 +31,7 @@ export default class AxiosAgent {
     getImport(tranCode, msgExtension) {
         return __awaiter(this, void 0, void 0, function* () {
             let mde = {};
-            let url = "/MainPage/Import";
+            let url = "/Maestro/MainPage/Import";
             let msgJson = this.getMessage(msgExtension, "ImportQb", tranCode, "", null);
             let result = yield this.sendRequest(url, msgJson);
             return result;
@@ -40,7 +40,7 @@ export default class AxiosAgent {
     getNewOrderId() {
         return __awaiter(this, void 0, void 0, function* () {
             let mde = { ["REQUEST_TYPE"]: "RequestNewId" };
-            let url = "/MainPage/GetOrderId";
+            let url = "/Maestro/MainPage/GetOrderId";
             let msgJson = this.getMessage(mde, "New", "ORDER", "", null);
             let result = yield this.sendRequest(url, msgJson);
             return result;
@@ -49,7 +49,7 @@ export default class AxiosAgent {
     getItem(id, tranCode) {
         return __awaiter(this, void 0, void 0, function* () {
             let mde = { ["ID"]: id.toString() };
-            let url = "/MainPage/GetItem";
+            let url = "/Maestro/MainPage/GetItem";
             let msgJson = this.getMessage(mde, "Get", tranCode, "", null);
             let result = yield this.sendRequest(url, msgJson);
             return result;
@@ -57,7 +57,7 @@ export default class AxiosAgent {
     }
     updateItem(tranCode, item) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = "/MainPage/UpdateItem";
+            let url = "/Maestro/MainPage/UpdateItem";
             let mde = {};
             let itemList = [item];
             let msgJson = this.getMessage(mde, "Update", tranCode, "", itemList);
@@ -67,7 +67,7 @@ export default class AxiosAgent {
     }
     createItem(tranCode, item, mde) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = "/MainPage/CreateItem";
+            let url = "/Maestro/MainPage/CreateItem";
             if (mde == undefined || mde == null)
                 mde = {};
             let itemList = [item];
@@ -78,7 +78,7 @@ export default class AxiosAgent {
     }
     exportItemQb(tranCode, items, mde) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = "/MainPage/ExportItem";
+            let url = "/Maestro/MainPage/ExportItem";
             if (mde == undefined || mde == null)
                 mde = {};
             let itemList = items;
@@ -89,7 +89,7 @@ export default class AxiosAgent {
     }
     cancelItem(tranCode, item) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = "/MainPage/DeleteItem";
+            let url = "/Maestro/MainPage/DeleteItem";
             let mde = { ["ID"]: item.Id.toString() };
             let itemList = [item];
             let msgJson = this.getMessage(mde, "Delete", tranCode, "", itemList);
@@ -99,7 +99,7 @@ export default class AxiosAgent {
     }
     createInvoice(invoiceList) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = "/MainPage/CreateInvoice";
+            let url = "/Maestro/MainPage/CreateInvoice";
             let idList = "";
             invoiceList.forEach(i => idList += i + ",");
             let mde = {

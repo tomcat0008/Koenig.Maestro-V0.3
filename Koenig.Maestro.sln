@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koenig.Maestro.Console", "K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koenig.Maestro.Host", "Koenig.Maestro.Host\Koenig.Maestro.Host.csproj", "{74789B5E-C72D-4ADA-A302-AED790A2F431}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koenig.Maestro.Scheduler", "Koenig.Maestro.Scheduler\Koenig.Maestro.Scheduler.csproj", "{5976AEF5-BF99-4FEB-9EF2-162ED65C582B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{74789B5E-C72D-4ADA-A302-AED790A2F431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74789B5E-C72D-4ADA-A302-AED790A2F431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74789B5E-C72D-4ADA-A302-AED790A2F431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5976AEF5-BF99-4FEB-9EF2-162ED65C582B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5976AEF5-BF99-4FEB-9EF2-162ED65C582B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5976AEF5-BF99-4FEB-9EF2-162ED65C582B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5976AEF5-BF99-4FEB-9EF2-162ED65C582B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@ export default class AxiosAgent {
 
     public async runReport(tranCode: string, reportCode: string, msgExtension: { [key: string]: string }): Promise<IResponseMessage> {
 
-        let url: string = "/MainPage/RunReport";
+        let url: string = "/Maestro/MainPage/RunReport";
         let msgJson = this.getMessage(msgExtension, "Report", tranCode, "", null);
         let result: IResponseMessage = await this.sendRequest(url, msgJson);
         return result;
@@ -21,7 +21,7 @@ export default class AxiosAgent {
     public async getList(tranCode: string, msgExtension: { [key: string]: string } ): Promise<IResponseMessage> {
 
         let mde: { [key: string]: string } = {};
-        let url: string = "/MainPage/List";
+        let url: string = "/Maestro/MainPage/List";
         let msgJson = this.getMessage(msgExtension, "List", tranCode, "", null);
         let result: IResponseMessage = await this.sendRequest(url, msgJson);
        
@@ -31,7 +31,7 @@ export default class AxiosAgent {
     public async getImport(tranCode: string, msgExtension: { [key: string]: string }): Promise<IResponseMessage> {
 
         let mde: { [key: string]: string } = {};
-        let url: string = "/MainPage/Import";
+        let url: string = "/Maestro/MainPage/Import";
         let msgJson = this.getMessage(msgExtension, "ImportQb", tranCode, "", null);
         let result: IResponseMessage = await this.sendRequest(url, msgJson);
         return result;
@@ -39,7 +39,7 @@ export default class AxiosAgent {
 
     public async getNewOrderId():Promise<IResponseMessage> {
         let mde: { [key: string]: string } = { ["REQUEST_TYPE"]: "RequestNewId"};
-        let url: string = "/MainPage/GetOrderId";
+        let url: string = "/Maestro/MainPage/GetOrderId";
         let msgJson = this.getMessage(mde, "New", "ORDER", "", null);
         let result: IResponseMessage = await this.sendRequest(url, msgJson);
         return result;
@@ -47,14 +47,14 @@ export default class AxiosAgent {
 
     public async getItem(id: number, tranCode: string): Promise<IResponseMessage> {
         let mde: { [key: string]: string } = { ["ID"]: id.toString() };
-        let url: string = "/MainPage/GetItem";
+        let url: string = "/Maestro/MainPage/GetItem";
         let msgJson = this.getMessage(mde, "Get", tranCode, "", null);
         let result: IResponseMessage = await this.sendRequest(url, msgJson);
         return result;
     }
 
     public async updateItem(tranCode: string, item:DbEntityBase):Promise<IResponseMessage> {
-        let url: string = "/MainPage/UpdateItem";
+        let url: string = "/Maestro/MainPage/UpdateItem";
         let mde: { [key: string]: string } = {};
         let itemList = [item];
         let msgJson = this.getMessage(mde, "Update", tranCode, "", itemList );
@@ -63,7 +63,7 @@ export default class AxiosAgent {
     }
 
     public async createItem(tranCode: string, item: DbEntityBase, mde?: { [key: string]: string }): Promise<IResponseMessage> {
-        let url: string = "/MainPage/CreateItem";
+        let url: string = "/Maestro/MainPage/CreateItem";
         if (mde == undefined || mde == null)
             mde = {};
         let itemList = [item];
@@ -73,7 +73,7 @@ export default class AxiosAgent {
     }
 
     public async exportItemQb(tranCode: string, items: DbEntityBase[], mde?: { [key: string]: string }): Promise<IResponseMessage> {
-        let url: string = "/MainPage/ExportItem";
+        let url: string = "/Maestro/MainPage/ExportItem";
         if (mde == undefined || mde == null)
             mde = {};
         let itemList = items;
@@ -83,7 +83,7 @@ export default class AxiosAgent {
     }
 
     public async cancelItem(tranCode: string, item:DbEntityBase) {
-        let url: string = "/MainPage/DeleteItem";
+        let url: string = "/Maestro/MainPage/DeleteItem";
         let mde: { [key: string]: string } = { ["ID"]: item.Id.toString() };
         let itemList = [item];
         let msgJson = this.getMessage(mde, "Delete", tranCode, "", itemList);
@@ -92,7 +92,7 @@ export default class AxiosAgent {
     }
 
     public async createInvoice(invoiceList: number[]) {
-        let url: string = "/MainPage/CreateInvoice";
+        let url: string = "/Maestro/MainPage/CreateInvoice";
 
         let idList: string = "";
         invoiceList.forEach(i => idList += i + ",");

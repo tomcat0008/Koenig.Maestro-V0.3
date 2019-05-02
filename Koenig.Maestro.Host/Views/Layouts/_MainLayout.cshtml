@@ -5,7 +5,8 @@
 
     @RenderSection("head", required: false)
     @System.Web.Optimization.Styles.Render("~/Content/dist")
-    @System.Web.Optimization.Styles.Render("~/Content/react-bootstrap-table2.min.css")
+    
+    <link href="~/Content/react-bootstrap-table2.min.css" rel="stylesheet" type="text\css" />
     <script src="~/Scripts/jquery-3.3.1.slim.min.js"></script>
     <script type="text/javascript">
         /*
@@ -17,8 +18,8 @@
                 console.log(e);
             };
                 //$("#updt").text(e.data);
-            
-            
+
+
             serverSentEvents.onerror = function (e) {
                 console.error(e);
             };
