@@ -9,6 +9,7 @@ export interface IOrderItem extends DbEntityBase {
     UnitName: string;
     ItemPrice: number;
     MapId: number;
+    MapDescription: string;
 }
 
 export class OrderItem implements IOrderItem {
@@ -41,7 +42,7 @@ export class OrderItem implements IOrderItem {
     UpdateDate: string;
     RecordStatus: string;
     TypeName: string;
-
+    MapDescription: string;
     Actions: string[];
 
 }

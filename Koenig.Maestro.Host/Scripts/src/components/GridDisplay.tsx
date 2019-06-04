@@ -87,7 +87,8 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
     }
 
     onDoubleClick(e, itemObject) {
-        this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "Editing " + this.props.TranCode.toLowerCase() + " " + itemObject.Id, Entity: itemObject, Action: "Update" });
+        if (this.props.TranCode != "PRODUCT")
+            this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "Editing " + this.props.TranCode.toLowerCase() + " " + itemObject.Id, Entity: itemObject, Action: "Update" });
     }
 
     async handleDateSelect(period: string) {
@@ -252,7 +253,7 @@ export default class GridDisplay extends React.Component<ITranRequest, IModalCon
                         props => (
                             <div>
                                 <div style={{ textAlign: "left" }}>
-                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }} href="/MainPage/Index" >Return</Button>
+                                    <Button key="add" variant="outline-secondary" style={{ width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }} href="/Maestro" >Return</Button>
                                     <span>  </span>
                                     <Button key="add" variant="primary" style={{ width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }} onClick={this.handleNew} >New</Button>
                                     <span>  </span>

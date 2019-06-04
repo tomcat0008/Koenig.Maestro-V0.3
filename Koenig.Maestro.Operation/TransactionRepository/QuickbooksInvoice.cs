@@ -35,6 +35,11 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             
         }
 
+        protected override void Merge()
+        {
+
+        }
+
         protected override void ExportQb()
         {
 

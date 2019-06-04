@@ -23,5 +23,12 @@ namespace Koenig.Maestro.Entity.Enums
         public static readonly string NOT_INTEGRATED = "NOT_INTEGRATED";
         public static readonly string SAVE_FILE = "SAVE_FILE";
         public static readonly string REPORT_CODE = "REPORT_CODE";
+        public static readonly string LIST_CODE = "LIST_CODE";
+        public static readonly string INVOICE_GROUP = "INVOICE_GROUP";
+    }
+
+    public struct MessageDataExtensionValues
+    {
+        public static readonly string LIST_CODE_MERGE_INVOICE = "MERGE_INVOICE";
     }
 }

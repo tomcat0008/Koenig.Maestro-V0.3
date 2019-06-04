@@ -16,6 +16,7 @@ import RegionComponent from './transaction/RegionComponent';
 import QbInvoiceLogComponent from './transaction/QbInvoiceLogComponent';
 import ReportFilterComponent from './transaction/ReportFilterComponent';
 import { IReportComponent } from './IReportComponent';
+import InvoiceMerge from './transaction/InvoiceMerge';
 
 export default class ModalContainer extends React.Component<IModalContent, IModalContainerState> {
 
@@ -33,7 +34,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
     }
 
     componentDidMount() {
-        let contentComponent = this.createContent(this.props.TranCode, this.props.Entity);
+        let contentComponent = this.createContent(this.props.TranCode, this.props.Entity, this.props.Action);
 
         this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: this.props.TranCode,
@@ -46,7 +47,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
 
     componentWillReceiveProps(nextProps: IModalContent) {
         try {
-            let contentComponent = this.createContent(nextProps.TranCode, nextProps.Entity);
+            let contentComponent = this.createContent(nextProps.TranCode, nextProps.Entity, nextProps.Action);
             this.setState({
                 ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: nextProps.TranCode,
                 ShowSuccess: false, SuccessMessage: "", Action: nextProps.Action, Init: true, 
@@ -59,7 +60,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
         }
     }
 
-    createContent(tranCode: string, item: DbEntityBase) {
+    createContent(tranCode: string, item: DbEntityBase, action:string) {
         let componentProp: ITranComponentProp = {
             Entity: item, ExceptionMethod: this.showException,
             ButtonSetMethod: this.buttonSetFct
@@ -68,7 +69,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
 
 
         if (tranCode == "REPORT") {
-            return <ReportFilterComponent ref={ (comp) => this.reportComponent = comp } {...componentProp} />
+            return <ReportFilterComponent ref={(comp) => this.reportComponent = comp} {...componentProp} />
         }
         else if (tranCode == "CUSTOMER")
             return <MaestroCustomerComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
@@ -83,8 +84,14 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
             return <UnitTypeComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
         else if (tranCode == "REGION")
             return <RegionComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
-        else if (tranCode == "QUICKBOOKS_INVOICE")
-            return <QbInvoiceLogComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
+        else if (tranCode == "QUICKBOOKS_INVOICE") {
+            if (action == "Merge") {
+                return <InvoiceMerge ref={(comp) => this.tranComponent = comp} {...componentProp} />
+            }
+            else {
+                return <QbInvoiceLogComponent ref={(comp) => this.tranComponent = comp} {...componentProp} />
+            }
+        }
         else
             return <div />
     }
@@ -149,7 +156,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
             (document.getElementById('btnIntegrate') as HTMLButtonElement).disabled = true;
             (document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;
             (document.getElementById('btnSave') as HTMLButtonElement).disabled = true;
-            /*(document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;*/
+            (document.getElementById('btnRun') as HTMLButtonElement).disabled = true;
             let response: IResponseMessage = await this.tranComponent.Integrate();
             let successMsg: string = response.ResultMessage;
             if (response.Warnings != null) {
@@ -169,6 +176,7 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
                 (document.getElementById('btnIntegrate') as HTMLButtonElement).disabled = false;
             (document.getElementById('btnCancel') as HTMLButtonElement).disabled = false;
             (document.getElementById('btnSave') as HTMLButtonElement).disabled = false;
+            (document.getElementById('btnRun') as HTMLButtonElement).disabled = false;
             this.setState({ ErrorInfo: error, ShowError: true, Init: false });
         }
         
@@ -180,6 +188,8 @@ export default class ModalContainer extends React.Component<IModalContent, IModa
             (document.getElementById("btnCancel") as HTMLButtonElement).style.display = actions.indexOf("Cancel") > -1 ? "" : "none";
             (document.getElementById("btnSave") as HTMLButtonElement).style.display = actions.indexOf("Save") > -1 ? "" : "none";
             (document.getElementById("btnIntegrate") as HTMLButtonElement).style.display = actions.indexOf("Integrate") > -1 ? "" : "none";
+            (document.getElementById("btnIntegrate") as HTMLButtonElement).style.display = actions.indexOf("Integrate") > -1 ? "" : "none";
+            (document.getElementById("btnRun") as HTMLButtonElement).style.display = actions.indexOf("Run") > -1 ? "" : "none";
         }
     }
 

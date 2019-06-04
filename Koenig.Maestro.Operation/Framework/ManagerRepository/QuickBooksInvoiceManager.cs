@@ -70,6 +70,11 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                                 qbInvoiceId = tuple.Item1;
                                 qbTxnId = tuple.Item2;
                             }
+                            else
+                            {
+                                qbInvoiceId = context.Bag["REF_NUMBER"].ToString();
+                                qbTxnId = context.Bag["TXN_ID"].ToString();
+                            }
                         log.QuickBooksInvoiceId = qbInvoiceId;
                         log.QuickBooksTxnId = qbTxnId;
                         log.IntegrationStatus = QbIntegrationLogStatus.OK;

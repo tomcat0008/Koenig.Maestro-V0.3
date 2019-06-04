@@ -70,16 +70,35 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         {
             ExtractTransactionCriteria();
 
-            DateTime endDate = (DateTime)Context.Bag[MessageDataExtensionKeys.END_DATE];
-            DateTime beginDate = (DateTime)Context.Bag[MessageDataExtensionKeys.BEGIN_DATE];
+            string listCode = Context.Bag[MessageDataExtensionKeys.LIST_CODE].ToString();
 
-            long customerId = (long)Context.Bag[MessageDataExtensionKeys.CUSTOMER_ID];
-            string status = Context.Bag[MessageDataExtensionKeys.STATUS].ToString();
-            string dateField = Context.Bag[MessageDataExtensionKeys.REQUEST_TYPE].ToString();
+            if (string.IsNullOrWhiteSpace(listCode))
+            {
 
-            List<OrderMaster> result = orderMan.List(beginDate, endDate, customerId, status, dateField);
-            this.response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
+                DateTime endDate = (DateTime)Context.Bag[MessageDataExtensionKeys.END_DATE];
+                DateTime beginDate = (DateTime)Context.Bag[MessageDataExtensionKeys.BEGIN_DATE];
 
+                long customerId = (long)Context.Bag[MessageDataExtensionKeys.CUSTOMER_ID];
+                string status = Context.Bag[MessageDataExtensionKeys.STATUS].ToString();
+                string dateField = Context.Bag[MessageDataExtensionKeys.REQUEST_TYPE].ToString();
+                List<OrderMaster> result = orderMan.List(beginDate, endDate, customerId, status, dateField);
+                this.response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
+            }
+            else
+            {
+                object result = null;
+                
+                if (listCode.Equals(OrderRequestType.DashboardSummary.ToString()))
+                {
+                    result = orderMan.ListDashboardSummary();
+                }
+                else if (listCode.Equals(MessageDataExtensionValues.LIST_CODE_MERGE_INVOICE))
+                {
+                    string invoiceGroup = Context.Bag[MessageDataExtensionKeys.INVOICE_GROUP].ToString();
+                    result = orderMan.ListMergeOrders(invoiceGroup).Cast<ITransactionEntity>().ToList();
+                }
+                this.response.TransactionResult = result;
+            }
         }
 
         protected override void New()
@@ -201,7 +220,8 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.END_DATE)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID)
                         && !extendedData.ContainsKey(MessageDataExtensionKeys.PERIOD)
-                        && !extendedData.ContainsKey(MessageDataExtensionKeys.STATUS))
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.STATUS)
+                        && !extendedData.ContainsKey(MessageDataExtensionKeys.LIST_CODE))
                         throw new Exception("MessageDataExtension does not contain any of order listing keys");
 
                     break;
@@ -234,6 +254,11 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
             response.TransactionResult = Context.TransactionObject;
 
+        }
+
+        protected override void Merge()
+        {
+            
         }
 
         public override void Deserialize(JToken token)

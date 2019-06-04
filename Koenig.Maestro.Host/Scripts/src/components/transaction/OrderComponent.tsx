@@ -113,12 +113,23 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
 
     UpdateOrder = (mapId: number, unitId: number, quantity: number) => {
         $("body").addClass("loading");
+
+        let maps: IQbProductMap[] = this.state.ProductMaps as IQbProductMap[];
+        let map: IQbProductMap = maps.find(m => m.Id == mapId);//find the subject of action
+        /*if (map.UnitTypeCanHaveUnits && unitId < 0) {
+            $("body").removeClass("loading");
+            return;
+        }*/
+
+
         let order: IOrderMaster = this.state.Entity;
         if (order.OrderItems == undefined)
             order.OrderItems = new Array<IOrderItem>();
-
-        let map:IQbProductMap =(this.state.ProductMaps as IQbProductMap[]).find(m => m.Id == mapId);
-
+        /*
+        let subMap: IQbProductMap = maps.find(m => m.QuickBooksParentCode == map.QuickBooksCode && m.UnitId == unitId);
+        if (subMap != undefined)
+            map = subMap;
+        */
         let item: IOrderItem = order.OrderItems.find(i => i.MapId == mapId);
         if (item == undefined) {
             if (quantity > 0) {
@@ -136,6 +147,7 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                 item.Quantity = quantity;
                 item.UnitId = unitId;
                 item.ItemPrice = map.Price;
+                item.MapId = map.Id;
             }
             else
                 order.OrderItems.splice(order.OrderItems.indexOf(item), 1);
@@ -222,6 +234,21 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
             order.ShippingAddressId = 0;
         else
             order.ShippingAddressId = parseInt((document.getElementById("shippingAddressId") as HTMLInputElement).value);
+
+        let maps: IQbProductMap[] = this.state.ProductMaps as IQbProductMap[];
+        //check order item maps, make corrections if needed
+        for (let i = 0; i < order.OrderItems.length; i++) {
+            let oi: IOrderItem = order.OrderItems[i];
+            let map: IQbProductMap = maps.find(m => m.Id == oi.MapId);
+            if (map.UnitTypeCanHaveUnits && oi.UnitId > 0) {
+
+                let mapDetail:IQbProductMap = maps.find(m=>m.QuickBooksParentCode == map.QuickBooksCode && m.UnitId == oi.UnitId )
+                if (mapDetail != undefined)
+                    oi.MapId = mapDetail.Id;
+            }
+
+        }
+
 
         order.CreateInvoiceOnQb = (document.getElementById("chkInvoiceCreate") as HTMLInputElement).checked;
         let ea: EntityAgent = new EntityAgent();
@@ -381,9 +408,9 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
     render() {
         if (!this.state.Init) {
             
-            let customers: IMaestroCustomer[] = this.state.Customers;
+            let customers: IMaestroCustomer[] = this.state.Customers.filter(c => c.Name != "UNKNOWN");
             
-            customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
+            customers.sort((a, b) => { return a.QuickBoosCompany.localeCompare(b.QuickBoosCompany); });
 
             if (customers.find(c => c.Id == -1) == undefined)
                 customers.unshift(EntityAgent.GetFirstSelecItem("CUSTOMER") as IMaestroCustomer);
@@ -391,9 +418,11 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
             let shipAddressList: ICustomerAddress[] = null;
 
             let order: IOrderMaster = this.state.Entity;
-
+            let disableInvoice: boolean = false;
             if (order.CustomerId > 0) {
+                
                 let c: IMaestroCustomer = customers.find(c => c.Id == order.CustomerId);
+                disableInvoice = c.InvoiceGroup != "";
                 if (c.AddressList != null && c.AddressList != undefined) {
                     shipAddressList = c.AddressList.filter(a => a.AddressType == "S");
                     shipAddressList.unshift(EntityAgent.GetFirstSelecItem("ADDRESS") as ICustomerAddress);
@@ -410,7 +439,7 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                             <Form.Control plaintext readOnly defaultValue={order.Id.toString()} />
                         </Col>
                         <Col style={{ paddingTop: "5px" }} sm={2}>
-                            <img src="/img/orderSummary.png" className={ this.state.SummaryDisplay.display == "none" ? "" : "disabled"  }
+                            <img src="/Maestro/img/orderSummary.png" className={ this.state.SummaryDisplay.display == "none" ? "" : "disabled"  }
                                 onClick={() => { this.setState({ SummaryDisplay: { display: "block" } }) }}
                                 style={{ float: "right", cursor: this.state.SummaryDisplay.display == "none" ? "pointer" : "default" }} />
                         </Col>
@@ -477,7 +506,7 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                     <Row>
                         <Col style={{ paddingTop: "5px" }} sm={2}>Create Invoice</Col>
                         <Col>
-                            <Form.Check aria-label="chkInvoiceCreate" id="chkInvoiceCreate" />
+                            <Form.Check aria-label="chkInvoiceCreate" disabled={disableInvoice} id="chkInvoiceCreate" />
                         </Col>
                     </Row>
                     <Row>
@@ -499,7 +528,7 @@ export default class OrderComponent extends React.Component<ITranComponentProp, 
                     >
                         <div>
                             <div style={this.state.SummaryDisplay} className="orderSummaryHeader">Order Summary
-                                <img src="/img/closeWindow.png"
+                                <img src="/Maestro/img/closeWindow.png"
                                     onClick={() => {
                                         this.setState({ SummaryDisplay: { display: "none" } })
                                     }}

@@ -56,5 +56,6 @@ namespace Koenig.Maestro.Entity
         [JsonConverter(typeof(EntityJsonConverter))]
         public MaestroProductGroup ProductGroup{get;set;}
 
+        public decimal CostBase { get; set; }
     }
 }

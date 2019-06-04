@@ -59,20 +59,25 @@ namespace Koenig.Maestro.Operation.QuickBooks
         IInvoiceAdd BuildInvoice(IMsgSetRequest request, OrderMaster om)
         {
             IInvoiceAdd invoice = request.AppendInvoiceAddRq();
+            //invoice.TemplateRef.ListID.SetValue();
             invoice.CustomerRef.ListID.SetValue(om.Customer.QuickBooksId);
-
-            foreach (OrderItem oi in om.OrderItems)
+            string templateRef = MaestroApplication.Instance.GetTemplateId(om.Customer.CustomerGroup);
+            invoice.TemplateRef.ListID.SetValue(templateRef);
+            List<OrderItem> items = om.OrderItems.OrderBy(oi => oi.QbProductMap.QuickBooksCode).ToList();
+            foreach (OrderItem oi in items)
             {
                 IORInvoiceLineAdd item = invoice.ORInvoiceLineAddList.Append();
                 item.InvoiceLineAdd.ItemRef.ListID.SetValue(oi.QbProductMap.QuickBooksListId);
                 item.InvoiceLineAdd.Quantity.SetValue(oi.Quantity);
                 //item.InvoiceLineAdd.ORRatePriceLevel.RatePercent.SetValue(3.2D);
                 //item.InvoiceLineAdd.ORRatePriceLevel.Rate.SetValue(4.2D);
-
-                IDataExt extendedData = item.InvoiceLineAdd.DataExtList.Append();
-                extendedData.DataExtName.SetValue("QTY ORD");
-                extendedData.DataExtValue.SetValue(oi.Quantity.ToString());
-                extendedData.OwnerID.SetValue("0");
+                if (!oi.QbProductMap.Unit.QuickBooksUnit.Equals("kg"))
+                {
+                    IDataExt extendedData = item.InvoiceLineAdd.DataExtList.Append();
+                    extendedData.DataExtName.SetValue("QTY ORD");
+                    extendedData.DataExtValue.SetValue(oi.Quantity.ToString());
+                    extendedData.OwnerID.SetValue("0");
+                }
             }
 
             return invoice;
@@ -220,7 +225,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             IMsgSetRequest request = GetLatestMsgSetRequest();
             IInvoiceQuery query = request.AppendInvoiceQueryRq();
             query.IncludeLineItems.SetValue(true);
-            query.ORInvoiceQuery.InvoiceFilter.MaxReturned.SetValue(1000);
+            query.ORInvoiceQuery.InvoiceFilter.MaxReturned.SetValue(10000);
             //query.ORInvoiceQuery.InvoiceFilter.ORRefNumberFilter.RefNumberFilter.MatchCriterion.SetValue(ENMatchCriterion.mcContains);
             //query.ORInvoiceQuery.InvoiceFilter.ORRefNumberFilter.RefNumberFilter.RefNumber.SetValue("89315");
 
@@ -229,26 +234,28 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
             IResponse res = GetResponse(request);
             IInvoiceRetList invoiceRetList = (IInvoiceRetList)res.Detail;
-
-            for(int i=0;i<invoiceRetList.Count;i++)
+            if (invoiceRetList != null)
             {
-                IInvoiceRet invoice = invoiceRetList.GetAt(i);
-                string txnID = invoice.TxnID.GetValue();
-                QuickBooksInvoiceLog log = invoiceManager.GetInvoiceLog(txnID);
-                if (log != null)
+                for (int i = 0; i < invoiceRetList.Count; i++)
                 {
+                    IInvoiceRet invoice = invoiceRetList.GetAt(i);
+                    string txnID = invoice.TxnID.GetValue();
+                    QuickBooksInvoiceLog log = invoiceManager.GetInvoiceLog(txnID);
 
-                    UpdateOrder(invoice, log);
-                    
-                    //context.Warnings.Add(string.Format("Skipping txnId:{0}, order {1} already exists", txnID, log.OrderId));
+                    if (log != null)
+                    {
+
+                        UpdateOrder(invoice, log);
+
+                        //context.Warnings.Add(string.Format("Skipping txnId:{0}, order {1} already exists", txnID, log.OrderId));
+                    }
+                    else
+                        GetOrder(invoice);
+
+                    //WalkInvoiceRet(invoice);
+                    Console.WriteLine(string.Format("Processed {0}/{1} order", i+1, invoiceRetList.Count));
                 }
-                else
-                    GetOrder(invoice);
-
-                //WalkInvoiceRet(invoice);
-
             }
-
 
             return result;
             
@@ -258,6 +265,19 @@ namespace Koenig.Maestro.Operation.QuickBooks
         {
             OrderMaster om = orderManager.GetOrder(log.OrderId);
 
+            if (log.Customer.AddressList.Count > 0)
+            {
+                string addressPk = qbInvoice.ShipAddress.PostalCode.GetValue().Replace(" ","");
+                CustomerAddress shippingAddress = log.Customer.AddressList.Find(a => a.PostalCode.Equals(addressPk));
+                if(shippingAddress != null)
+                {
+                    if (om.ShippingAddressId != shippingAddress.Id)
+                    {
+                        om.ShippingAddressId = shippingAddress.Id;
+                        orderManager.UpdateOrder(om);
+                    }
+                }
+            }
 
             for (int i = 0; i < qbInvoice.ORInvoiceLineRetList.Count; i++)
             {
@@ -334,7 +354,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             if (customer == null)
                 customer = new CustomerManager(context).GetUnknownItem();
 
-            long orderId = orderManager.GetNewOrderId();
+            long orderId = orderManager.GetNewOrderId(orderDate);
 
             OrderMaster order = new OrderMaster()
             {
@@ -358,7 +378,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
             QuickBooksInvoiceLog log = invoiceManager.CreateInvoiceLog(order, QbIntegrationLogStatus.OK);
             invoiceManager.InsertIntegrationLog(log);
-
+            
         }
 
 
@@ -367,7 +387,8 @@ namespace Koenig.Maestro.Operation.QuickBooks
             List<OrderItem> orderItems = new List<OrderItem>();
             
             DateTime orderDate = qbInvoice.TimeCreated.GetValue();
-
+            ProductManager pm = new ProductManager(context);
+            UnitManager um = new UnitManager(context);
             for (int i=0;i< qbInvoice.ORInvoiceLineRetList.Count;i++)
             {
                 IORInvoiceLineRet line = qbInvoice.ORInvoiceLineRetList.GetAt(i);
@@ -381,13 +402,28 @@ namespace Koenig.Maestro.Operation.QuickBooks
                     OrderItem item = new OrderItem();
                     item.OrderId = orderId;
                     item.CreateDate = orderDate;
+                    item.Quantity = Convert.ToInt32(quantity);
                     item.Amount = line.InvoiceLineRet.Amount != null ? Convert.ToDecimal(line.InvoiceLineRet.Amount.GetValue()) : 0;
                     item.CreatedUser = "IMPORT";
-                    item.Product = map.Product;
-                    item.Price = map.Price;
-                    item.QbProductMap = map;
-                    item.Quantity = Convert.ToInt32(quantity);
-                    item.Unit = map.Unit;
+                    if(map == null)
+                    {
+                        Console.WriteLine(string.Format("Map null for productRefID:`{0}`", productRefID));
+                        logger.Error(string.Format("Map null for productRefID:`{0}`", productRefID));
+                        item.Product = pm.GetUnknownItem();
+                        item.Price = item.Quantity > 0 ? item.Amount/item.Quantity : 0;
+                        item.QbProductMap = map;
+                        item.Unit = um.GetUnknownItem();
+                    }
+                    else
+                    {
+                        item.Product = map.Product;
+                        item.Price = map.Price;
+                        item.QbProductMap = map;
+                        item.Unit = map.Unit;
+                    }
+
+                    
+                    
                     item.UpdateDate = orderDate;
                     item.UpdatedUser = context.UserName;
                     orderItems.Add(item);

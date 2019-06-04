@@ -19,6 +19,7 @@ namespace Koenig.Maestro.Operation.Framework
         Undelete,
         Erase,
         Backup,
-        Report
+        Report,
+        Merge
     }
 }

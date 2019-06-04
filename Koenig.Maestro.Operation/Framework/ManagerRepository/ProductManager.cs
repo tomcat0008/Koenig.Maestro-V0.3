@@ -38,6 +38,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetInt("@MINIMUM_ORDER_QUANTITY", product.MinimumOrderQuantity);
             call.SetBigInt("@UNIT_TYPE_ID", product.UnitType.Id);
             call.SetBigInt("@PRODUCT_GROUP_ID", product.GroupId);
+
+            call.SetDecimal("@COST_BASE", product.CostBase);
+
             call.SetDateTime("@UPDATE_DATE", DateTime.Now);
             call.SetVarchar("@UPDATE_USER", context.UserName);
 
@@ -59,11 +62,12 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 row["MINIMUM_ORDER_QUANTITY"] = p.MinimumOrderQuantity;
                 row["UNIT_TYPE_ID"] = p.UnitType.Id;
                 row["PRODUCT_GROUP_ID"] = p.GroupId;
+                row["COST_BASE"] = p.CostBase;
                 row["CREATE_DATE"] = p.CreateDate;
                 row["CREATE_USER"] = p.CreatedUser;
                 row["UPDATE_DATE"] = p.UpdateDate;
                 row["UPDATE_USER"] = p.UpdatedUser;
-                row["RECORD_STATUS"] = "A";
+                row["RECORD_STATUS"] = p.RecordStatus;
                 dt.Rows.Add(row);
             });
             dt.TableName = "DAT.PRODUCT";
@@ -83,6 +87,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetInt("@MINIMUM_ORDER_QUANTITY", product.MinimumOrderQuantity);
             call.SetBigInt("@UNIT_TYPE_ID", product.UnitType.Id);
             call.SetBigInt("@PRODUCT_GROUP_ID", product.GroupId);
+            call.SetDecimal("@COST_BASE", product.CostBase);
             call.SetDateTime("@CREATE_DATE", product.CreateDate);
             call.SetVarchar("@CREATE_USER", product.CreatedUser);
             product.Id = db.ExecuteScalar<long>(call);
@@ -101,6 +106,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                     MinimumOrderQuantity = 0,
                     QuickBooksProductId = string.Empty,
                     Price = 0M,
+                    CostBase =0M,
                     UnitType = new UnitTypeManager(context).GetUnknownItem(),
                     Description = string.Empty,
                     CreateDate = DateTime.Now,

@@ -37,8 +37,18 @@ namespace Koenig.Maestro.Console.TestRepository.TransactionTest
                 case "ImportQb":
                     result = Import();
                     break;
+                case "ExportQb":
+                    result = Export();
+                    break;
             }
             return result;
+        }
+
+        ResponseMessage Export()
+        {
+            RequestMessage request = MessagePrepareAgent.GetRequest(action, tranCode, null, null);
+            request.MessageDataExtension.Add("EXPORT_TYPE", "Full");
+            return new MessageBroker().Execute(request);
         }
 
         ResponseMessage Import()

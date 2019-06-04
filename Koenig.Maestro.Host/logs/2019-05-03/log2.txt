@@ -1,0 +1,122 @@
+2019-05-03 18:30:57.4406   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 57 
+2019-05-03 18:30:57.5283   23 ERROR Koenig.Maestro.Operation.Cache.DbLoadCache`2 PerformFirstLoad exception System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2..ctor(String cacheName, String spName) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 23
+2019-05-03 18:30:57.6104   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 57 
+2019-05-03 18:30:57.6824   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 114 
+2019-05-03 18:30:57.7582   23 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction PRODUCT System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 119
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Values() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 285
+   at Koenig.Maestro.Operation.TransactionRepository.Product.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Product.cs:line 65
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 106
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-03 18:31:36.4875   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 57 
+2019-05-03 18:31:36.5653   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 114 
+2019-05-03 18:31:36.6376   23 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction PRODUCT System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 119
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Values() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 285
+   at Koenig.Maestro.Operation.TransactionRepository.Product.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Product.cs:line 65
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 106
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-03 18:32:06.2525   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 57 
+2019-05-03 18:32:06.3385   23 ERROR Koenig.Maestro.Operation.Cache.DbLoadCache`2 PerformFirstLoad exception System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2..ctor(String cacheName, String spName) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 23
+2019-05-03 18:32:06.4203   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 57 
+2019-05-03 18:32:06.4951   23 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 114 
+2019-05-03 18:32:06.5719   23 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction PRODUCT System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 119
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Values() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 285
+   at Koenig.Maestro.Operation.TransactionRepository.Product.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Product.cs:line 65
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 106
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-03 18:32:24.6833   17 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 57 
+2019-05-03 18:32:24.7561   17 ERROR Koenig.Maestro.Operation.Cache.CacheBase`2 Exception in loading cache Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache for multiple values, ex: System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 114 
+2019-05-03 18:32:24.8252   17 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction PRODUCT System.Collections.Generic.KeyNotFoundException: KeyNotFound GlobalCacheName: Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache - Key : 22
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Item(TKey key) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 225
+   at Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache.GetItem(SqlReader reader) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheRepository\ProductCache.cs:line 51
+   at Koenig.Maestro.Operation.Cache.DbLoadCache`2.GetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\DbLoadCache.cs:line 56
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.LoadAndGetAllValues() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 360
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.ExecuteInitialLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 65
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.PerformIfNotMultipleLoad() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 119
+   at Koenig.Maestro.Operation.Cache.CacheBase`2.get_Values() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Cache\CacheBase.cs:line 285
+   at Koenig.Maestro.Operation.TransactionRepository.Product.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Product.cs:line 65
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 106
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53

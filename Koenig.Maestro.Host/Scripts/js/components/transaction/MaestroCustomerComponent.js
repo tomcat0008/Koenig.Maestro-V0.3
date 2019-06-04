@@ -57,6 +57,7 @@ export default class MaestroCustomerComponent extends React.Component {
             cust.DefaultPaymentType = document.getElementById("defaultPaymentId").checked ? "COD" : "";
             cust.CustomerGroup = document.getElementById("customerGroupId").value;
             cust.ReportGroup = document.getElementById("reportGroupId").value;
+            cust.InvoiceGroup = document.getElementById("invoiceGroupId").value;
             let result = yield ea.SaveCustomer(cust);
             this.DisableEnable(true);
             if (result.ErrorInfo != null) {
@@ -88,6 +89,7 @@ export default class MaestroCustomerComponent extends React.Component {
         document.getElementById("defaultPaymentId").disabled = disable;
         document.getElementById("customerGroupId").disabled = disable;
         document.getElementById("reportGroupId").disabled = disable;
+        document.getElementById("invoiceGroupId").disabled = disable;
     }
     render() {
         let cus = this.state.Customer;
@@ -138,6 +140,10 @@ export default class MaestroCustomerComponent extends React.Component {
                         React.createElement(Form.Control, { as: "select", id: "customerRegionId" }, regions.map(rg => React.createElement("option", { selected: rg.Id == cus.RegionId, value: rg.Id },
                             rg.Name + " (" + rg.PostalCode + ")",
                             " "))))),
+                React.createElement(Form.Row, null,
+                    React.createElement(Form.Group, { as: Col, controlId: "invoiceGroup" },
+                        React.createElement(Form.Label, null, "Invoice Group"),
+                        React.createElement(Form.Control, { id: "invoiceGroupId", type: "input", defaultValue: cus.InvoiceGroup }))),
                 React.createElement(Form.Row, null,
                     React.createElement(Form.Group, { as: Col, controlId: "customerAddress" },
                         React.createElement(Form.Label, null, "Address"),

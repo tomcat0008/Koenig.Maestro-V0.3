@@ -60,7 +60,7 @@ export default class OrderProductItem extends React.Component {
                     React.createElement(Col, { style: { textAlign: "left" } },
                         React.createElement(Form.Control, { as: "select", id: "unitNr_" + this.props.MapId, disabled: this.props.Units == null, style: { width: "100px" }, onChange: this.onChangeUnit }, (this.props.Units != null ?
                             //this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).filter(u=>this.props.ProductMaps.find(m=>m.UnitId==u.Id)!=undefined).map(u => <option value={u.Id}>{u.Name}</option>)
-                            this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).map(u => React.createElement("option", { selected: (this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id)) || (this.props.Units.length == 2 && u.Id >= 0), value: u.Id }, u.Name))
+                            this.props.Units.filter(u => u.Name != "UNKNOWN").sort((a, b) => a.Name.localeCompare(b.Name)).map(u => React.createElement("option", { selected: (this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id)) || (this.props.Units.length == 2 && u.Id >= 0), value: u.Id }, u.Name))
                             : null))),
                     React.createElement(Col, { style: { textAlign: "left", paddingTop: "6px" } },
                         React.createElement(Form.Label, { tabIndex: -1, id: "unitNameId", style: { width: "50px" } }, this.props.UnitTypeLabel)),

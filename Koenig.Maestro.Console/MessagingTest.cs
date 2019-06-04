@@ -161,6 +161,13 @@ namespace Koenig.Maestro.Console
         {
             static string transactionCode = "CUSTOMER";
 
+            public static void Export()
+            {
+                Dictionary<string, object> testData = new Dictionary<string, object>();
+                testData.Add("ACTION_TYPE", "ExportQb");
+                Instance.Execute(transactionCode, testData);
+            }
+
             public static void Import()
             {
                 Dictionary<string, object> testData = new Dictionary<string, object>();

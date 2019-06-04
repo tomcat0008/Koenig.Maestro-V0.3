@@ -56,6 +56,7 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
         cust.DefaultPaymentType = (document.getElementById("defaultPaymentId") as HTMLInputElement).checked ? "COD" : "";
         cust.CustomerGroup = (document.getElementById("customerGroupId") as HTMLInputElement).value;
         cust.ReportGroup = (document.getElementById("reportGroupId") as HTMLInputElement).value;
+        cust.InvoiceGroup = (document.getElementById("invoiceGroupId") as HTMLInputElement).value;
         let result: IResponseMessage = await ea.SaveCustomer(cust);
         this.DisableEnable(true);
         if (result.ErrorInfo != null) {
@@ -89,6 +90,8 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
         (document.getElementById("defaultPaymentId") as HTMLInputElement).disabled = disable;
         (document.getElementById("customerGroupId") as HTMLInputElement).disabled = disable;
         (document.getElementById("reportGroupId") as HTMLInputElement).disabled = disable;
+        (document.getElementById("invoiceGroupId") as HTMLInputElement).disabled = disable;
+        
         
     }
 
@@ -165,6 +168,13 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
 
                     </Form.Row>
                     <Form.Row>
+                        <Form.Group as={Col} controlId="invoiceGroup">
+                            <Form.Label>Invoice Group</Form.Label>
+                            <Form.Control id="invoiceGroupId" type="input" defaultValue={cus.InvoiceGroup} />
+                        </Form.Group>
+                    </Form.Row>
+
+                    <Form.Row>
                         <Form.Group as={Col} controlId="customerAddress">
                             <Form.Label>Address</Form.Label>
                             <Form.Control as="textarea" id="customerAddressId" rows="3">{cus.Address}</Form.Control>
@@ -180,9 +190,11 @@ export default class MaestroCustomerComponent extends React.Component<ITranCompo
                             {qbId}
                         </Form.Group>
                     </Form.Row>
+
                     <Form.Group id="defaultPayment">
                         <Form.Check type="checkbox" id="defaultPaymentId" label="C.O.D." defaultChecked={cus.DefaultPaymentType=="COD"} />
                     </Form.Group>
+
 
                 </Form>
                 

@@ -48,7 +48,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
                 qbId = extendedData[MessageDataExtensionKeys.ID];
             */
             List<MaestroProduct> qbProducts = null;
-
+            BackUp();
             using (qbAgent = new QuickBooksProductAgent(Context))
             {
                 qbProducts = qbAgent.Import().Cast<MaestroProduct>().ToList();
@@ -62,7 +62,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void List()
         {
-            response.TransactionResult = ProductCache.Instance.Values.Cast<ITransactionEntity>().ToList();
+            response.TransactionResult = ProductCache.Instance.Values.Where(p=>p.RecordStatus.Equals("A")).Cast<ITransactionEntity>().ToList();
         }
 
         protected override void New()

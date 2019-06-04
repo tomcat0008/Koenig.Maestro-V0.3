@@ -355,6 +355,18 @@ export default class EntityAgent {
             return result;
         });
     }
+    GetInvoiceMergeDisplay() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let ax = new AxiosAgent();
+            let response = yield ax.getList("CUSTOMER", { ["LIST_CODE"]: "MERGE_INVOICE" });
+            let cusList;
+            let orderList;
+            if (response.TransactionStatus != "ERROR")
+                cusList = response.TransactionResult;
+            let result = { Invoice: new QbInvoiceLog(0), Init: true, ErrorInfo: response.ErrorInfo, Customers: cusList, Orders: orderList, Templates: [""], OrdersToMerge: [] };
+            return result;
+        });
+    }
     GetUnitDisplay(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let unit;

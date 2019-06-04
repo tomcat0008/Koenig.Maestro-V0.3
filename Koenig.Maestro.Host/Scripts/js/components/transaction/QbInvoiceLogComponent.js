@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as React from "react";
+import EntityAgent from "../../classes/EntityAgent";
 import ErrorInfo from "../../classes/ErrorInfo";
 import { Form, Row, Col } from "react-bootstrap";
 export default class QbInvoiceLogComponent extends React.Component {
@@ -26,7 +27,34 @@ export default class QbInvoiceLogComponent extends React.Component {
     }
     Integrate() {
         return __awaiter(this, void 0, void 0, function* () {
-            return null;
+            $("body").addClass("loading");
+            let invoice = this.props.Entity;
+            let ea = new EntityAgent();
+            let invoiceNumbers = new Array();
+            invoiceNumbers.push(invoice.Id);
+            let result = yield ea.CreateInvoices(invoiceNumbers);
+            this.DisableEnable(true);
+            if (result.ErrorInfo != null) {
+                $("body").removeClass("loading");
+                throw result.ErrorInfo;
+            }
+            //this.setState({ InvoiceLog:  });
+            //(document.getElementById("intergationStatusId") as HTMLInputElement).value = order.IntegrationStatus;
+            $("body").removeClass("loading");
+            return result;
+        });
+    }
+    componentDidMount() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let invoice = this.props.Entity;
+            //$("body").addClass("loading");
+            invoice.Actions = new Array();
+            if (invoice.IntegrationStatus == "WAITING")
+                invoice.Actions.push("Integrate");
+            else if (invoice.IntegrationStatus == "OK") {
+                invoice.Actions.push("Cancel");
+            }
+            this.setState({ InvoiceLog: invoice });
         });
     }
     render() {

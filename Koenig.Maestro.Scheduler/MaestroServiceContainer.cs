@@ -132,15 +132,27 @@ namespace Koenig.Maestro.Scheduler
             DateTime start = DateTime.Now;
 
             Type executableType = GetExecutableType();
+            TransactionContext context = new TransactionContext()
+            {
+                UserName = "MAESTRO",
+                Database = new Database(),
+                Bag = new Dictionary<string, object>()
+
+            };
+
+            context.Bag.Add(MessageDataExtensionKeys.BEGIN_DATE, lastExecution);
+            context.Bag.Add(MessageDataExtensionKeys.END_DATE, DateTime.Now);
 
             logger.Debug(string.Format("Creating executable instance for Task `{0}`, type:{1}", taskName, className));
-            object executableInstance = Activator.CreateInstance(executableType);
+            object executableInstance = Activator.CreateInstance(executableType, new object[] { context });
 
             logger.Debug(string.Format("Executing method `{0}` of `{1}` for Task `{2}`", methodName, className, taskName));
             executableType.InvokeMember(methodName, System.Reflection.BindingFlags.InvokeMethod, null, executableInstance, null);
 
             InsertExecutionLog(start);
         }
+
+
 
         Type GetExecutableType()
         {
@@ -162,7 +174,7 @@ namespace Koenig.Maestro.Scheduler
             
 
             DateTime endDate = DateTime.Now;
-            double duration = endDate.Subtract(endDate).TotalMilliseconds;
+            double duration = endDate.Subtract(startDate).TotalMilliseconds;
 
             logger.Debug(string.Format("Inserting execution log for Task `{0}`, duration:{1} miliseconds", taskName, duration));
 

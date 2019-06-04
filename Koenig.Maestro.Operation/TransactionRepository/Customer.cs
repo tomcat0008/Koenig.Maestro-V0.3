@@ -47,6 +47,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
             resultObj.QuickBoosCompany = entityObj["QuickBoosCompany"].ToString();
             resultObj.CustomerGroup = entityObj["CustomerGroup"].ToString();
             resultObj.ReportGroup = entityObj["ReportGroup"].ToString();
+            resultObj.InvoiceGroup = entityObj["InvoiceGroup"].ToString();
             MaestroRegion region = null;
             if(entityObj.ContainsKey("MaestroRegion"))
             {
@@ -81,7 +82,15 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void List()
         {
-            response.TransactionResult = CustomerCache.Instance.Values.Cast<ITransactionEntity>().ToList();
+            ExtractTransactionCriteria();
+            string listCode = Context.Bag[MessageDataExtensionKeys.LIST_CODE].ToString();
+
+            List<MaestroCustomer> result = CustomerCache.Instance.Values.Where(c => c.RecordStatus == "A").ToList();
+
+            if (listCode.Equals(MessageDataExtensionValues.LIST_CODE_MERGE_INVOICE))
+                result = result.Where(c => !c.InvoiceGroup.Equals(string.Empty)).ToList();
+
+            response.TransactionResult = result.Cast<ITransactionEntity>().ToList();
         }
 
         protected override void New()
@@ -147,6 +156,12 @@ namespace Koenig.Maestro.Operation.TransactionRepository
         protected override void ExportQb()
         {
             throw new NotImplementedException();
+            /*
+            using (qbAgent = new QuickBooksCustomerAgent(Context))
+            {
+                qbAgent.Export();
+            }             
+             */
         }
 
         public override void RefreshCache(ActionType at)

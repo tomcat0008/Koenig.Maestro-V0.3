@@ -32,6 +32,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
             IMsgSetRequest request = GetLatestMsgSetRequest();
             IItemNonInventoryQuery query = request.AppendItemNonInventoryQueryRq();
+            query.ORListQueryWithOwnerIDAndClass.ListWithClassFilter.ActiveStatus.SetValue(ENActiveStatus.asAll);
             //IItemQuery query = request.AppendItemQueryRq();
             IResponse res = GetResponse(request);
 
@@ -50,10 +51,25 @@ namespace Koenig.Maestro.Operation.QuickBooks
             {
                 IItemNonInventoryRet inv = returnList.GetAt(i);
                 if (inv != null)
+                {
+                    
+                    string parentId = string.Empty;
+                    if (inv.ParentRef != null)
+                        parentId = ReadQbId(inv.ParentRef.ListID);
+
+                    if (string.IsNullOrEmpty(parentId))
+                    {
+                        MaestroProduct product = GetMaestroProduct(inv);
+                        plist.Add(product);
+                    }
+
+                    mapSourceList.Add(inv);//for late processing
+
+                    /*
                     if (ReadBool(inv.IsActive))
                     {
                         string parentId = string.Empty;
-                        if(inv.ParentRef !=null)
+                        if (inv.ParentRef != null)
                             parentId = ReadQbId(inv.ParentRef.ListID);
 
                         if (string.IsNullOrEmpty(parentId))
@@ -61,9 +77,29 @@ namespace Koenig.Maestro.Operation.QuickBooks
                             MaestroProduct product = GetMaestroProduct(inv);
                             plist.Add(product);
                         }
-                        
+
                         mapSourceList.Add(inv);//for late processing
                     }
+                    */
+                    /*
+                    else
+                    {
+                        string parentId = string.Empty;
+                        if (inv.ParentRef != null)
+                            parentId = ReadQbId(inv.ParentRef.ListID);
+
+                        if (string.IsNullOrEmpty(parentId))
+                        {
+                            MaestroProduct product = GetMaestroProduct(inv);
+                            //plist.Add(product);
+
+                        }
+
+
+
+
+                    }*/
+                }
 
                 #region commented
                 //WalkItemNonInventoryRet(inv);
@@ -121,7 +157,10 @@ namespace Koenig.Maestro.Operation.QuickBooks
             if (clist.Count > 0)
                 pm.BulkInsert(clist);
 
-            if(clist.Count > 0 || updatedProducts.Count>0)
+            if (updatedProducts.Count > 0)
+                updatedProducts.ForEach(p => pm.Update(p));
+
+            if (clist.Count > 0 || updatedProducts.Count>0)
                 ProductCache.Instance.Reload(true);
 
         }
@@ -377,6 +416,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             List<QuickBooksProductMapDef> mapList = new List<QuickBooksProductMapDef>();
             mapSourceList.ForEach(ms =>
             {
+                bool status = ReadBool(ms.IsActive);
                 QuickBooksProductMapDef map = GetMap(ms);
                 MaestroProduct product = null;
                 if (string.IsNullOrWhiteSpace(map.QuickBooksParentListId))
@@ -387,11 +427,13 @@ namespace Koenig.Maestro.Operation.QuickBooks
                     product = pm.GetUnknownItem();
                 map.Product = product;
                 map.Price = product.Price;
+                map.RecordStatus = status ? "A" : "P";
                 QuickBooksProductMapDef existing = QuickBooksProductMapCache.Instance.GetByQbId(map.QuickBooksListId);
                 if (existing != null)
                 {
                     map.Id = existing.Id;
                     map.Unit = existing.Unit;
+                    map.Label = existing.Label;
                     qmanager.Update(map);
                 }
                 else
@@ -405,6 +447,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
         QuickBooksProductMapDef GetMap(IItemNonInventoryRet item)
         {
+            bool status = ReadBool(item.IsActive);
             QuickBooksProductMapDef result = new QuickBooksProductMapDef()
             {
                 QuickBooksCode = ReadString(item.Name),
@@ -417,7 +460,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
                 UpdateDate = DateTime.Now,
                 CreatedUser = context.UserName,
                 UpdatedUser = context.UserName,
-                RecordStatus = "A",
+                RecordStatus = status ? "A" : "P",
                 Unit = um.GetUnknownItem()
             };
             return result;
@@ -425,6 +468,10 @@ namespace Koenig.Maestro.Operation.QuickBooks
         
         MaestroProduct GetMaestroProduct(IItemNonInventoryRet item)
         {
+            bool status = ReadBool(item.IsActive);
+            string qbID = ReadQbId(item.ListID);
+            MaestroProduct existingProduct = ProductCache.Instance.GetByQbId(qbID);
+
             MaestroProduct result = new MaestroProduct()
             {
                 Name = ReadString(item.ORSalesPurchase.SalesOrPurchase.Desc),
@@ -437,9 +484,9 @@ namespace Koenig.Maestro.Operation.QuickBooks
                 UpdateDate = DateTime.Now,
                 UpdatedUser = context.UserName,
                 CreatedUser = context.UserName,
-                RecordStatus = "A"
-                
-        };
+                RecordStatus = status ? "A" : "P"
+
+            };
 
             return result;
 

@@ -95,7 +95,8 @@ export default class GridDisplay extends React.Component {
         this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "New " + this.props.TranCode.toLowerCase(), Entity: EntityAgent.FactoryCreate(this.props.TranCode), Action: "New" });
     }
     onDoubleClick(e, itemObject) {
-        this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "Editing " + this.props.TranCode.toLowerCase() + " " + itemObject.Id, Entity: itemObject, Action: "Update" });
+        if (this.props.TranCode != "PRODUCT")
+            this.setState({ ModalContent: null, ShowModal: true, ModalCaption: "Editing " + this.props.TranCode.toLowerCase() + " " + itemObject.Id, Entity: itemObject, Action: "Update" });
     }
     handleDateSelect(period) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -209,7 +210,7 @@ export default class GridDisplay extends React.Component {
                     fileName: this.state.TranCode + "_" + nr + ".csv"
                 } }, props => (React.createElement("div", null,
                 React.createElement("div", { style: { textAlign: "left" } },
-                    React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }, href: "/MainPage/Index" }, "Return"),
+                    React.createElement(Button, { key: "add", variant: "outline-secondary", style: { width: "120px", display: this.props.ButtonList.indexOf("Return") > -1 ? "" : "none" }, href: "/Maestro" }, "Return"),
                     React.createElement("span", null, "  "),
                     React.createElement(Button, { key: "add", variant: "primary", style: { width: "120px", display: this.props.ButtonList.indexOf("New") > -1 ? "" : "none" }, onClick: this.handleNew }, "New"),
                     React.createElement("span", null, "  "),

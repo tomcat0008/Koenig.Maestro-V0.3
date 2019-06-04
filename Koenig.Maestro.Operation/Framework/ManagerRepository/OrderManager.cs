@@ -11,10 +11,14 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 {
     internal sealed class OrderManager : ManagerBase
     {
+        ProductManager pm;
         QuickBooksInvoiceManager qm;
+        UnitManager um;
         public OrderManager(TransactionContext context):base(context)
         {
             qm = new QuickBooksInvoiceManager(context);
+            pm = new ProductManager(context);
+            um = new UnitManager(context);
         }
 
         public OrderMaster GetOrder(long id)
@@ -73,6 +77,15 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             return result;
         }
 
+        public long GetNewOrderId(DateTime date)
+        {
+            long result = 0;
+            SpCall spCall = new SpCall("DAT.GET_ORDER_ID_WITH_DATE");
+            spCall.SetDateTime("@ORDER_DATE", date);
+            result = db.ExecuteScalar<long>(spCall);
+            return result;
+        }
+
 
         public void InsertOrder(OrderMaster orderMaster)
         {
@@ -99,7 +112,12 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 
         }
 
-        public void UpdateOrder(OrderMaster orderMaster, bool cleanItems)
+        public void UpdateOrder(OrderMaster orderMaster)
+        {
+            UpdateOrderInternal(orderMaster, false);
+        }
+
+        void UpdateOrderInternal(OrderMaster orderMaster, bool cleanItems)
         {
             orderMaster.UpdateDate = DateTime.Now;
 
@@ -116,8 +134,15 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             spCall.SetBit("@CLEAN_ORDERITEMS", cleanItems);
             spCall.SetBigInt("@SHIP_ADDRESS", orderMaster.ShippingAddressId);
             db.ExecuteNonQuery(spCall);
+        }
 
-            if(cleanItems)
+
+        public void UpdateOrder(OrderMaster orderMaster, bool cleanItems)
+        {
+
+            UpdateOrderInternal(orderMaster, cleanItems);
+
+            if (cleanItems)
             {
                 DataTable dt = PrepareOrderItemsTable(orderMaster.OrderItems);
                 db.ExecuteBulkInsert(dt);
@@ -224,6 +249,69 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             db.ExecuteNonQuery(spCall);
         }
 
+        public List<OrderMaster> ListMergeOrders(string invoiceGroup)
+        {
+            List<OrderMaster> result = new List<OrderMaster>();
+            string status = "CR";
+            SpCall spCall = new SpCall("DAT.ORDER_MASTER_MERGE_LIST");
+            spCall.SetVarchar("@STATUS", status);
+            spCall.SetVarchar("@INVOICE_GROUP", invoiceGroup);
+            DataSet ds = db.ExecuteDataSet(spCall);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ds.Tables[0].AsEnumerable().ToList().ForEach(omRow =>
+                {
+
+                    OrderMaster om = ReadOrderMaster(omRow);
+                    om.OrderItems = new List<OrderItem>();
+                    ds.Tables[1].AsEnumerable().Where(itemRow =>
+                        itemRow.Field<long>("ORDER_ID") == om.Id).ToList().ForEach(itemRow =>
+                        om.OrderItems.Add(InitOrderItem(itemRow)));
+
+                    ds.Tables[2].AsEnumerable().Where(logRow => logRow.Field<long>("ORDER_ID") == om.Id).ToList().ForEach(
+                        logRow => om.InvoiceLog = qm.InitLog(logRow));
+                    result.Add(om);
+
+                });
+
+
+            }
+
+
+            return result;
+        }
+
+        public Dictionary<string, List<Dictionary<string, string>>> ListDashboardSummary()
+        {
+            SpCall spCall = new SpCall("RPT.DASHBOARD_SUMMARY");
+            DataSet ds = db.ExecuteDataSet(spCall);
+
+            //first table contains summary codes
+            List<string> summaryCodes = ds.Tables[0].AsEnumerable().ToList().Select(r => r.Field<string>("TBL_CODE")).ToList();
+
+
+            Dictionary<string, List<Dictionary<string, string>>> result = new Dictionary<string, List<Dictionary<string, string>>>();
+
+            for(int i=1;i<ds.Tables.Count;i++)
+            {
+                List<Dictionary<string, string>> tblDict = new List<Dictionary<string, string>>();
+                DataTable tb = ds.Tables[i];
+                List<string> columns = tb.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+                tb.AsEnumerable().ToList().ForEach(delegate (DataRow r)
+                {
+                    Dictionary<string, string> obj = new Dictionary<string, string>();
+                    columns.ForEach(c => obj.Add(c, r[c].ToString()));
+                    tblDict.Add(obj);
+                });
+
+                result.Add(summaryCodes[i - 1], tblDict);
+            }
+
+
+            return result;
+        }
+
         public List<OrderMaster> List(DateTime begin, DateTime end, long customerId, string status, string dateField)
         {
             List<OrderMaster> result = new List<OrderMaster>();
@@ -275,7 +363,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 dr["PRODUCT_ID"] = o.Product.Id;
                 dr["QUANTITY"] = o.Quantity;
                 dr["UNIT_ID"] = o.Unit.Id;
-                dr["QB_PRODUCT_MAP_ID"] = o.QbProductMap.Id;
+                dr["QB_PRODUCT_MAP_ID"] = o.QbProductMap == null ? -1 : o.QbProductMap.Id;
                 dr["PRICE"] = o.Price;
                 dr["CREATE_DATE"] = now;
                 dr["CREATE_USER"] = context.UserName;
@@ -315,6 +403,31 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
 
         OrderItem InitOrderItem(DataRow row)
         {
+            QuickBooksProductMapDef map = null;
+            MaestroProduct product = null;
+            MaestroUnit unit = null;
+            long mapId = row.Field<long>("QB_PRODUCT_MAP_ID");
+            long productId = row.Field<long>("PRODUCT_ID");
+            long unitId = row.Field<long>("UNIT_ID");
+            if (mapId >=0 )
+                map = QuickBooksProductMapCache.Instance[mapId];
+
+            if(productId >=0)
+                product = ProductCache.Instance[productId];
+            if(unitId >=0)
+                unit = UnitCache.Instance[unitId];
+
+            decimal price = 0;
+            if (map != null)
+                price = map.Price;
+
+            if (product == null)
+                product = pm.GetUnknownItem();
+
+            if (unit == null)
+                unit = um.GetUnknownItem();
+            
+            
             OrderItem result = new OrderItem()
             {
                 Id = row.Field<long>("ID"),
@@ -326,9 +439,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 OrderId = row.Field<long>("ORDER_ID"),
                 Product = ProductCache.Instance[row.Field<long>("PRODUCT_ID")],
                 Quantity = row.Field<int>("QUANTITY"),
-                QbProductMap = QuickBooksProductMapCache.Instance[row.Field<long>("QB_PRODUCT_MAP_ID")],
-                Price = QuickBooksProductMapCache.Instance[row.Field<long>("QB_PRODUCT_MAP_ID")].Price,
-                Unit = UnitCache.Instance[row.Field<long>("UNIT_ID")],
+                QbProductMap = map,
+                Price = row.Field<decimal>("PRICE"),
+                Unit = unit,
                 Amount = row.Field<decimal>("AMOUNT")
             };
             return result;

@@ -1,0 +1,40 @@
+2019-05-23 13:41:31.1569    8 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 13:41:59.9566    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 13:44:01.8233    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 13:45:12.3227    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 13:45:31.1360    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 13:47:54.8946   12 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 13:51:17.0763   15 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: MessageDataExtension does not contain any of order listing keys
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ValidateRequest() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 217
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 96
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-23 14:34:17.9373    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.ArgumentException: Column 'TBL_CODE' does not belong to table Table.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at System.Data.DataRowExtensions.Field[T](DataRow row, String columnName)
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.OrderManager.<>c.<ListDashboardSummary>b__17_0(DataRow r) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\OrderManager.cs:line 258
+   at System.Linq.Enumerable.WhereSelectListIterator`2.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.OrderManager.ListDashboardSummary() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\OrderManager.cs:line 258
+   at Koenig.Maestro.Operation.TransactionRepository.Order.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 91
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 106
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53

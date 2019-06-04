@@ -1,0 +1,129 @@
+2019-05-23 11:30:50.4215    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 13:41:27.9950    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 13:41:31.0821    8 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 13:41:31.1200    8 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 13:41:31.1200    8  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 13:44:00.5598    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 13:44:01.7635    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 13:44:01.7794    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 13:44:01.7794    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 13:52:39.6055   16 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 13:52:47.2391   18 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 13:52:47.2561   18 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 13:52:47.2561   18  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 13:52:51.1160   18 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 13:54:47.5334   14 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 13:54:48.8359   11 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 13:54:48.8539   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 13:54:48.8539   11  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 13:54:48.8987   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 13:57:24.8798   14 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:29:12.2529    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 14:29:13.5111    6 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 14:29:13.5811    6 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 14:29:13.5851    6  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 14:29:13.6140    6 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:34:17.6775    6 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:34:42.2519    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:37:46.7889   30 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:37:56.1628    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:41:35.0709   42 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:45:14.0204   50 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:47:40.5648   68 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:51:19.3752   65 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:52:10.4631   72 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 14:56:06.9753   77 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:36:47.2678    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 16:36:50.4916    7 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 16:36:50.5436    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 16:36:50.5436    7  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 16:36:50.5605    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:38:34.2764    8 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:40:59.9348    8 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:44:16.9515   13 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:51:02.1133    6 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:55:07.4495   52 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:56:54.2003   57 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 16:58:18.1136   54 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 17:07:59.8065   59 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 17:15:05.3773   60 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 17:18:16.2048   60 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 17:21:50.1035   72 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 20:33:08.0474    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 20:33:09.3494   11 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 20:33:09.4283   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 20:33:09.4283   11  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 20:33:09.4662   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 21:16:53.8401    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 21:16:54.9265   11 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 21:16:54.9993   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 21:16:55.0118   11  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 21:16:55.0427   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 21:31:07.8115   50 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 21:33:57.9401   42 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 21:40:46.1370   40 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 21:50:39.0530  103 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:35:54.9556    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 22:35:56.1514   11 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 22:35:56.2282   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 22:35:56.2401   11  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 22:35:56.2671   11 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:37:15.6417    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:39:26.4795   17 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:40:45.5728   17 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:42:47.2697    6 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:45:06.2860   17 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:49:27.2318   44 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 22:50:55.8947   44 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 23:20:26.9269    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 23:20:29.8086    7 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 23:20:29.8575    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:20:29.8575    7  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 23:20:29.8744    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 23:42:20.4377    3 DEBUG Koenig.Maestro.Host.MvcApplication starting... 
+2019-05-23 23:42:21.6756    7 DEBUG Koenig.Maestro.Operation.Data.Database Select : COR.TRANSACTION_DEFINITION_SELECT_ALL  
+2019-05-23 23:42:21.7384    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:42:21.7384    7  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.TransactionCache' cache nesnesi register edildi. 
+2019-05-23 23:42:21.7783    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 23:43:34.0589    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 23:46:53.3283    9 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 23:48:40.5442    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190501', @END_DATE='20190601', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:48:40.8785    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.CUSTOMER_SELECT_ALL  
+2019-05-23 23:48:40.8785    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.REGION_SELECT_ALL  
+2019-05-23 23:48:40.8785    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.RegionCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.RegionCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.8785    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.RegionCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.8785    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.CUSTOMER_ADDRESS_SELECT_ALL  
+2019-05-23 23:48:40.8965    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.AddressCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.AddressCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.8965    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.AddressCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.8965    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.CustomerCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.CustomerCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.8965    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.CustomerCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.9584    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.QB_PRODUCT_MAP_SELECT_ALL  
+2019-05-23 23:48:40.9584    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.PRODUCT_SELECT_ALL  
+2019-05-23 23:48:40.9584    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.UNIT_TYPE_SELECT_ALL  
+2019-05-23 23:48:40.9744    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.9744    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.UnitTypeCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.9744    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.PRODUCT_GROUP_SELECT_ALL  
+2019-05-23 23:48:40.9744    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.ProductGroupCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.ProductGroupCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.9744    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.ProductGroupCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.9744    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.9744    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.ProductCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.9744    3 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.UNIT_SELECT_ALL  
+2019-05-23 23:48:40.9883    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.UnitCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.UnitCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.9883    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.UnitCache' cache nesnesi register edildi. 
+2019-05-23 23:48:40.9883    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.QuickBooksProductMapCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.QuickBooksProductMapCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:48:40.9883    3  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.QuickBooksProductMapCache' cache nesnesi register edildi. 
+2019-05-23 23:48:55.3391   25 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  
+2019-05-23 23:49:00.5932    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190501', @END_DATE='20190601', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:49:24.0460    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190523', @END_DATE='20190524', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:49:25.1600   45 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190520', @END_DATE='20190524', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:49:26.3202    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190501', @END_DATE='20190601', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:49:36.8488   25 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteScalar : DAT.GET_ORDER_ID  
+2019-05-23 23:49:37.0183   25 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteScalar : COR.TRANSACTION_LOG_INSERT @TRAN_CODE='ORDER', @TRANSACTION_LOG=NULL, @TRANSACTION_JSON='{"Request":{"MessageHeader":{"TransactionCode":"ORDER","AgentInfo":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36","ClientDate":"2019-05-24T03:49:36","UserName":"MAESTRO","ActionType":0,"HostName":"::1"},"TransactionEntityList":null,"MessageTag":"","MessageDataExtension":{"REQUEST_TYPE":"RequestNewId"},"ObjectId":-1,"RequestType":"RequestNewId"},"Response":{"ErrorInfo":null,"ResultMessage":"Transaction complete in 29.9428 ms","TransactionResult":201905230001,"TransactionStatus":"OK","TransactionCode":"ORDER","LogID":0,"TransactionDuration":29.942800000000002,"ActionType":"New","Warnings":[],"GridDisplayMembers":null}}', @TRANSACTION_STATUS='OK', @TRANSACTION_OBJECT_ID=-1, @ACTION_TYPE='New', @REQUEST_TYPE='RequestNewId', @CREATE_DATE='20190523', @CREATE_USER='MAESTRO', @DURATION=29.9428 
+2019-05-23 23:49:40.9512   25 DEBUG Koenig.Maestro.Operation.Data.Database Select : DAT.CUSTOMER_PRODUCT_UNIT_SELECT_ALL  
+2019-05-23 23:49:40.9632   25 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteNonQuery : CACHE.CACHE_REGISTRY_INSERT @GLOBAL_CACHE_NAME='Koenig.Maestro.Operation.Cache.CacheRepository.CustomerProductUnitCache', @CACHE_ID='Koenig.Maestro.Operation.Cache.CacheRepository.CustomerProductUnitCache', @APPLICATION_CODE='MAESTRO', @CACHE_HOST_NAME='STING', @UPDATE_DATE='20190523', @RECORD_STATUS='A' 
+2019-05-23 23:49:40.9632   25  INFO Koenig.Maestro.Operation.Cache.CacheRegistry 'Koenig.Maestro.Operation.Cache.CacheRepository.CustomerProductUnitCache' cache nesnesi register edildi. 
+2019-05-23 23:49:45.7436    3 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190501', @END_DATE='20190601', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:49:48.7466    7 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190501', @END_DATE='20190601', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:49:58.5276   25 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190520', @END_DATE='20190524', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:50:00.7334   25 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : DAT.ORDER_MASTER_LIST @BEGIN_DATE='20190501', @END_DATE='20190601', @CUSTOMER_ID=-1, @STATUS='', @DATE_FIELD='ListByOrderDate' 
+2019-05-23 23:50:17.6847   45 DEBUG Koenig.Maestro.Operation.Data.Database ExecuteDataSet : RPT.DASHBOARD_SUMMARY  

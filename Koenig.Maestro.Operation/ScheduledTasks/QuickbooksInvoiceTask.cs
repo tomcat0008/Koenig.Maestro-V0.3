@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Koenig.Maestro.Entity;
+using Koenig.Maestro.Operation.Framework;
+using Koenig.Maestro.Operation.QuickBooks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +12,22 @@ namespace Koenig.Maestro.Operation.ScheduledTasks
 {
     public class QuickbooksInvoiceTask
     {
+        TransactionContext context;
+
+        public QuickbooksInvoiceTask(TransactionContext context)
+        {
+            this.context = context;
+        }
+
+        
+
         public void Execute()
         {
-            Thread.Sleep(1000);
+            /*DateTime lastExecution = (DateTime)context.Bag["LAST_EXECUTION"];
+            double intervall = (double)context.Bag["INTERVALL"];*/
+
+            QuickBooksInvoiceAgent agent = new QuickBooksInvoiceAgent(context);
+            List<ITransactionEntity> invoices = agent.Import();
 
 
         }

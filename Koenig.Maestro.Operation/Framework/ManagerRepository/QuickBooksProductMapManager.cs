@@ -22,6 +22,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             DataTable dt = db.ExecuteDataTable(spCall);
             MaestroProduct unknownProduct = new ProductManager(context).GetUnknownItem();
             MaestroUnit unknownUnit = new UnitManager(context).GetUnknownItem();
+            
             itemList.Cast<QuickBooksProductMapDef>().ToList().ForEach(m =>
             {
                 DataRow row = dt.NewRow();
@@ -37,7 +38,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 row["CREATE_USER"] = m.CreatedUser;
                 row["UPDATE_DATE"] = m.UpdateDate;
                 row["UPDATE_USER"] = m.UpdatedUser;
-                row["RECORD_STATUS"] = "A";
+                row["RECORD_STATUS"] = m.RecordStatus;
                 row["REPORT_LABEL"] = m.Label;
                 dt.Rows.Add(row);
             });
@@ -72,7 +73,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetDateTime("@UPDATE_DATE", DateTime.Now);
             call.SetVarchar("@UPDATE_USER", context.UserName);
             call.SetVarchar("@REPORT_LABEL", map.Label);
-            
+
             db.ExecuteNonQuery(call);
         }
 

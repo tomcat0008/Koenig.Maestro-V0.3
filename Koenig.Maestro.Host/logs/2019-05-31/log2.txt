@@ -1,0 +1,5 @@
+2019-05-31 16:48:49.1833   68 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction CUSTOMER System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Koenig.Maestro.Operation.TransactionRepository.Customer.List() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Customer.cs:line 85
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 106
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53

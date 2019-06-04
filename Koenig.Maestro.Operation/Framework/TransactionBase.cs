@@ -132,6 +132,9 @@ namespace Koenig.Maestro.Operation.Framework
                 case ActionType.Report:
                     Report();
                     break;
+                case ActionType.Merge:
+                    Merge();
+                    break;
             }
             response.ResultMessage = responseMessage;
             response.Warnings = Warnings;
@@ -189,6 +192,7 @@ namespace Koenig.Maestro.Operation.Framework
         protected virtual void Clone() { }
         protected virtual void BackUp() { }
         protected virtual void Report() { }
+        protected virtual void Merge() { }
 
         public virtual void Deserialize(JToken token) { }
 
@@ -204,6 +208,8 @@ namespace Koenig.Maestro.Operation.Framework
             bool notIntegrated = false;
             string reportCode = string.Empty;
             bool saveFile = false;
+            string listCode = string.Empty;
+            string invoiceGroup = string.Empty;
 
             if (extendedData.ContainsKey(MessageDataExtensionKeys.CUSTOMER_ID))
                 long.TryParse(extendedData[MessageDataExtensionKeys.CUSTOMER_ID], out customerId);
@@ -224,6 +230,11 @@ namespace Koenig.Maestro.Operation.Framework
             if (extendedData.ContainsKey(MessageDataExtensionKeys.REPORT_CODE))
                 reportCode = extendedData[MessageDataExtensionKeys.REPORT_CODE];
 
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.LIST_CODE))
+                listCode = extendedData[MessageDataExtensionKeys.LIST_CODE];
+
+            if (extendedData.ContainsKey(MessageDataExtensionKeys.INVOICE_GROUP))
+                invoiceGroup = extendedData[MessageDataExtensionKeys.INVOICE_GROUP];
 
             Context.Bag.Add(MessageDataExtensionKeys.SAVE_FILE, saveFile);
             Context.Bag.Add(MessageDataExtensionKeys.REPORT_CODE, reportCode);
@@ -232,7 +243,9 @@ namespace Koenig.Maestro.Operation.Framework
             Context.Bag.Add(MessageDataExtensionKeys.STATUS, status);
             Context.Bag.Add(MessageDataExtensionKeys.REQUEST_TYPE, dateField);
             Context.Bag.Add(MessageDataExtensionKeys.NOT_INTEGRATED, notIntegrated);
-
+            Context.Bag.Add(MessageDataExtensionKeys.LIST_CODE, listCode);
+            Context.Bag.Add(MessageDataExtensionKeys.INVOICE_GROUP, invoiceGroup);
+            
 
 
         }

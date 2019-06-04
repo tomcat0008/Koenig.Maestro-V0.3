@@ -51,7 +51,7 @@ namespace Koenig.Maestro.Operation.Cache.CacheRepository
             product.UnitType = UnitTypeCache.Instance[reader.GetInt64("UNIT_TYPE_ID")];
             /*product.QbProductMaps = QuickBooksProductMapCache.Instance.GetByProductId(product.Id);
             product.QbProductMaps.ForEach(q => q.Product = product);*/
-
+            product.CostBase = reader.GetDecimal("COST_BASE");
             product.ProductGroup = ProductGroupCache.Instance[reader.GetInt64("PRODUCT_GROUP_ID")];
             product.CreateDate = reader.GetDateTime("CREATE_DATE");
             product.RecordStatus = reader.GetString("RECORD_STATUS");

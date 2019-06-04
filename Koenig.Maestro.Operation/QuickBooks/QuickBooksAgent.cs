@@ -24,7 +24,10 @@ namespace Koenig.Maestro.Operation.QuickBooks
         {
             this.context = context;
             db = context.Database;
-            extendedData = context.RequestMessage.MessageDataExtension;
+            if (context.RequestMessage != null)
+                extendedData = context.RequestMessage.MessageDataExtension;
+            else
+                extendedData = new Dictionary<string, string>();
         }
 
         protected void StartSession()
@@ -40,6 +43,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             }
             catch(Exception ex)
             {
+                FinishSession(true);
                 throw new Exception("Exception while connecting to QuickBooks", ex);
             }
 
@@ -51,7 +55,9 @@ namespace Koenig.Maestro.Operation.QuickBooks
             }
             catch (Exception ex)
             {
+                FinishSession(true);
                 throw new Exception("Exception while starting QuickBooks session", ex);
+                
             }
 
             
@@ -69,6 +75,9 @@ namespace Koenig.Maestro.Operation.QuickBooks
             if(connectionOpen)
                 sessionManager.CloseConnection();
             connectionOpen = false;
+
+            sessionManager = null;
+
         }
 
         protected IMsgSetRequest GetLatestMsgSetRequest()

@@ -12,6 +12,7 @@ namespace Koenig.Maestro.Entity.Enums
         UpdateQbOrder,
         RecreateOrderItems,
         ListByOrderDate,
-        ListByDeliveryDate
+        ListByDeliveryDate,
+        DashboardSummary
     }
 }

@@ -21,11 +21,13 @@ namespace Koenig.Maestro.Operation
         static short qbMinorVersion = 0;
         static string qbCountryCode = string.Empty;
         static string reportSavePath = string.Empty;
-
+        static string quickBooksDwpTemplate = string.Empty;
+        static string quickBooksKonigTemplate = string.Empty;
+        
         public readonly string UNKNOWN_ITEM_NAME = "UNKNOWN";
 
         static bool saveReportsOnServer = false;
-
+        static Dictionary<string, string> templateIdList = new Dictionary<string, string>();
         MaestroApplication()
         {
             
@@ -53,6 +55,9 @@ namespace Koenig.Maestro.Operation
                 short.TryParse(configRoot.GetSection("QuickBooks")["MajorVersion"], out qbMajorVersion);
                 short.TryParse(configRoot.GetSection("QuickBooks")["MinorVersion"], out qbMinorVersion);
                 qbCountryCode = configRoot.GetSection("QuickBooks")["Country"];
+
+                templateIdList.Add("DWP", configRoot.GetSection("QuickBooks")["DWP"]);
+                templateIdList.Add("KONIG", configRoot.GetSection("QuickBooks")["KONIG"]);
                 
             }
         }
@@ -86,6 +91,9 @@ namespace Koenig.Maestro.Operation
             }
             
         }
+        
+
+        public string GetTemplateId(string customerGroup) { return templateIdList[customerGroup]; }
 
         public string QuickBooksAppId{get{ return qbAppId; }}
         public string QuickBooksAppName { get { return qbAppName; } }

@@ -14,6 +14,7 @@ namespace Koenig.Maestro.Console
 
         static void Main(string[] args)
         {
+
             logger.Debug("starting....");
 
             IConfigurationRoot configRoot = new ConfigurationBuilder().SetBasePath(System.IO.Directory.GetCurrentDirectory())
@@ -21,17 +22,17 @@ namespace Koenig.Maestro.Console
             Maestro.Operation.MaestroApplication.ConfigRoot = configRoot;
 
             //MessagingTest.Transactions.Add("QuickbooksInvoice", "QB Invoice Integration", "QUICKBOOKS_INVOICE");
-            
+
             //TestProduct();
             //TestCustomer();
             //TestCustomerProductUnit();
             //TestOrder();
 
-            ServiceTester.Execute();
+            //ServiceTester.Execute();
 
-            //ReportingTest.OrderSummary.GenerateReport(new DateTime(2019, 1, 1), new DateTime(2019, 12, 31));
-
-            //MessagingTest.Customers.Import();
+            //ReportingTest.OrderSummary.GenerateReport(new DateTime(2019, 5, 15), new DateTime(2019, 5, 18));
+            //MessagingTest.Orders.List();
+            MessagingTest.Customers.Export();
             //MessagingTest.Customers.List();
             //MessagingTest.Products.Import();
             //MessagingTest.Products.List();

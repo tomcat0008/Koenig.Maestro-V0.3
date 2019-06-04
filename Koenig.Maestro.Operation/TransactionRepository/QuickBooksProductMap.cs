@@ -43,7 +43,7 @@ namespace Koenig.Maestro.Operation.TransactionRepository
 
         protected override void List()
         {
-            response.TransactionResult = QuickBooksProductMapCache.Instance.Values.Cast<ITransactionEntity>().ToList();
+            response.TransactionResult = QuickBooksProductMapCache.Instance.Values.Where(m=>m.RecordStatus.Equals("A")).Cast<ITransactionEntity>().ToList();
         }
 
         protected override void New()

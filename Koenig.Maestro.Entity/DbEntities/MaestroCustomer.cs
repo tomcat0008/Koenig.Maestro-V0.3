@@ -33,6 +33,9 @@ namespace Koenig.Maestro.Entity
         public string RegionName { get { return Region.Name; } }
 
 
+        [DisplayProperty(Text = "Invoice Group", DataField = "InvoiceGroup", Sort = true, DisplayOrder = 50)]
+        public string InvoiceGroup { get; set; }
+        
 
         public List<CustomerAddress> AddressList
         {

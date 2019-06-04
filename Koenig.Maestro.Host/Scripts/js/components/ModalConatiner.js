@@ -18,6 +18,7 @@ import UnitTypeComponent from './transaction/UnitTypeComponent';
 import RegionComponent from './transaction/RegionComponent';
 import QbInvoiceLogComponent from './transaction/QbInvoiceLogComponent';
 import ReportFilterComponent from './transaction/ReportFilterComponent';
+import InvoiceMerge from './transaction/InvoiceMerge';
 export default class ModalContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -76,7 +77,7 @@ export default class ModalContainer extends React.Component {
                 document.getElementById('btnIntegrate').disabled = true;
                 document.getElementById('btnCancel').disabled = true;
                 document.getElementById('btnSave').disabled = true;
-                /*(document.getElementById('btnCancel') as HTMLButtonElement).disabled = true;*/
+                document.getElementById('btnRun').disabled = true;
                 let response = yield this.tranComponent.Integrate();
                 let successMsg = response.ResultMessage;
                 if (response.Warnings != null) {
@@ -94,6 +95,7 @@ export default class ModalContainer extends React.Component {
                     document.getElementById('btnIntegrate').disabled = false;
                 document.getElementById('btnCancel').disabled = false;
                 document.getElementById('btnSave').disabled = false;
+                document.getElementById('btnRun').disabled = false;
                 this.setState({ ErrorInfo: error, ShowError: true, Init: false });
             }
         });
@@ -102,6 +104,8 @@ export default class ModalContainer extends React.Component {
                 document.getElementById("btnCancel").style.display = actions.indexOf("Cancel") > -1 ? "" : "none";
                 document.getElementById("btnSave").style.display = actions.indexOf("Save") > -1 ? "" : "none";
                 document.getElementById("btnIntegrate").style.display = actions.indexOf("Integrate") > -1 ? "" : "none";
+                document.getElementById("btnIntegrate").style.display = actions.indexOf("Integrate") > -1 ? "" : "none";
+                document.getElementById("btnRun").style.display = actions.indexOf("Run") > -1 ? "" : "none";
             }
         };
         this.onYes = () => {
@@ -123,7 +127,7 @@ export default class ModalContainer extends React.Component {
         };
     }
     componentDidMount() {
-        let contentComponent = this.createContent(this.props.TranCode, this.props.Entity);
+        let contentComponent = this.createContent(this.props.TranCode, this.props.Entity, this.props.Action);
         this.state = {
             ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: this.props.TranCode,
             ShowSuccess: false, SuccessMessage: "", Action: this.props.Action, Init: true, Entity: this.props.Entity,
@@ -134,7 +138,7 @@ export default class ModalContainer extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         try {
-            let contentComponent = this.createContent(nextProps.TranCode, nextProps.Entity);
+            let contentComponent = this.createContent(nextProps.TranCode, nextProps.Entity, nextProps.Action);
             this.setState({
                 ShowError: false, ErrorInfo: new ErrorInfo(), TranCode: nextProps.TranCode,
                 ShowSuccess: false, SuccessMessage: "", Action: nextProps.Action, Init: true,
@@ -146,7 +150,7 @@ export default class ModalContainer extends React.Component {
             this.setState({ ShowError: true, ErrorInfo: error });
         }
     }
-    createContent(tranCode, item) {
+    createContent(tranCode, item, action) {
         let componentProp = {
             Entity: item, ExceptionMethod: this.showException,
             ButtonSetMethod: this.buttonSetFct
@@ -167,8 +171,14 @@ export default class ModalContainer extends React.Component {
             return React.createElement(UnitTypeComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
         else if (tranCode == "REGION")
             return React.createElement(RegionComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
-        else if (tranCode == "QUICKBOOKS_INVOICE")
-            return React.createElement(QbInvoiceLogComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
+        else if (tranCode == "QUICKBOOKS_INVOICE") {
+            if (action == "Merge") {
+                return React.createElement(InvoiceMerge, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
+            }
+            else {
+                return React.createElement(QbInvoiceLogComponent, Object.assign({ ref: (comp) => this.tranComponent = comp }, componentProp));
+            }
+        }
         else
             return React.createElement("div", null);
     }

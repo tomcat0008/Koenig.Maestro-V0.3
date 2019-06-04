@@ -53,6 +53,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             
             call.SetDateTime("@UPDATE_DATE", DateTime.Now);
             call.SetVarchar("@UPDATE_USER", context.UserName);
+            call.SetVarchar("@RECORD_STATUS", string.IsNullOrWhiteSpace(customer.RecordStatus) ? "A" : customer.RecordStatus );
+            call.SetVarchar("@INVOICE_GROUP", customer.InvoiceGroup);
+            
             db.ExecuteNonQuery(call);
         }
 
@@ -80,9 +83,10 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                 dr["CREATE_USER"] = cus.CreatedUser;
                 dr["UPDATE_DATE"] = cus.UpdateDate;
                 dr["UPDATE_USER"] = cus.UpdatedUser;
-                dr["RECORD_STATUS"] = "A";
+                dr["RECORD_STATUS"] = string.IsNullOrWhiteSpace(cus.RecordStatus) ? "A" : cus.RecordStatus;
                 dr["CUSTOMER_GROUP"] = cus.CustomerGroup;
                 dr["REPORT_GROUP"] = cus.ReportGroup;
+                dr["INVOICE_GROUP"] = cus.InvoiceGroup;
                 
                 dt.Rows.Add(dr);
             });
@@ -98,6 +102,7 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             {
                 unknowCustomer = new MaestroCustomer()
                 {
+                    Name = MaestroApplication.Instance.UNKNOWN_ITEM_NAME,
                     Address = string.Empty,
                     DefaultPaymentType = string.Empty,
                     Email    = string.Empty,
@@ -112,7 +117,8 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
                     UpdatedUser = "MAESTRO",
                     RecordStatus = "A",
                     CustomerGroup = string.Empty,
-                    ReportGroup = string.Empty
+                    ReportGroup = string.Empty,
+                    InvoiceGroup = string.Empty
 
                 };
                 InsertNewItem(unknowCustomer);
@@ -138,6 +144,9 @@ namespace Koenig.Maestro.Operation.Framework.ManagerRepository
             call.SetVarchar("@REPORT_GROUP", customer.ReportGroup);
             call.SetDateTime("@CREATE_DATE", DateTime.Now);
             call.SetVarchar("@CREATE_USER", context.UserName);
+            call.SetVarchar("@REPORT_GROUP", customer.ReportGroup);
+            call.SetVarchar("@RECORD_STATUS", string.IsNullOrWhiteSpace(customer.RecordStatus) ? "A" : customer.RecordStatus);
+            call.SetVarchar("@INVOICE_GROUP", customer.InvoiceGroup);
             customer.Id = db.ExecuteScalar<long>(call);
             
         }

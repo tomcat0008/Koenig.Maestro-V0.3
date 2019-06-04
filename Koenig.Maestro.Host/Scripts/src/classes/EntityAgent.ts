@@ -51,6 +51,14 @@ export interface IReportFilterDisplay extends IDisplayBase {
     ReportDefinitions:IMaestroReportDefinition[];
 }
 
+export interface IInvoiceMergeDisplay extends IDisplayBase {
+    Customers: IMaestroCustomer[];
+    Orders: IOrderMaster[];
+    Templates: string[];
+    OrdersToMerge: number[];
+    Invoice: IQbInvoiceLog;
+
+}
 
 export interface IOrderDisplay extends IDisplayBase {
     Customers: IMaestroCustomer[];
@@ -440,6 +448,19 @@ export default class EntityAgent {
         }
         unitType.Actions = new Array<string>("Save");
         let result: IUnitTypeDisplay = { ErrorInfo: errorInfo, UnitType: unitType, Init: false };
+        return result;
+    }
+
+    async GetInvoiceMergeDisplay(): Promise<IInvoiceMergeDisplay> {
+
+        let ax: AxiosAgent = new AxiosAgent();
+        let response: IResponseMessage = await ax.getList("CUSTOMER", { ["LIST_CODE"]:"MERGE_INVOICE" });
+        let cusList: IMaestroCustomer[];
+        let orderList: IOrderMaster[];
+        if (response.TransactionStatus != "ERROR")
+            cusList = response.TransactionResult as IMaestroCustomer[];
+
+        let result: IInvoiceMergeDisplay = { Invoice: new QbInvoiceLog(0), Init: true, ErrorInfo: response.ErrorInfo, Customers: cusList, Orders: orderList, Templates:[""], OrdersToMerge:[] };
         return result;
     }
 

@@ -120,7 +120,7 @@ export default class OrderProductItem extends React.Component<IOrderProductItemP
                                     {
                                         (this.props.Units != null ?
                                             //this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).filter(u=>this.props.ProductMaps.find(m=>m.UnitId==u.Id)!=undefined).map(u => <option value={u.Id}>{u.Name}</option>)
-                                            this.props.Units.sort((a, b) => a.Name.localeCompare(b.Name)).map(u =>
+                                            this.props.Units.filter(u=>u.Name!="UNKNOWN").sort((a, b) => a.Name.localeCompare(b.Name)).map(u =>
                                                 <option selected={ (this.props.Cpu == undefined ? false : (this.props.Cpu.UnitId == u.Id )) || (this.props.Units.length == 2 && u.Id >=0 ) } value={u.Id}>{u.Name}</option>)
                                             : null)
                                     }

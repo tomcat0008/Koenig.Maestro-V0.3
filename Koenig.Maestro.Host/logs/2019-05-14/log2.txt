@@ -1,0 +1,391 @@
+2019-05-14 10:07:44.2875    5 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: No data can be found between 2019-05-14 2:07:39 PM and 2019-05-15 2:07:39 PM
+   at Koenig.Maestro.Operation.Reporting.ReportRepository.OrderSummaryReport.LoadData() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Reporting\ReportRepository\OrderSummaryReport.cs:line 46
+   at Koenig.Maestro.Operation.Reporting.ExcelReportBase.Render() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Reporting\ExcelReportBase.cs:line 51
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.ReportManager.RunReport() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\ReportManager.cs:line 33
+   at Koenig.Maestro.Operation.TransactionRepository.Order.Report() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 233
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 133
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 14:48:32.7969    6 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140699 to Quickbooks. System.Exception: Exception while connecting to QuickBooks ---> System.Runtime.InteropServices.COMException: Retrieving the COM class factory for component with CLSID {22E885D7-FB0B-49E3-B905-CCA6BD526B52} failed due to the following error: 80040154 Class not registered (Exception from HRESULT: 0x80040154 (REGDB_E_CLASSNOTREG)).
+   at System.RuntimeTypeHandle.CreateInstance(RuntimeType type, Boolean publicOnly, Boolean noCheck, Boolean& canBeCached, RuntimeMethodHandleInternal& ctor, Boolean& bNeedSecurityCheck)
+   at System.RuntimeType.CreateInstanceSlow(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+   at System.Activator.CreateInstance(Type type, Boolean nonPublic)
+   at System.Activator.CreateInstance(Type type)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 38
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 46
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 14:48:32.9001    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140699
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 181
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 14:57:51.6093   50 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140702 to Quickbooks. System.Exception: Exception while connecting to QuickBooks ---> System.Runtime.InteropServices.COMException: Retrieving the COM class factory for component with CLSID {22E885D7-FB0B-49E3-B905-CCA6BD526B52} failed due to the following error: 80040154 Class not registered (Exception from HRESULT: 0x80040154 (REGDB_E_CLASSNOTREG)).
+   at System.RuntimeTypeHandle.CreateInstance(RuntimeType type, Boolean publicOnly, Boolean noCheck, Boolean& canBeCached, RuntimeMethodHandleInternal& ctor, Boolean& bNeedSecurityCheck)
+   at System.RuntimeType.CreateInstanceSlow(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+   at System.Activator.CreateInstance(Type type, Boolean nonPublic)
+   at System.Activator.CreateInstance(Type type)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 38
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 46
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 14:57:51.6173   50 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140702
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 181
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:05:49.7853   10 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140703 to Quickbooks. System.Exception: Exception while connecting to QuickBooks ---> System.Runtime.InteropServices.COMException: Retrieving the COM class factory for component with CLSID {22E885D7-FB0B-49E3-B905-CCA6BD526B52} failed due to the following error: 80040154 Class not registered (Exception from HRESULT: 0x80040154 (REGDB_E_CLASSNOTREG)).
+   at System.RuntimeTypeHandle.CreateInstance(RuntimeType type, Boolean publicOnly, Boolean noCheck, Boolean& canBeCached, RuntimeMethodHandleInternal& ctor, Boolean& bNeedSecurityCheck)
+   at System.RuntimeType.CreateInstanceSlow(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+   at System.Activator.CreateInstance(Type type, Boolean nonPublic)
+   at System.Activator.CreateInstance(Type type)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 38
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 46
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:05:50.0635   10 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140703
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 181
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:08:46.1388   35 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140704 to Quickbooks. System.Exception: Exception while connecting to QuickBooks ---> System.Runtime.InteropServices.COMException: Retrieving the COM class factory for component with CLSID {22E885D7-FB0B-49E3-B905-CCA6BD526B52} failed due to the following error: 80040154 Class not registered (Exception from HRESULT: 0x80040154 (REGDB_E_CLASSNOTREG)).
+   at System.RuntimeTypeHandle.CreateInstance(RuntimeType type, Boolean publicOnly, Boolean noCheck, Boolean& canBeCached, RuntimeMethodHandleInternal& ctor, Boolean& bNeedSecurityCheck)
+   at System.RuntimeType.CreateInstanceSlow(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+   at System.Activator.CreateInstance(Type type, Boolean nonPublic)
+   at System.Activator.CreateInstance(Type type)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 38
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 46
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:08:46.1488   35 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140704
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 181
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:10:42.9446    9 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140705 to Quickbooks. System.Exception: Exception while connecting to QuickBooks ---> System.Runtime.InteropServices.COMException: Retrieving the COM class factory for component with CLSID {22E885D7-FB0B-49E3-B905-CCA6BD526B52} failed due to the following error: 80040154 Class not registered (Exception from HRESULT: 0x80040154 (REGDB_E_CLASSNOTREG)).
+   at System.RuntimeTypeHandle.CreateInstance(RuntimeType type, Boolean publicOnly, Boolean noCheck, Boolean& canBeCached, RuntimeMethodHandleInternal& ctor, Boolean& bNeedSecurityCheck)
+   at System.RuntimeType.CreateInstanceSlow(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+   at System.Activator.CreateInstance(Type type, Boolean nonPublic)
+   at System.Activator.CreateInstance(Type type)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 38
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 46
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:10:42.9635    9 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140705
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 181
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:25:26.2248    6 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140710 to Quickbooks. System.Exception: Exception occured while requesting export operation on Quickbooks:
+Object "80000172-1554925297" specified in the request cannot be found.  QuickBooks error message: Invalid argument.  The specified record does not exist in the list. (StatusCode:3120)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 40
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:25:28.3852    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140710
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:35:17.6898    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140712 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:35:17.7835    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140712
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:43:57.4161    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140713 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:43:57.4560    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140713
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:45:28.8551    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140714 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:45:28.8834    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140714
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:47:20.6077    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140715 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:47:20.6346    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140715
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:48:38.0757    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140716 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:48:38.1216    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140716
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:50:26.8463    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140718 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:50:26.8832    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140718
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:53:22.1276    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140719 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:53:22.1995    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140719
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:54:16.6507    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140720 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:54:16.6796    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140720
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:56:27.1858    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140721 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:56:27.2427    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140721
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 15:57:36.5781   34 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140722 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 15:57:36.6190   34 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140722
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:08:17.4679   32 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140723 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:08:17.4988   32 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140723
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:09:28.6206   48 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140725 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:09:28.6510   48 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140725
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:31:22.4248   59 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140727 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:31:22.4710   59 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140727
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:32:46.6574    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140728 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:32:46.7052    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140728
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:34:46.8780    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140729 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:34:46.9209    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140729
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:36:41.5140    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140730 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:36:41.5567    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140730
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:42:22.9985    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140731 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:42:23.0456    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140731
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:43:23.1338    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140732 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:43:23.1647    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140732
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:43:51.0757   37 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140733 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:43:51.0838   37 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140733
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:50:01.7612   57 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140734 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:50:01.7872   57 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140734
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:50:50.3472   13 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140735 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:50:50.3875   13 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140735
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:53:48.6022    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140736 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Could not start QuickBooks.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:53:48.6339    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140736
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:54:39.9513    6 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140737 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:54:39.9599    6 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140737
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:57:42.0137    7 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140738 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:57:42.0514    7 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140738
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
+2019-05-14 16:58:31.1161    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905140739 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: This application is unable to log into this QuickBooks company data file automatically. The QuickBooks administrator must grant permission for an automatic login through the Integrated Application preferences.  If such permission was already granted, the administrator must revoke permission, save preferences, then grant the permission again.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 52
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 57
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-14 16:58:31.1161    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905140739
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 179
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 98
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53

@@ -49,6 +49,7 @@ namespace Koenig.Maestro.Operation.Cache.CacheRepository
             t.QuickBooksId = reader.GetString("QB_CUSTOMER_ID");
             t.QuickBoosCompany = reader.GetString("QB_COMPANY");
             long regionId = reader.GetInt64("REGION_ID");
+            t.InvoiceGroup = reader.GetString("INVOICE_GROUP");
             try
             {
                 t.Region = RegionCache.Instance[regionId];

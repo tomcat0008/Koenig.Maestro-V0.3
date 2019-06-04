@@ -7,6 +7,7 @@ import { IResponseMessage } from "../../classes/ResponseMessage";
 import MaestroRegion, { IMaestroRegion } from "../../classes/dbEntities/IMaestroRegion";
 import { Form, Row, Col } from "react-bootstrap";
 import { IQbInvoiceLog } from "../../classes/dbEntities/IQbInvoiceLog";
+import OrderMaster from "../../classes/dbEntities/IOrderMaster";
 
 export default class QbInvoiceLogComponent extends React.Component<ITranComponentProp, IQbInvoiceLogDisplay> implements ICrudComponent {
 
@@ -26,7 +27,42 @@ export default class QbInvoiceLogComponent extends React.Component<ITranComponen
     }
 
     async Integrate(): Promise<IResponseMessage> {
-        return null;
+
+        $("body").addClass("loading");
+        let invoice: IQbInvoiceLog = this.props.Entity as IQbInvoiceLog;
+
+        let ea: EntityAgent = new EntityAgent();
+        let invoiceNumbers: Array<number> = new Array<number>();
+        invoiceNumbers.push(invoice.Id);
+        let result: IResponseMessage = await ea.CreateInvoices(invoiceNumbers);
+        
+        this.DisableEnable(true);
+        if (result.ErrorInfo != null) {
+            $("body").removeClass("loading");
+            throw result.ErrorInfo;
+        }
+        
+        //this.setState({ InvoiceLog:  });
+        //(document.getElementById("intergationStatusId") as HTMLInputElement).value = order.IntegrationStatus;
+        $("body").removeClass("loading");
+        return result;        
+        
+    }
+
+    async componentDidMount() {
+
+
+        let invoice: IQbInvoiceLog = this.props.Entity as IQbInvoiceLog;
+        //$("body").addClass("loading");
+        invoice.Actions = new Array<string>();
+        if (invoice.IntegrationStatus == "WAITING")
+            invoice.Actions.push("Integrate");
+        else if (invoice.IntegrationStatus == "OK") {
+            invoice.Actions.push("Cancel");
+        }
+        
+        this.setState({ InvoiceLog : invoice });
+
     }
 
     render() {

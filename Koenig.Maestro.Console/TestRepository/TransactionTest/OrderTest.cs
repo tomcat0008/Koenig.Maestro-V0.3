@@ -150,6 +150,7 @@ namespace Koenig.Maestro.Console.TestRepository.TransactionTest
         {
             RequestMessage request = MessagePrepareAgent.GetRequest(action, tranCode, null, null);
             request.MessageDataExtension.Add(MessageDataExtensionKeys.CUSTOMER_ID, "5");
+            request.MessageDataExtension.Add(MessageDataExtensionKeys.LIST_CODE, OrderRequestType.DashboardSummary.ToString());
             return new MessageBroker().Execute(request);
         }
 

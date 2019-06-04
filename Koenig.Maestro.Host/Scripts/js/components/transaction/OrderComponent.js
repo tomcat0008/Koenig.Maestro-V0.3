@@ -82,10 +82,20 @@ export default class OrderComponent extends React.Component {
         };
         this.UpdateOrder = (mapId, unitId, quantity) => {
             $("body").addClass("loading");
+            let maps = this.state.ProductMaps;
+            let map = maps.find(m => m.Id == mapId); //find the subject of action
+            /*if (map.UnitTypeCanHaveUnits && unitId < 0) {
+                $("body").removeClass("loading");
+                return;
+            }*/
             let order = this.state.Entity;
             if (order.OrderItems == undefined)
                 order.OrderItems = new Array();
-            let map = this.state.ProductMaps.find(m => m.Id == mapId);
+            /*
+            let subMap: IQbProductMap = maps.find(m => m.QuickBooksParentCode == map.QuickBooksCode && m.UnitId == unitId);
+            if (subMap != undefined)
+                map = subMap;
+            */
             let item = order.OrderItems.find(i => i.MapId == mapId);
             if (item == undefined) {
                 if (quantity > 0) {
@@ -103,6 +113,7 @@ export default class OrderComponent extends React.Component {
                     item.Quantity = quantity;
                     item.UnitId = unitId;
                     item.ItemPrice = map.Price;
+                    item.MapId = map.Id;
                 }
                 else
                     order.OrderItems.splice(order.OrderItems.indexOf(item), 1);
@@ -196,6 +207,17 @@ export default class OrderComponent extends React.Component {
                 order.ShippingAddressId = 0;
             else
                 order.ShippingAddressId = parseInt(document.getElementById("shippingAddressId").value);
+            let maps = this.state.ProductMaps;
+            //check order item maps, make corrections if needed
+            for (let i = 0; i < order.OrderItems.length; i++) {
+                let oi = order.OrderItems[i];
+                let map = maps.find(m => m.Id == oi.MapId);
+                if (map.UnitTypeCanHaveUnits && oi.UnitId > 0) {
+                    let mapDetail = maps.find(m => m.QuickBooksParentCode == map.QuickBooksCode && m.UnitId == oi.UnitId);
+                    if (mapDetail != undefined)
+                        oi.MapId = mapDetail.Id;
+                }
+            }
             order.CreateInvoiceOnQb = document.getElementById("chkInvoiceCreate").checked;
             let ea = new EntityAgent();
             this.DisableEnable(true);
@@ -297,14 +319,16 @@ export default class OrderComponent extends React.Component {
     }
     render() {
         if (!this.state.Init) {
-            let customers = this.state.Customers;
-            customers.sort((a, b) => { return a.Name.localeCompare(b.Name); });
+            let customers = this.state.Customers.filter(c => c.Name != "UNKNOWN");
+            customers.sort((a, b) => { return a.QuickBoosCompany.localeCompare(b.QuickBoosCompany); });
             if (customers.find(c => c.Id == -1) == undefined)
                 customers.unshift(EntityAgent.GetFirstSelecItem("CUSTOMER"));
             let shipAddressList = null;
             let order = this.state.Entity;
+            let disableInvoice = false;
             if (order.CustomerId > 0) {
                 let c = customers.find(c => c.Id == order.CustomerId);
+                disableInvoice = c.InvoiceGroup != "";
                 if (c.AddressList != null && c.AddressList != undefined) {
                     shipAddressList = c.AddressList.filter(a => a.AddressType == "S");
                     shipAddressList.unshift(EntityAgent.GetFirstSelecItem("ADDRESS"));
@@ -318,7 +342,7 @@ export default class OrderComponent extends React.Component {
                     React.createElement(Col, { style: { paddingTop: "5px" } },
                         React.createElement(Form.Control, { plaintext: true, readOnly: true, defaultValue: order.Id.toString() })),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
-                        React.createElement("img", { src: "/img/orderSummary.png", className: this.state.SummaryDisplay.display == "none" ? "" : "disabled", onClick: () => { this.setState({ SummaryDisplay: { display: "block" } }); }, style: { float: "right", cursor: this.state.SummaryDisplay.display == "none" ? "pointer" : "default" } }))),
+                        React.createElement("img", { src: "/Maestro/img/orderSummary.png", className: this.state.SummaryDisplay.display == "none" ? "" : "disabled", onClick: () => { this.setState({ SummaryDisplay: { display: "block" } }); }, style: { float: "right", cursor: this.state.SummaryDisplay.display == "none" ? "pointer" : "default" } }))),
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Integration status"),
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 },
@@ -350,14 +374,14 @@ export default class OrderComponent extends React.Component {
                 React.createElement(Row, null,
                     React.createElement(Col, { style: { paddingTop: "5px" }, sm: 2 }, "Create Invoice"),
                     React.createElement(Col, null,
-                        React.createElement(Form.Check, { "aria-label": "chkInvoiceCreate", id: "chkInvoiceCreate" }))),
+                        React.createElement(Form.Check, { "aria-label": "chkInvoiceCreate", disabled: disableInvoice, id: "chkInvoiceCreate" }))),
                 React.createElement(Row, null,
                     React.createElement(Col, { sm: 12 }, this.renderTabs())),
                 React.createElement(Draggable, { axis: "both", handle: ".orderSummaryHeader", defaultPosition: { x: 0, y: 0 }, position: null, grid: [10, 10], scale: 1, offsetParent: document.getElementById("content") },
                     React.createElement("div", null,
                         React.createElement("div", { style: this.state.SummaryDisplay, className: "orderSummaryHeader" },
                             "Order Summary",
-                            React.createElement("img", { src: "/img/closeWindow.png", onClick: () => {
+                            React.createElement("img", { src: "/Maestro/img/closeWindow.png", onClick: () => {
                                     this.setState({ SummaryDisplay: { display: "none" } });
                                 }, style: { float: "right", cursor: "pointer" } })),
                         React.createElement("div", { style: this.state.SummaryDisplay, className: "orderSummary", id: "orderSummary" })))));

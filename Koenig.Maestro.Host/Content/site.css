@@ -366,3 +366,133 @@ table {
     pointer-events: none;
     font-size: 25px;
 }
+
+.maincontent {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    
+}
+
+.maincontent-main {
+    flex: 1;
+}
+
+/* not important */
+body {
+    margin: 0;
+}
+
+header {
+    height:10vh;
+    background-color: black;
+}
+
+main {
+    background-color: white;
+}
+
+footer {
+    height: 10vh;
+    background-color: black;
+}
+
+.dashboard {
+    margin: 0 auto; /* Center the DIV horizontally */
+    width: 100%;
+    min-height: 80vh;
+    border: 1px solid lightgray;
+}
+
+.dbrdMenuCol {
+    float: left;
+    width: 18%;
+    padding: 0 10px;
+    min-height: 80vh;
+    max-height:80vh;
+    background-color:whitesmoke ;
+    overflow:auto;
+}
+
+.dbrdColumn {
+    float: left;
+    padding: 5px 10px;
+    min-height: 80vh;
+    max-height: 80vh;
+    background-color: whitesmoke;
+    overflow: auto;
+    width:82%;
+}
+
+.dbInnerTable {
+    width: 100%;
+    overflow: auto;
+    height: 1000px;
+    text-align: left;
+    padding: 20px;
+    background: #99e580;
+    border: 1px solid #ced4da;
+}
+
+.dbColDiv {
+    border: 1px solid #ced4da;
+    padding: 0px;
+}
+
+.listCap
+{
+    text-align: center;
+    font-size:20px;
+    color:dimgray;
+}
+
+.invMergeTop {
+    width: 100%;
+    height: 140px;
+    background-color: whitesmoke;
+    border: 1px solid #ced4da;
+    padding:10px;
+}
+
+.invMergeSides {
+    width: 50%;
+    height: 540px;
+    background-color: whitesmoke;
+    border: 1px solid #ced4da;
+    float: left;
+    overflow: auto;
+}
+
+.invMergeCenter {
+    width: 10%;
+    height: 540px;
+    background-color: whitesmoke;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+    float: left;
+    vertical-align: middle;
+    text-align:center;
+}
+.invMergeCenter img {
+    border: 1px solid #ced4da;
+}
+
+.orderCap {
+    text-align: center;
+    font-size: 20px;
+    color: dimgray;
+}
+
+.mergeOrderCard
+{
+    width:98%;
+    cursor:pointer;
+}
+
+.mergeOrderHostDiv
+{
+    padding:20px;
+    width: 100%;
+    text-align:center;
+    
+}

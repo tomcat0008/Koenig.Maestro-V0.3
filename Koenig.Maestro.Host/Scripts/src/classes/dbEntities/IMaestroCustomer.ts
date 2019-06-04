@@ -17,6 +17,7 @@ export interface IMaestroCustomer extends DbEntityBase {
     ReportGroup: string;
     Actions: string[];
     AddressList: ICustomerAddress[];
+    InvoiceGroup: string;
 }
 
 export default class MaestroCustomer implements IMaestroCustomer {
@@ -51,4 +52,5 @@ export default class MaestroCustomer implements IMaestroCustomer {
     TypeName: string;
     Actions: string[];
     AddressList: ICustomerAddress[];
+    InvoiceGroup: string;
 }

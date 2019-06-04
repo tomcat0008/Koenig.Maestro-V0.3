@@ -22,9 +22,47 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
         public override void Export()
         {
-            //StartSession();
-            
+            /*
+             * JUST FOR TESTING HERE
+            StartSession();
+            IMsgSetRequest request = GetLatestMsgSetRequest();
+            ITemplateQuery query = request.AppendTemplateQueryRq();
+            query.metaData.SetValue(ENmetaData.mdMetaDataAndResponseData);
+            //Set field value for IncludeRetElementList
+            //May create more than one of these if needed
+            //TemplateQueryRq.IncludeRetElementList.Add("ab");
+            IResponse res = GetResponse(request);
+            ITemplateRetList returnList = res.Detail as ITemplateRetList;
+            for (int i=0;i<returnList.Count;i++)
+            {
+                ITemplateRet template = returnList.GetAt(i);
+                if (template == null) return;
+
+                //Go through all the elements of ITemplateRetList
+                //Get value of ListID
+                string ListID15 = (string)template.ListID.GetValue();
+                //Get value of TimeCreated
+                DateTime TimeCreated16 = (DateTime)template.TimeCreated.GetValue();
+                //Get value of TimeModified
+                DateTime TimeModified17 = (DateTime)template.TimeModified.GetValue();
+                //Get value of EditSequence
+                string EditSequence18 = (string)template.EditSequence.GetValue();
+                //Get value of Name
+                string Name19 = (string)template.Name.GetValue();
+                //Get value of IsActive
+                bool IsActive20 = false;
+                if (template.IsActive != null)
+                {
+                    IsActive20 = (bool)template.IsActive.GetValue();
+                }
+                //Get value of TemplateType
+                ENTemplateType TemplateType21 = (ENTemplateType)template.TemplateType.GetValue();
+
+                Console.WriteLine(Name19 + ":" + ListID15 + " - IsActive20:" + IsActive20.ToString());
+            }
+
             //FinishSession(true);
+            */
         }
 
         public override List<ITransactionEntity> Import()
@@ -33,6 +71,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
 
             IMsgSetRequest request = GetLatestMsgSetRequest();
             ICustomerQuery query = request.AppendCustomerQueryRq();
+            query.ORCustomerListQuery.CustomerListFilter.ActiveStatus.SetValue(ENActiveStatus.asAll);
             
             IResponse res = GetResponse(request);
 
@@ -43,17 +82,19 @@ namespace Koenig.Maestro.Operation.QuickBooks
             for (int i = 0; i<returnList.Count; i++)
             {
                 ICustomerRet qbc = returnList.GetAt(i);
-                if (ReadBool(qbc.IsActive))
-                {
-                    mlist.Add(GetMaestroCustomer(qbc));
+                //if (ReadBool(qbc.IsActive))
+                //{
+                    //mlist.Add(GetMaestroCustomer(qbc));
                     /*
                     if(qbc.ShipToAddressList != null)
                     {
                         Console.WriteLine("count:"+qbc.ShipToAddressList.Count);
                     }*/
-                }
-                    //WalkCustomerRet(qbc);
-                    //
+                //}
+                mlist.Add(GetMaestroCustomer(qbc));
+
+                //WalkCustomerRet(qbc);
+                //
             }
             
             return mlist.Cast<ITransactionEntity>().ToList();
@@ -77,6 +118,7 @@ namespace Koenig.Maestro.Operation.QuickBooks
             result.UpdatedUser = context.UserName;
             result.CreatedUser = context.UserName;
             result.CustomerGroup = qbc.CustomerTypeRef == null ? string.Empty : ReadString(qbc.CustomerTypeRef.FullName);
+            result.RecordStatus = qbc.IsActive.GetValue() ? "A" : "P";
             if (qbc.ShipToAddressList != null)
                 for (int i = 0; i < qbc.ShipToAddressList.Count; i++)
                 {

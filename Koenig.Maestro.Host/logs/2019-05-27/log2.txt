@@ -1,0 +1,12 @@
+2019-05-27 16:24:41.4247    3 ERROR Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager Exception occured while integrating Order 201905270003 to Quickbooks. System.Exception: Exception while starting QuickBooks session ---> System.Runtime.InteropServices.COMException: Unexpected error. Check the "qbsdklog.txt" file for possible additional information.
+   at Interop.QBFC13.IQBSessionManager.BeginSession(String qbFile, ENOpenMode openMode)
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 53
+   --- End of inner exception stack trace ---
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksAgent.StartSession() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksAgent.cs:line 59
+   at Koenig.Maestro.Operation.QuickBooks.QuickBooksInvoiceAgent.Export() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\QuickBooks\QuickBooksInvoiceAgent.cs:line 32
+   at Koenig.Maestro.Operation.Framework.ManagerRepository.QuickBooksInvoiceManager.IntegrateOrderToQuickBooks(List`1 omList) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\ManagerRepository\QuickBooksInvoiceManager.cs:line 65
+2019-05-27 16:24:41.4716    3 FATAL Koenig.Maestro.Operation.Messaging.MessageBroker Exception occured while executing transaction ORDER System.Exception: Exception occured while creating invoice for Orders: ,201905270003
+   at Koenig.Maestro.Operation.TransactionRepository.Order.ExportQb() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 191
+   at Koenig.Maestro.Operation.TransactionRepository.Order.New() in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\TransactionRepository\Order.cs:line 110
+   at Koenig.Maestro.Operation.Framework.TransactionBase.Execute(RequestMessage requestMessage) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Framework\TransactionBase.cs:line 109
+   at Koenig.Maestro.Operation.Messaging.MessageBroker.Execute(RequestMessage message) in D:\WORK\Koenig.Maestro\Koenig.Maestro.Operation\Messaging\MessageBroker.cs:line 53
